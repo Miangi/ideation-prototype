@@ -46,6 +46,26 @@ function removeTab(id: number) {
 function selectTab(tab: {id: number, title: string}) {
   activeTab = tab;
 }
+
+
+import { writable } from 'svelte/store';
+
+let isClickedinfo = writable(false);
+let isClickedtask = writable(false);
+let isClickedsolution = writable(false);
+
+
+function handleClickinfo() {
+  isClickedinfo.set(true);
+}
+
+function handleClicktask() {
+	isClickedtask.set(true);
+}
+
+function handleClicksolution() {
+	isClickedsolution.set(true);
+}
 	
 </script>
 
@@ -107,16 +127,25 @@ function selectTab(tab: {id: number, title: string}) {
 			</div>
 			<div class="app-task-container">
 				<div class="task-info-container">
-					<div class="task-info-unclicked"><TaskInfoUnclicked/></div>
-					<div class="task-info-clicked"><TaskInfoclicked/></div>
-				</div>
+					{#if !$isClickedinfo}
+					  <div class="task-info-unclicked" on:click={handleClickinfo}><TaskInfoUnclicked/></div>
+					{:else}
+					  <div class="task-info-clicked"><TaskInfoclicked/></div>
+					{/if}
+				  </div>
 				<div class="task-container">
-					<div class="task-unclicked"><TaskUnclicked/></div>
+					{#if !$isClickedtask}
+					<div class="task-unclicked" on:click={handleClicktask}><TaskUnclicked/></div>
+					{:else}
 					<div class="task-clicked"><TaskClicked/></div>
+					{/if}
 				</div>
 				<div class="task-solution-container">
-					<div class="task-solution-unclicked"><TaskSolutionUnclicked/></div>
+					{#if !$isClickedsolution}
+					<div class="task-solution-unclicked" on:click={handleClicksolution}><TaskSolutionUnclicked/></div>
+					{:else}
 					<div class="task-solution-clicked"><TaskSolutionClicked/></div>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -343,8 +372,8 @@ function selectTab(tab: {id: number, title: string}) {
 		display: flex;
 	}
 
-	.task-info-clicked{
-			display: none;
+		.task-info-clicked{
+			display: flex;
 			cursor: pointer;
 		}
 
@@ -363,7 +392,7 @@ function selectTab(tab: {id: number, title: string}) {
 			}
 
 		.task-clicked{
-				display: none;
+				display: flex;
 				cursor: pointer;
 			}
 
@@ -377,7 +406,7 @@ function selectTab(tab: {id: number, title: string}) {
 				}
 
 		.task-solution-clicked{
-					display: none;
+					display: flex;
 					cursor: pointer;
 				}
 
