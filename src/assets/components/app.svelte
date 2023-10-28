@@ -11,13 +11,16 @@
 
 
 	import TaskInfoUnclicked from '../svg/taskinfo_notification.svelte';
-	import TaskInfoclicked from '../svg/task-info-clicked.svelte';
+	import TaskInfoClicked from '../svg/task-info-clicked.svelte';
+	import MinimizeTaskInfo from '../svg/minimize_task_info24px.svelte';
 
 	import TaskUnclicked from '../svg/task_notofication.svelte';
 	import TaskClicked from '../svg/task-clicked.svelte';
+	import MinimizeTask from '../svg/minimize_task_24px.svelte';
 
 	import TaskSolutionUnclicked from '../svg/tasksolution_notification.svelte';
 	import TaskSolutionClicked from '../svg/task-solution-clicked.svelte';
+	import MinimizeTaskSolution from '../svg/minimize_task_solution24px.svelte';
 
 	import AddProblemSecondary from '../svg/add_problem_circle_outlined_12px.svelte'
 	import AddPersonaSecondary from '../svg/add_ai_circle_outlined_12px.svelte'
@@ -30,11 +33,16 @@ let tabs = [{ id: 1, title: 'Ideation 1'}];
 let activeTab = tabs[0];
 
 function addTab() {
-  const id = tabs.length + 1;
-  const newTab = { id, title: `Ideation ${id}` };
+const id = Math.random()
+ .toString(16)
+ .slice(2, 10)
+ .toUpperCase()
+
+  const newTab = { id, title: `Ideation` };
   tabs = [...tabs, newTab];
   activeTab = newTab;
 }
+
 
 function removeTab(id: number) {
   tabs = tabs.filter(tab => tab.id !== id);
@@ -54,23 +62,106 @@ let isClickedinfo = writable(false);
 let isClickedtask = writable(false);
 let isClickedsolution = writable(false);
 
+let modalOpenInfo = writable(false);
+let modalOpenTask = writable(false);
+let modalOpenSolution = writable(false);
 
 function handleClickinfo() {
   isClickedinfo.set(true);
-}
-
+  modalOpenInfo.set(true);
+};
 function handleClicktask() {
 	isClickedtask.set(true);
-}
-
+	modalOpenTask.set(true);
+};
 function handleClicksolution() {
 	isClickedsolution.set(true);
-}
-	
+	modalOpenSolution.set(true);
+};
+
+
+function handleCloseModalInfo () {
+	modalOpenInfo.set(false);
+};
+
+function handleCloseModalTask () {
+	modalOpenTask.set(false);
+};
+
+function handleCloseModalSolution () {
+	modalOpenSolution.set(false);
+};
+
+
+let isClickedProblem = writable(false);
+let modalOpenProblem = writable(false);
+
+function handleClickProblem() {
+	isClickedProblem.set(true);
+	modalOpenProblem.set(true);
+};
+
+function handleCloseModalProblem () {
+	modalOpenProblem.set(false);
+
+};
+
+
+
+let problemDescription = ""
+  let activeProblem = ""
+
+  const handleSubmit = () => {
+    activeProblem = problemDescription;
+	modalOpenProblem.set(false);
+  };
+
+
 </script>
 
 <div class="background-container-app">
 	<div class="container-app">
+								{#if $modalOpenProblem}
+								<div class="modal-task-problem">
+									<div class="modal-task-problem-content">
+										<div class="modal-problem-description-label">Add Problem Description</div>
+										<div class="modal-subtitle">Add a description of the problem. Try to describe the problem in your own words as detailed as possible. This helps the AI avatars to ideate efficiently with you.</div>
+										<div class="modal-problem-description-input">
+											<textarea bind:value={problemDescription} id='problem-description-input' placeholder="please enter your problem description"></textarea>
+										</div>
+										<div class="submit-button" on:click={handleSubmit}>submit</div>
+									</div>
+								</div>
+								{/if}
+								{#if $modalOpenInfo}
+								<div class="modal-task-info">
+								<div class="modal-task-info-content">
+									<div class="close-button" on:click={handleCloseModalInfo}><MinimizeTaskInfo/></div>
+									<div class="ModalLabel">Informationen</div><p>Im Jahr 2020 werden weltweit 727 Millionen Menschen 65 Jahre oder älter sein. Prognosen zufolge wird sich diese Zahl bis 2050 auf über 1,5 Milliarden Menschen fast verdoppeln. Diese wachsende Bevölkerungsgruppe bringt eine Reihe von besonderen gesundheitlichen Herausforderungen mit sich, von chronischen Krankheiten wie Arthritis und Demenz bis hin zu Unfällen aufgrund eingeschränkter Mobilität. In Verbindung mit diesen gesundheitlichen Problemen wächst auch die Nachfrage nach Produkten und Dienstleistungen, die es Senioren ermöglichen, eine gute Lebensqualität zu bewahren, die Autonomie zu fördern und die Verbindung zur Gesellschaft aufrechtzuerhalten. Der Markt befindet sich jedoch noch im Anfangsstadium, und es gibt noch viel Spielraum für innovative Produkte, die die Gesundheitsfürsorge für ältere Menschen vereinfachen können.</p>
+									</div>
+								</div>
+								{/if}
+
+								{#if $modalOpenTask}
+								<div class="modal-task">
+									<div class="modal-task-content">
+									<div class="close-button" on:click={handleCloseModalTask}><MinimizeTask/></div>
+									<div class="ModalLabel">Aufgabe</div><p>Deine Aufgabe ist es, ein neues oder verbessertes Produktangebot zu entwickeln, das den Bedürfnissen älterer Menschen entspricht - entweder um die Gesundheitsversorgung zugänglicher zu machen, das Unfallrisiko zu verringern oder die Lebensqualität insgesamt zu verbessern.</p>
+									</div>
+								</div>
+								{/if}
+
+								{#if $modalOpenSolution}
+								<div class="modal-task-solution">
+									<div class="modal-task-solution-content">
+									<div class="close-button" on:click={handleCloseModalSolution}><MinimizeTaskSolution/></div>
+									<div class="ModalLabel">Lösung</div><p>Beschreibung des Geschäftsmodells, in der dargelegt wird, wie es sich von herkömmlichen Geschäftsmodellen in der Automobilindustrie unterscheidet.</p>
+									<div class="SolutionInput-container">
+										<div class="SolutionInput" contentEditable></div>
+									</div>
+								</div>
+								</div>
+								{/if}
 		<div class="chat-tabs-container">
 			{#each tabs as tab (tab.id)}  
 			  <div class={activeTab.id === tab.id ? 'tab-container active' : 'tab-container'} on:click={() => selectTab(tab)}>
@@ -82,13 +173,18 @@ function handleClicksolution() {
 		  </div>
 		<div class="chat-app">
 			<div class="avatar-management-container">
-				<div class="problem-container-inactive">
+				{#if !activeProblem}
+				<div class="problem-container-inactive" on:click={handleClickProblem}>
 					<div class="add-icon"><AddIcon /></div>
 					Beschreibe dein Problem
 				</div>
-				<div class="problem-container-active">
-					input: Problem descr. vaaaaaaaaaaaaaaariable
+				{/if}
+				{#if activeProblem}
+				<div class="problem-container-active" on:click={handleClickProblem}>
+					<div class="problem-description-label">Problem Description</div>
+					{activeProblem}
 				</div>
+				{/if}
 				<div class="avatar-container">
 					<Avatar />
 				</div>
@@ -100,20 +196,26 @@ function handleClicksolution() {
 			</div>
 			<div class="app-chat-container">
 				<div class="chat-container">
-					<div class="chat-messages"></div>
+					<div class="chat-messages">
+
+					</div>
 					<div class="chat-input">
+						{#if !activeProblem}
 						<div class="chat-input-text-no-problem-description">
 							Füge eine Problembeschreibung hinzu...
-							<div class="add-problem-description-secondary">
+							<div class="add-problem-description-secondary" on:click={handleClickProblem}>
 								<AddProblemSecondary/>
 								hinzufügen</div>
 						</div>
+						{/if}
+						{#if activeProblem} <!-- AND wenn kein avatar existiert -->
 						<div class="chat-input-text-no-ai-avatar-added">
 							Füge KI Persona für die Session hinzu...
 							<div class="add-ai-persona-secondary">
 								<AddPersonaSecondary/>
 								hinzufügen</div>
 						</div>
+						{/if}
 						<div class="chat-input-text">
 							<div class="message-wrapper">
 								<div class="message-text" contentEditable></div>
@@ -130,21 +232,21 @@ function handleClicksolution() {
 					{#if !$isClickedinfo}
 					  <div class="task-info-unclicked" on:click={handleClickinfo}><TaskInfoUnclicked/></div>
 					{:else}
-					  <div class="task-info-clicked"><TaskInfoclicked/></div>
+					  <div class="task-info-clicked" on:click={handleClickinfo}><TaskInfoClicked/></div>
 					{/if}
 				  </div>
 				<div class="task-container">
 					{#if !$isClickedtask}
 					<div class="task-unclicked" on:click={handleClicktask}><TaskUnclicked/></div>
 					{:else}
-					<div class="task-clicked"><TaskClicked/></div>
+					<div class="task-clicked" on:click={handleClicktask}><TaskClicked/></div>
 					{/if}
 				</div>
 				<div class="task-solution-container">
 					{#if !$isClickedsolution}
 					<div class="task-solution-unclicked" on:click={handleClicksolution}><TaskSolutionUnclicked/></div>
 					{:else}
-					<div class="task-solution-clicked"><TaskSolutionClicked/></div>
+					<div class="task-solution-clicked" on:click={handleClicksolution}><TaskSolutionClicked/></div>
 					{/if}
 				</div>
 			</div>
@@ -153,6 +255,192 @@ function handleClicksolution() {
 </div>
 
 <style>
+.modal-task-problem {
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+	background: #12121280;
+}	
+
+.modal-task-info {
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+}
+
+.modal-task{
+	display: block;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+
+}
+
+.modal-task-solution{
+	display: block;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.modal-task-info-content {
+  display: flex;
+  flex-direction: column;
+	position: relative;
+  background-color: #505050;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  color: #D3D3D3;
+  word-break: normal;
+}
+
+.modal-task-content{
+	display: flex;
+  flex-direction: column;
+	position: relative;
+  background-color: #00274A;
+  color: #3EA2FF;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.modal-task-solution-content{
+	display: flex;
+  flex-direction: column;
+	position: relative;
+  background-color: #004A3D;
+  color: #34E5B0;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.modal-task-problem-content{
+	display: flex;
+  	flex-direction: column;
+	position: relative;
+  	background-color: #004A3D;
+  	color: #34E5B0;
+  	margin: 15% auto;
+ 	padding: 20px;
+  	border-radius: 10px;
+  	width: 515px;
+}
+
+.modal-problem-description-label{
+	display: flex;
+	font-size: 24px;
+	font-family: 'Ubuntu Bold';
+}
+
+.modal-problem-description-input{
+	display: flex;
+	width: 100%;
+	height: auto;
+}
+
+#problem-description-input{
+	display: flex;
+	width: 100%;
+	min-height: 70px;
+	max-height: 120px;
+	background-color: #033129;
+	margin-top: 15px;
+	border-radius: 10px;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	box-sizing: border-box;
+	overflow: scroll;
+	outline: none;
+	border: none;
+	color: #34E5B0;
+}
+
+.submit-button{
+	display: flex;
+	margin-top: 20px;
+	margin-left: auto;
+	width: 90px;
+	height: 40px;
+	background-color:#34E5B0;
+	color: #121212;
+	padding: 10px;
+	align-items: center;
+	border-radius: 5px;
+	box-sizing: border-box;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.SolutionInput-container{
+width: 100%;
+background-color: #033129;
+  max-height: 145px;
+  color: #fefefe;
+  align-items: center;
+  margin-top: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.SolutionInput{
+	display: flex;
+	min-height: 64px;
+ 	max-height: 140px;
+  	width: 100%;
+  	align-content: center;
+  	outline: none;
+  	overflow:scroll;
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding:5px
+}
+
+.close-button {
+  display: flex;
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.ModalLabel{
+	display: flex;
+	font-size: 24px;
+	font-family: 'Ubuntu Bold';
+}
+
+.close-button:hover, .close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 
 ::-webkit-scrollbar-corner {
   background: rgba(0,0,0,0);
@@ -164,7 +452,7 @@ function handleClicksolution() {
   width: 100%;
   align-content: center;
   outline: none;
-  overflow:scroll;
+  overflow: scroll;
 }
 
 .message-wrapper {
@@ -198,18 +486,18 @@ function handleClicksolution() {
 
 	.avatar-management-container {
 		display: flex;
-		width: 350px;
-		min-width: 350px;
-		height: auto;
+		width: 15em;
+		min-width: 15em;
+		height: 100%;
 		flex-direction: column;
 		gap: 10px;
 		margin-left:15px;
 	}
 
 	.problem-container-inactive {
-		display: none;
+		display: flex;
 		width: 100%;
-		height: 120px;
+		height: 90px;
 		background-color: #083a2b70;
 		border-radius: 15px;
 		justify-content: center;
@@ -223,7 +511,7 @@ function handleClicksolution() {
 		display: flex;
 		width: 100%;
 		max-width: 450px;
-		height: 120px;
+		min-height: 90px;
 		background-color: #083a2b70;
 		border-radius: 15px;
 		justify-content: center;
@@ -238,22 +526,28 @@ function handleClicksolution() {
 		box-sizing: border-box;         /* Opera/IE 8+ */
 	}
 
+	.problem-description-label{
+		display: flex;
+		margin-bottom: 5px;
+		font-size: 12px;
+		color: #1E8465;
+	}
+
 	.app-chat-container {
 		display: flex;
 		width: 100%;
 		height: 100%;
-		min-height: 800px;
-		margin-left: 25px;
+		margin-left: 15px;
 		flex-direction: column;
 	}
 
 	.chat-container{
 		display: flex;
 		width: 100%;
-		height: 80vh;
+		height: 75vh;
 		background-color: #131313;
-		border-bottom-left-radius: 20px;
-		border-bottom-right-radius: 20px;
+		border-bottom-left-radius: 30px;
+		border-bottom-right-radius: 30px;
 		flex-direction: column;
 	}
 
@@ -262,7 +556,7 @@ function handleClicksolution() {
 		display: flex;
 		background-color: #0A0A0A;
 		height: auto;
-		border-radius: 20px;
+		border-radius: 30px;
 		align-items: center;
 		padding-left: 30px;
 		padding-right: 2px;
@@ -275,11 +569,13 @@ function handleClicksolution() {
 		display: flex;
 		width: 100%;
 		min-width: 500px;
-		height: 100%;
+		max-height: 450px;
+		height: 65vh;
+		overflow: scroll;
 	}
 
 	.chat-input-text-no-problem-description{
-		display: none;
+		display: flex;
 		width: 100%;
 		gap: 10px;
 		color: #9CA4A9;
@@ -287,7 +583,7 @@ function handleClicksolution() {
 	}
 
 	.chat-input-text-no-ai-avatar-added{
-		display: none;
+		display: flex;
 		width: 100%;
 		gap: 10px;
 		color: #9CA4A9;
@@ -338,11 +634,13 @@ function handleClicksolution() {
 
 	.chat-input-send-icon-no-problem-description{
 		display: none;
+		margin-right: 10px;
 	}
 
 	.chat-input-send-icon{
 		display: flex;
 		cursor: pointer;
+		margin-right: 10px;
 	}
 
 	.add-problem-description-secondary{
@@ -364,7 +662,6 @@ function handleClicksolution() {
 		min-width: 130px;
 		height: 100%;
 		flex-direction: column;
-		margin-top: 20px;
 		align-items: center;
 	}
 
@@ -419,7 +716,7 @@ function handleClicksolution() {
 	.add-avatar-container {
 		display: flex;
 		width: 99%;
-		height: 120px;
+		height: 90px;
 		border: 2px solid #565656;
 		border-radius: 15px;
 		justify-content: center;
@@ -435,20 +732,13 @@ function handleClicksolution() {
 		background-color: #1d1d1d;
 		width: auto;
 		align-items: center;
-		margin-left: 390px;
+		margin-left: 17.2em;
 	}
 
-	.chat-tabs-container {
-    display: flex;
-    background-color: #1d1d1d;
-    width: auto;
-    align-items: center;
-    margin-left: 390px;
-  }
 
   .tab-container {
     display: flex;
-    min-width: 100px;
+    min-width: 20px;
     height: 20px;
     justify-content: center;
     padding-left: 10px;

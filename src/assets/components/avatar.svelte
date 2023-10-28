@@ -21,7 +21,7 @@
 	.avatar {
 		display: flex;
 		width: 100%;
-		height: 120px;
+		height: 90px;
 		border: 2px solid #565656;
 		border-radius: 15px;
 		justify-content: center;
@@ -35,8 +35,8 @@
 	.delete-icon {
 		display: flex;
 		position: relative;
-		top: -20%;
-		left: 44%;
+		top: -10%;
+		left: 43%;
 		cursor: pointer;
 	}
 
