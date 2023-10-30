@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Avatar from './avatar.svelte';
+	import AvatarInSelection from './avatar_selection.svelte';
 
 	import AddIcon from '../svg/add_24px.svelte';
 	import AddPersona from '../svg/add_persona_24px.svelte';
@@ -28,7 +29,9 @@
 	import SendIconInactive from '../svg/send_icon_inactive.svelte'
 	import SendIconActive from '../svg/send_icon_active.svelte'
 
+	import ShuffleAiAvatars from '../svg/shuffle-ai-avatar.svelte';
 
+//tab management
 let tabs = [{ id: 1, title: 'Ideation 1'}];
 let activeTab = tabs[0];
 
@@ -55,6 +58,8 @@ function selectTab(tab: {id: number, title: string}) {
   activeTab = tab;
 }
 
+
+//implementation functions to handle the info, task and solution modals on the right side
 
 import { writable } from 'svelte/store';
 
@@ -93,6 +98,8 @@ function handleCloseModalSolution () {
 };
 
 
+//implementation of adding a problem description
+
 let isClickedProblem = writable(false);
 let modalOpenProblem = writable(false);
 
@@ -106,8 +113,6 @@ function handleCloseModalProblem () {
 
 };
 
-
-
 let problemDescription = ""
   let activeProblem = ""
 
@@ -117,13 +122,46 @@ let problemDescription = ""
   };
 
 
+  //implementation AI persona modal
+  	let isClickedAvatar = writable(false);
+	let modalOpenAvatar = writable(false);
+
+	function handleClickAvatar() {
+		isClickedAvatar.set(true);
+		modalOpenAvatar.set(true);
+};
+
+
+function handleAvatarSubmit () {
+	modalOpenAvatar.set(false);
+};
 </script>
 
 <div class="background-container-app">
 	<div class="container-app">
+								{#if $modalOpenAvatar}
+								<div class="modal-task-avatar">
+									<div class="modal-task-avatar-content">
+										<div class="modal-label-avatar">Select AI Avatars</div>
+										<div class="modal-description-avatar">AI Avatars help you by giving context and and ideas to a certain problem, just like extremely knowledgeable human team  member.</div>
+										<div class="avatar-selection-container">
+											<AvatarInSelection/>
+											<AvatarInSelection/>
+											<AvatarInSelection/>
+											<AvatarInSelection/>
+										</div>
+										<div class="button-container">
+											<div class="shuffle-button">
+												<ShuffleAiAvatars/>
+												Shuffle</div>
+											<div class="add-ai-avatar-button" on:click={handleAvatarSubmit}>Add AI Avatar</div>
+										</div>
+									</div>
+								</div>
+								{/if}
 								{#if $modalOpenProblem}
 								<div class="modal-task-problem">
-									<div class="modal-task-problem-content">
+									<div class="modal-task-problem-content" on:click|stopPropagation>
 										<div class="modal-problem-description-label">Add Problem Description</div>
 										<div class="modal-subtitle">Add a description of the problem. Try to describe the problem in your own words as detailed as possible. This helps the AI avatars to ideate efficiently with you.</div>
 										<div class="modal-problem-description-input">
@@ -137,7 +175,7 @@ let problemDescription = ""
 								<div class="modal-task-info">
 								<div class="modal-task-info-content">
 									<div class="close-button" on:click={handleCloseModalInfo}><MinimizeTaskInfo/></div>
-									<div class="ModalLabel">Informationen</div><p>Im Jahr 2020 werden weltweit 727 Millionen Menschen 65 Jahre oder älter sein. Prognosen zufolge wird sich diese Zahl bis 2050 auf über 1,5 Milliarden Menschen fast verdoppeln. Diese wachsende Bevölkerungsgruppe bringt eine Reihe von besonderen gesundheitlichen Herausforderungen mit sich, von chronischen Krankheiten wie Arthritis und Demenz bis hin zu Unfällen aufgrund eingeschränkter Mobilität. In Verbindung mit diesen gesundheitlichen Problemen wächst auch die Nachfrage nach Produkten und Dienstleistungen, die es Senioren ermöglichen, eine gute Lebensqualität zu bewahren, die Autonomie zu fördern und die Verbindung zur Gesellschaft aufrechtzuerhalten. Der Markt befindet sich jedoch noch im Anfangsstadium, und es gibt noch viel Spielraum für innovative Produkte, die die Gesundheitsfürsorge für ältere Menschen vereinfachen können.</p>
+									<div class="ModalLabel">Informations</div><p>The number of people aged 65 years or older worldwide is projected to more than double, rising from 761 million in 2021 to 1.6 billion in 2050. The number of people aged 80 years or older is growing even faster. This growing population brings with it a number of unique health challenges, from chronic diseases such as arthritis and dementia to accidents due to reduced mobility. In conjunction with these health issues, there is also growing demand for products and services that enable seniors to maintain a good quality of life, promote autonomy and stay connected to society. However, the market is still in its early stages and there is still plenty of scope for innovative products that can simplify healthcare for the elderly.</p>
 									</div>
 								</div>
 								{/if}
@@ -146,7 +184,7 @@ let problemDescription = ""
 								<div class="modal-task">
 									<div class="modal-task-content">
 									<div class="close-button" on:click={handleCloseModalTask}><MinimizeTask/></div>
-									<div class="ModalLabel">Aufgabe</div><p>Deine Aufgabe ist es, ein neues oder verbessertes Produktangebot zu entwickeln, das den Bedürfnissen älterer Menschen entspricht - entweder um die Gesundheitsversorgung zugänglicher zu machen, das Unfallrisiko zu verringern oder die Lebensqualität insgesamt zu verbessern.</p>
+									<div class="ModalLabel">Task</div><p>Your job is to develop a new or improved product or service offering that meets the needs of older people - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life.</p>
 									</div>
 								</div>
 								{/if}
@@ -155,9 +193,31 @@ let problemDescription = ""
 								<div class="modal-task-solution">
 									<div class="modal-task-solution-content">
 									<div class="close-button" on:click={handleCloseModalSolution}><MinimizeTaskSolution/></div>
-									<div class="ModalLabel">Lösung</div><p>Beschreibung des Geschäftsmodells, in der dargelegt wird, wie es sich von herkömmlichen Geschäftsmodellen in der Automobilindustrie unterscheidet.</p>
-									<div class="SolutionInput-container">
-										<div class="SolutionInput" contentEditable></div>
+									<div class="ModalLabel">Lösung</div>
+									<div class="SolutionInput-container1">
+										<p>1. Beschreibung des Produkts oder der Dienstleistung und der neuartigen Eigenschaften.</p>
+										<textarea class="SolutionInput" id="solution-input1"></textarea>
+									</div>
+									<div class="SolutionInput-container2">
+										<p>2. Klärung der Frage, wie genau das Produkt/Dienstleistung ein bestimmtes Problem in der Gesundheitsversorgung älterer Menschen angeht.</p>
+										<textarea class="SolutionInput" id="solution-input2"></textarea>
+									</div>
+									<div class="SolutionInput-container3">
+										<p>3. Überblick über die Customer Journey beziehungsweise wie das Produkt/Dienstleistung von älteren Menschen oder Pflegekräften bedient werden kann.</p>
+										<textarea class="SolutionInput" id="solution-input3"></textarea>
+									</div>
+									<div class="SolutionInput-container4">
+										<p>4. Kurze Erläuterung, inwiefern das Produkt bestehende Lösungen verbessert oder einen bisher nicht erfüllten Bedarf deckt.</p>
+										<textarea class="SolutionInput" id="solution-input4"></textarea>
+									</div>
+									<div class="progress-tracker">
+										<div class="progress-tracker-state">1</div>
+										of
+										<div class="progress-tracker-end">4</div>
+									</div>
+									<div class="solution-submit-container">
+										<div class="solution-next">Next</div>
+										<div class="solution-submit">Submit Answer</div>
 									</div>
 								</div>
 								</div>
@@ -188,16 +248,18 @@ let problemDescription = ""
 				<div class="avatar-container">
 					<Avatar />
 				</div>
-
-				<div class="add-avatar-container">
+				
+				{#if activeProblem}
+				<div class="add-avatar-container" on:click={handleClickAvatar}>
 					<AddPersona />
 					KI Persona hinzufügen
 				</div>
+				{/if}
 			</div>
 			<div class="app-chat-container">
 				<div class="chat-container">
 					<div class="chat-messages">
-
+						<!--input bubble conversation here-->
 					</div>
 					<div class="chat-input">
 						{#if !activeProblem}
@@ -209,7 +271,7 @@ let problemDescription = ""
 						</div>
 						{/if}
 						{#if activeProblem} <!-- AND wenn kein avatar existiert -->
-						<div class="chat-input-text-no-ai-avatar-added">
+						<div class="chat-input-text-no-ai-avatar-added" on:click={handleClickAvatar}>
 							Füge KI Persona für die Session hinzu...
 							<div class="add-ai-persona-secondary">
 								<AddPersonaSecondary/>
@@ -221,8 +283,11 @@ let problemDescription = ""
 								<div class="message-text" contentEditable></div>
 							  </div>
 						</div>
+						{#if !activeProblem} <!-- OR wenn kein avatar existiert -->
 						<div class="chat-input-send-icon-no-problem-description"><SendIconInactive/></div>
+						{:else}
 						<div class="chat-input-send-icon"><SendIconActive/></div>
+						{/if}
 					</div>
 					
 				</div>
@@ -255,6 +320,20 @@ let problemDescription = ""
 </div>
 
 <style>
+
+.modal-task-avatar{
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+	background: #12121280;
+}
+
+
 .modal-task-problem {
 	display: block;
 	position: absolute;
@@ -276,6 +355,7 @@ let problemDescription = ""
 	width: 100%;
 	height: 100%;
 	overflow:hidden;
+	background: #12121280;
 }
 
 .modal-task{
@@ -287,6 +367,7 @@ let problemDescription = ""
 	width: 100%;
 	height: 100%;
 	overflow: auto;
+	background: #12121280;
 
 }
 
@@ -299,6 +380,7 @@ let problemDescription = ""
 	width: 100%;
 	height: 100%;
 	overflow: auto;
+	background-color: #12121280;
 }
 
 .modal-task-info-content {
@@ -327,16 +409,117 @@ let problemDescription = ""
 }
 
 .modal-task-solution-content{
-	display: flex;
-  flex-direction: column;
-	position: relative;
-  background-color: #004A3D;
-  color: #34E5B0;
-  margin: 15% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
+		display: flex;
+		z-index: 1100;
+		flex-direction: column;
+		position: relative;
+		background-color: #004A3D;
+		color: #34E5B0;
+		margin: 15% auto;
+		padding: 20px;
+		border-radius: 10px;
+		width: 400px;
 }
+
+		.solution-submit-container{
+			display: flex;
+			align-items: center;
+		}
+
+				.progress-tracker{
+					display: flex;
+					gap: 3px;
+					margin-left: auto;
+					margin-top: 15px;
+					margin-right: 12px;
+					margin-bottom: 5px;
+				}
+
+				.solution-next{
+					display: flex;
+					width: auto;
+					height: 44px;
+					box-sizing: border-box;
+					padding: 15px;
+					background-color:#34E5B0;
+					color: #121212;
+					align-items: center;
+					border-radius: 5px;
+					cursor: pointer;
+					margin-left: auto;
+				} 
+				
+				.solution-submit{
+					display: none;
+					width: auto;
+					height: 44px;
+					box-sizing: border-box;
+					padding: 15px;
+					background-color:#34E5B0;
+					color: #121212;
+					align-items: center;
+					border-radius: 5px;
+					cursor: pointer;
+					margin-left: auto;
+				}
+
+.modal-task-avatar-content{
+	display: flex;
+  	flex-direction: column;
+	position: relative;
+  	background-color: #444444;
+  	color: #9CA4A9;
+  	margin: 15% auto;
+ 	padding: 20px;
+  	border-radius: 10px;
+  	width: 60em;
+	height: auto;
+
+}
+
+		.modal-label-avatar{
+			display: flex;
+			font-size: 24px;
+			font-family: 'Ubuntu Bold';
+		}
+
+		.avatar-selection-container{
+			display: flex;
+			gap:5px;
+			margin-top: 15px;
+		}
+
+		.button-container{
+			display: flex;
+			align-items: center;
+			margin-top:15px;
+		}
+
+		.add-ai-avatar-button{
+			display: flex;
+			width: auto;
+			height: 44px;
+			align-items: center;
+			background-color: #00372D;
+			padding: 15px;
+			box-sizing: border-box;
+			border-radius: 10px;
+			color: #34E5B0;
+			cursor: pointer;
+		}
+
+		.shuffle-button{
+			display: flex;
+			width: auto;
+			height: 44px;
+			padding: 15px;
+			align-items: center;
+			margin-left: auto;
+			box-sizing: border-box;
+			margin-right: 15px;
+			gap: 3px;
+			cursor: pointer;
+		}
 
 .modal-task-problem-content{
 	display: flex;
@@ -349,6 +532,7 @@ let problemDescription = ""
   	border-radius: 10px;
   	width: 515px;
 }
+
 
 .modal-problem-description-label{
 	display: flex;
@@ -377,6 +561,7 @@ let problemDescription = ""
 	overflow: scroll;
 	outline: none;
 	border: none;
+	resize: none;
 	color: #34E5B0;
 }
 
@@ -396,29 +581,82 @@ let problemDescription = ""
 	cursor: pointer;
 }
 
-.SolutionInput-container{
-width: 100%;
-background-color: #033129;
-  max-height: 145px;
-  color: #fefefe;
-  align-items: center;
-  margin-top: 10px;
-  box-sizing: border-box;
-  border-radius: 5px;
+.SolutionInput-container1{
+	display: flex;
+	flex-direction: column;
 }
 
-.SolutionInput{
-	display: flex;
-	min-height: 64px;
- 	max-height: 140px;
-  	width: 100%;
-  	align-content: center;
-  	outline: none;
-  	overflow:scroll;
-	border-radius: 5px;
-	box-sizing: border-box;
-	padding:5px
-}
+					#solution-input1{
+						display: flex;
+						width: 100%;
+						min-height: 70px;
+						max-height: 120px;
+						background-color: #033129;
+						border-radius: 10px;
+						padding-top: 5px;
+						padding-left: 5px;
+						padding-right: 5px;
+						box-sizing: border-box;
+						overflow: scroll;
+						outline: none;
+						border: none;
+						resize: none;
+						color: #34E5B0;
+					}
+
+					#solution-input2{
+						display: flex;
+						width: 100%;
+						min-height: 70px;
+						max-height: 120px;
+						background-color: #033129;
+						border-radius: 10px;
+						padding-top: 5px;
+						padding-left: 5px;
+						padding-right: 5px;
+						box-sizing: border-box;
+						overflow: scroll;
+						outline: none;
+						border: none;
+						resize: none;
+						color: #34E5B0;
+					}
+
+					#solution-input3{
+						display: flex;
+						width: 100%;
+						min-height: 70px;
+						max-height: 120px;
+						background-color: #033129;
+						border-radius: 10px;
+						padding-top: 5px;
+						padding-left: 5px;
+						padding-right: 5px;
+						box-sizing: border-box;
+						overflow: scroll;
+						outline: none;
+						border: none;
+						resize: none;
+						color: #34E5B0;
+					}
+
+					#solution-input4{
+						display: flex;
+						width: 100%;
+						min-height: 70px;
+						max-height: 120px;
+						background-color: #033129;
+						border-radius: 10px;
+						padding-top: 5px;
+						padding-left: 5px;
+						padding-right: 5px;
+						box-sizing: border-box;
+						overflow: scroll;
+						outline: none;
+						border: none;
+						resize: none;
+						color: #34E5B0;
+					}
 
 .close-button {
   display: flex;
@@ -519,7 +757,7 @@ background-color: #033129;
 		color: #34e5b0;
 		flex-direction: column;
 		cursor: pointer;
-		word-break: break-all;
+
 		padding: 15px;
 		-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 		-moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -569,8 +807,7 @@ background-color: #033129;
 		display: flex;
 		width: 100%;
 		min-width: 500px;
-		max-height: 450px;
-		height: 65vh;
+		height: 75vh;
 		overflow: scroll;
 	}
 
@@ -633,7 +870,7 @@ background-color: #033129;
 	}
 
 	.chat-input-send-icon-no-problem-description{
-		display: none;
+		display: flex;
 		margin-right: 10px;
 	}
 
@@ -708,7 +945,7 @@ background-color: #033129;
 				}
 
 	.avatar-container{
-		display: flex;
+		display: none;
 		flex-direction: column;
 		gap: 10px;
 	}

@@ -8,6 +8,7 @@
 		<div class="delete-icon"><DeletePersona /></div>
 		<div class="avatar-icon"><AIAvatar /></div>
 		<div class="avatar-description">Avatar Occupation</div>
+		<div class="avatar-background">Avatar Background</div>
 	</div>
 </div>
 
@@ -52,5 +53,9 @@
 		position: relative;
 		top: -10px;
 		cursor: pointer;
+	}
+
+	.avatar-background{
+		display: none;
 	}
 </style>

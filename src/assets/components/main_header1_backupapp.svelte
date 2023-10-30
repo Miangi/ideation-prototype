@@ -6,6 +6,23 @@
 	import GroupTag3 from '../svg/group3.svelte';
 	import GroupTag4 from '../svg/group4.svelte';
 	import GroupTag5 from '../svg/group5.svelte';
+
+
+	import { onMount } from 'svelte';
+  
+	
+	let time;
+
+  	onMount(() => {
+    const intervalId = setInterval(() => {
+      time = new Date().toLocaleString();
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  });
+
 </script>
 
 <div class="background-container-header">
@@ -21,7 +38,7 @@
 					<div class="surname">surname</div>
 					<div class="id">#id</div>
 				</div>
-				<div class="time-and-date">16:33 23.10.2023</div>
+				<div class="time-and-date">{time}</div>
 				<div class="assigned-group">
 					<div class="group1"><GroupTag1 /></div>
 					<div class="group2"><GroupTag2 /></div>
