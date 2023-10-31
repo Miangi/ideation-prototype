@@ -135,6 +135,50 @@ let problemDescription = ""
 function handleAvatarSubmit () {
 	modalOpenAvatar.set(false);
 };
+
+  //implementation Chat
+
+  import { onMount, tick } from 'svelte';
+
+let messageInput = ""; 
+let messageId = 0;
+const messages = writable([]);
+	
+let chatContainer; 
+
+// Uncomment below code if we have getResponseFromGPT4 function
+/*
+let botResponse = async(text) => {
+	let response = await getResponseFromGPT4(text);
+	messages.update(curr => [...curr, { text: response, sender: 'bot', id: messageId }]);
+}
+*/
+
+let sendMessage = () => {
+	messageId++;
+	messages.update(curr => [...curr, { text: messageInput, sender: 'user', id: messageId }]);
+	// botResponse(messageInput); Uncomment code if we have getResponseFromGPT4 function
+	messageInput = "";
+
+	// Scroll to the newest message after sending
+	setTimeout(() => {
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}, 0);
+};
+
+// Reactive statement for scrolling to the newest message > doesn't work somehow
+/*$: if($messages.length > 0) {
+	tick().then(_ => {
+		chatContainer.scrollTo(0, chatContainer.scrollHeight);
+	});
+}
+
+onMount(() => {
+	if (chatContainer) {
+		chatContainer.scrollTo(0, chatContainer.scrollHeight);
+	}
+});*/
+
 </script>
 
 <div class="background-container-app">
@@ -142,8 +186,8 @@ function handleAvatarSubmit () {
 								{#if $modalOpenAvatar}
 								<div class="modal-task-avatar">
 									<div class="modal-task-avatar-content">
-										<div class="modal-label-avatar">Select AI Avatars</div>
-										<div class="modal-description-avatar">AI Avatars help you by giving context and and ideas to a certain problem, just like extremely knowledgeable human team  member.</div>
+										<div class="modal-label-avatar">Select AI Personas</div>
+										<div class="modal-description-avatar">AI Personas help you by giving context and and ideas to a certain problem, just like extremely knowledgeable human team  member.</div>
 										<div class="avatar-selection-container">
 											<AvatarInSelection/>
 											<AvatarInSelection/>
@@ -154,7 +198,7 @@ function handleAvatarSubmit () {
 											<div class="shuffle-button">
 												<ShuffleAiAvatars/>
 												Shuffle</div>
-											<div class="add-ai-avatar-button" on:click={handleAvatarSubmit}>Add AI Avatar</div>
+											<div class="add-ai-avatar-button" on:click={handleAvatarSubmit}>Add AI Persona</div>
 										</div>
 									</div>
 								</div>
@@ -163,7 +207,7 @@ function handleAvatarSubmit () {
 								<div class="modal-task-problem">
 									<div class="modal-task-problem-content" on:click|stopPropagation>
 										<div class="modal-problem-description-label">Add Problem Description</div>
-										<div class="modal-subtitle">Add a description of the problem. Try to describe the problem in your own words as detailed as possible. This helps the AI avatars to ideate efficiently with you.</div>
+										<div class="modal-subtitle">Add a description of the problem. Try to describe the problem in your own words as detailed as possible. This helps the AI personas to ideate efficiently with you.</div>
 										<div class="modal-problem-description-input">
 											<textarea bind:value={problemDescription} id='problem-description-input' placeholder="please enter your problem description"></textarea>
 										</div>
@@ -184,7 +228,11 @@ function handleAvatarSubmit () {
 								<div class="modal-task">
 									<div class="modal-task-content">
 									<div class="close-button" on:click={handleCloseModalTask}><MinimizeTask/></div>
-									<div class="ModalLabel">Task</div><p>Your job is to develop a new or improved product or service offering that meets the needs of older people - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life.</p>
+									<div class="ModalLabel">Task</div><p>Your job is to develop a new or improved product or service offering that meets the needs of older people - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life. <br>
+										<br><br>1. What are some <b>common problems or challenges faced by the aging population</b> that your product aims to solve? 
+										<br><br>2. What is your <b>proposed product or service</b>? Describe its functionality and how it helps the elderly in detail.
+										<br><br>3. How does your product or service <b>improve upon or differ from existing solutions in the market</b>?
+										<br><br>4. What is the <b>feasibility</b> (practicality or workability of a project, idea, or plan) of implementing your product? Consider factors such as cost, risk, and complexity. </p>
 									</div>
 								</div>
 								{/if}
@@ -193,21 +241,21 @@ function handleAvatarSubmit () {
 								<div class="modal-task-solution">
 									<div class="modal-task-solution-content">
 									<div class="close-button" on:click={handleCloseModalSolution}><MinimizeTaskSolution/></div>
-									<div class="ModalLabel">Lösung</div>
+									<div class="ModalLabel">Task Solution</div>
 									<div class="SolutionInput-container1">
-										<p>1. Beschreibung des Produkts oder der Dienstleistung und der neuartigen Eigenschaften.</p>
+										<p>1. What are some common problems or challenges faced by the aging population that your product aims to solve?</p>
 										<textarea class="SolutionInput" id="solution-input1"></textarea>
 									</div>
 									<div class="SolutionInput-container2">
-										<p>2. Klärung der Frage, wie genau das Produkt/Dienstleistung ein bestimmtes Problem in der Gesundheitsversorgung älterer Menschen angeht.</p>
+										<p>2. What is your proposed product or service? Describe its functionality and how it helps the elderly in detail.</p>
 										<textarea class="SolutionInput" id="solution-input2"></textarea>
 									</div>
 									<div class="SolutionInput-container3">
-										<p>3. Überblick über die Customer Journey beziehungsweise wie das Produkt/Dienstleistung von älteren Menschen oder Pflegekräften bedient werden kann.</p>
+										<p>3. How does your product or service improve upon or differ from existing solutions in the market?</p>
 										<textarea class="SolutionInput" id="solution-input3"></textarea>
 									</div>
 									<div class="SolutionInput-container4">
-										<p>4. Kurze Erläuterung, inwiefern das Produkt bestehende Lösungen verbessert oder einen bisher nicht erfüllten Bedarf deckt.</p>
+										<p>4. What is the feasibility of implementing your product? Consider factors such as cost, risk, and complexity.</p>
 										<textarea class="SolutionInput" id="solution-input4"></textarea>
 									</div>
 									<div class="progress-tracker">
@@ -236,7 +284,7 @@ function handleAvatarSubmit () {
 				{#if !activeProblem}
 				<div class="problem-container-inactive" on:click={handleClickProblem}>
 					<div class="add-icon"><AddIcon /></div>
-					Beschreibe dein Problem
+					Describe your problem
 				</div>
 				{/if}
 				{#if activeProblem}
@@ -252,41 +300,54 @@ function handleAvatarSubmit () {
 				{#if activeProblem}
 				<div class="add-avatar-container" on:click={handleClickAvatar}>
 					<AddPersona />
-					KI Persona hinzufügen
+					Add AI Persona
 				</div>
 				{/if}
 			</div>
 			<div class="app-chat-container">
-				<div class="chat-container">
-					<div class="chat-messages">
-						<!--input bubble conversation here-->
+				<div class="chat-container" bind:this={chatContainer}>
+					<div class="chat-message-container">
+						<div class="chat-messages">
+							{#each $messages as message (message.id)}
+								<div class={`message-bubble ${message.sender === 'user' ? 'message-user' : 'message-bot'}`}>
+									{message.text}
+								</div>
+							{/each}
+						</div>
 					</div>
 					<div class="chat-input">
 						{#if !activeProblem}
 						<div class="chat-input-text-no-problem-description">
-							Füge eine Problembeschreibung hinzu...
+							Add a problem description...
 							<div class="add-problem-description-secondary" on:click={handleClickProblem}>
 								<AddProblemSecondary/>
-								hinzufügen</div>
+								add</div>
 						</div>
 						{/if}
 						{#if activeProblem} <!-- AND wenn kein avatar existiert -->
 						<div class="chat-input-text-no-ai-avatar-added" on:click={handleClickAvatar}>
-							Füge KI Persona für die Session hinzu...
+							Add an AI Avatar to your ideation session...
 							<div class="add-ai-persona-secondary">
 								<AddPersonaSecondary/>
-								hinzufügen</div>
+								add</div>
 						</div>
 						{/if}
+						{#if activeProblem} <!-- und Avatars wurden hinzugefügt! -->
 						<div class="chat-input-text">
 							<div class="message-wrapper">
-								<div class="message-text" contentEditable></div>
-							  </div>
+								<textarea class='message-text-area' id='message-text-area' bind:value={messageInput} placeholder="Start your brainstorming session..."></textarea>
+							</div>
+							<!--<div class="message-text" 
+														contenteditable 
+														bind:innerHTML={messageInput} 
+														on:input={(event) => messageInput = event.target.innerHTML}></div>
+							</div>-->
 						</div>
+						{/if}
 						{#if !activeProblem} <!-- OR wenn kein avatar existiert -->
 						<div class="chat-input-send-icon-no-problem-description"><SendIconInactive/></div>
 						{:else}
-						<div class="chat-input-send-icon"><SendIconActive/></div>
+						<div class="chat-input-send-icon" on:click={sendMessage}><SendIconActive/></div>
 						{/if}
 					</div>
 					
@@ -419,6 +480,7 @@ function handleAvatarSubmit () {
 		padding: 20px;
 		border-radius: 10px;
 		width: 400px;
+		top: -200px;
 }
 
 		.solution-submit-container{
@@ -681,7 +743,7 @@ function handleAvatarSubmit () {
 
 
 ::-webkit-scrollbar-corner {
-  background: rgba(0,0,0,0);
+  background: none;
 }
 
 .message-text {
@@ -691,6 +753,29 @@ function handleAvatarSubmit () {
   align-content: center;
   outline: none;
   overflow: scroll;
+}
+
+.message-text-area{
+	display:flex;
+	min-height: 36px; /* prevent height collapsing when there is no text */
+	max-height: 250px;
+	width: 100%;
+	align-content: center;
+	outline: none;
+}
+
+#message-text-area{
+	display:flex;
+	min-height: 36px; /* prevent height collapsing when there is no text */
+	max-height: 250px;
+	width: 100%;
+	align-content: center;
+	outline: none;
+	overflow: scroll;
+	background-color: transparent;
+	color: #fefefe;
+	border: none;
+	resize: none;
 }
 
 .message-wrapper {
@@ -793,6 +878,7 @@ function handleAvatarSubmit () {
 	.chat-input{
 		display: flex;
 		background-color: #0A0A0A;
+		min-height: 44px;
 		height: auto;
 		border-radius: 30px;
 		align-items: center;
@@ -803,17 +889,46 @@ function handleAvatarSubmit () {
 		box-sizing: border-box;
 	}
 
+
+	.chat-message-container{
+		display: flex;
+		height: 100%;
+		overflow: scroll;
+	}
+
 	.chat-messages{
 		display: flex;
 		width: 100%;
 		min-width: 500px;
-		height: 75vh;
-		overflow: scroll;
+		height: auto;
+		flex-direction: column;
 	}
+
+
+					.message-bubble {
+					margin: 10px;
+					padding: 10px;
+					border-radius: 5px;
+					max-width: 60%;
+					}
+
+					.message-user {
+						align-self: flex-end;
+						background-color: #004A3D;
+						color: #34E5B0;
+					}
+
+					.message-bot {
+						align-self: flex-start;
+						background-color: #505050;
+						color: #D3D3D3;
+					}
 
 	.chat-input-text-no-problem-description{
 		display: flex;
 		width: 100%;
+		height: 70px;
+		align-items: center;
 		gap: 10px;
 		color: #9CA4A9;
 		cursor: pointer;
@@ -822,6 +937,8 @@ function handleAvatarSubmit () {
 	.chat-input-text-no-ai-avatar-added{
 		display: flex;
 		width: 100%;
+		height: 70px;
+		align-items: center;
 		gap: 10px;
 		color: #9CA4A9;
 		cursor: pointer;
@@ -842,7 +959,7 @@ function handleAvatarSubmit () {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: none;
 }
 
 /* Handle */
@@ -853,7 +970,7 @@ function handleAvatarSubmit () {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: transparent;
+  background: #9ca4a9;
 }
 
 	#chat-write{
