@@ -8,12 +8,13 @@
 	import CloseTabIcon from '../svg/close_inactive_tab_18px.svelte';
 	import CloseActiveTabIcon from '../svg/close_tab_18px.svelte';
 	import AddTabIcon from '../svg/add_tab_18px.svelte';
-
+	import CloseIcon from '../svg/close_green_24px.svelte';
 
 
 	import TaskInfoUnclicked from '../svg/taskinfo_notification.svelte';
 	import TaskInfoClicked from '../svg/task-info-clicked.svelte';
 	import MinimizeTaskInfo from '../svg/minimize_task_info24px.svelte';
+	import WarningIcon from '../svg/warning_amber_18px.svelte';
 
 	import TaskUnclicked from '../svg/task_notofication.svelte';
 	import TaskClicked from '../svg/task-clicked.svelte';
@@ -22,6 +23,7 @@
 	import TaskSolutionUnclicked from '../svg/tasksolution_notification.svelte';
 	import TaskSolutionClicked from '../svg/task-solution-clicked.svelte';
 	import MinimizeTaskSolution from '../svg/minimize_task_solution24px.svelte';
+	import CheckIcon from '../svg/check_circle_outline_16px.svelte'
 
 	import AddProblemSecondary from '../svg/add_problem_circle_outlined_12px.svelte'
 	import AddPersonaSecondary from '../svg/add_ai_circle_outlined_12px.svelte'
@@ -66,10 +68,21 @@ import { writable } from 'svelte/store';
 let isClickedinfo = writable(false);
 let isClickedtask = writable(false);
 let isClickedsolution = writable(false);
+let isClickedSolutionPopup = writable(false);
 
 let modalOpenInfo = writable(false);
 let modalOpenTask = writable(false);
 let modalOpenSolution = writable(false);
+let modalSolutionPopup = writable(false);
+
+function handleClickSolutionPopup() {
+	if (!validAnswer) {
+        return;
+    }
+	
+	isClickedSolutionPopup.set(true);
+	modalSolutionPopup.set(true);
+};
 
 function handleClickinfo() {
   isClickedinfo.set(true);
@@ -84,6 +97,9 @@ function handleClicksolution() {
 	modalOpenSolution.set(true);
 };
 
+function handleCloseSolutionPopup () {
+	modalSolutionPopup.set(false);
+};
 
 function handleCloseModalInfo () {
 	modalOpenInfo.set(false);
@@ -121,6 +137,50 @@ let problemDescription = ""
 	modalOpenProblem.set(false);
   };
 
+  //implementation of solution container for task 1
+
+  import { goto } from '$app/navigation';
+
+let currentQuestion = 0
+let validAnswer = false;
+let answers = ["", "", "", ""];
+const questions = [
+    'What are some common problems or challenges faced by the aging population that your product aims to solve?',
+    'What is your proposed product or service? Describe its functionality and how it helps the elderly in detail.',
+    'How does your product or service improve upon or differ from existing solutions in the market?',
+    'What is the feasibility of implementing your product? Consider factors such as cost, risk, and complexity.'
+];
+let showError = false;
+$: showError = !validAnswer;
+
+// Function to handle the next button
+function nextQuestion() {
+    if (validAnswer) {
+        currentQuestion += 1;
+    }
+}
+// Function to handle the back button
+function prevQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion -= 1;
+    }
+}
+// Function to handle the textarea input
+function handleInput({ target }) {
+    answers[currentQuestion] = target.value;
+    validAnswer = answers[currentQuestion].split(' ').length >= 50;
+}
+// Function to submit the answers
+function submitAnswers() {
+    if (!validAnswer) {
+        return;
+    }
+
+    modalSolutionPopup.set(false);
+    goto('/ideation-task-2');
+
+    console.log(answers);
+}
 
   //implementation AI persona modal
   	let isClickedAvatar = writable(false);
@@ -167,22 +227,25 @@ let sendMessage = () => {
 };
 
 // Reactive statement for scrolling to the newest message > doesn't work somehow
-/*$: if($messages.length > 0) {
-	tick().then(_ => {
-		chatContainer.scrollTo(0, chatContainer.scrollHeight);
-	});
-}
 
-onMount(() => {
-	if (chatContainer) {
-		chatContainer.scrollTo(0, chatContainer.scrollHeight);
-	}
-});*/
 
 </script>
 
 <div class="background-container-app">
 	<div class="container-app">
+								{#if $modalSolutionPopup}
+								<div class="modal-task-soltuion-popup">
+									<div class="modal-task-soltuion-popup-content" on:click|stopPropagation>
+										<div class="modal-task-soltuion-close" on:click={handleCloseSolutionPopup}><CloseIcon/></div>
+										<div class="modal-task-soltuion-popup-label">Finished?</div>
+										<div class="modal-task-soltuion-popup-subtitle">By clicking submit, your answer will be saved. After that you can no longer edit your answer and continue with the next task.</div>
+										<div class="submit-solution-button" on:click={submitAnswers}><CheckIcon/>Submit Answer</div>
+									</div>
+								</div>
+								
+								{/if}
+		
+		
 								{#if $modalOpenAvatar}
 								<div class="modal-task-avatar">
 									<div class="modal-task-avatar-content">
@@ -240,35 +303,45 @@ onMount(() => {
 								{#if $modalOpenSolution}
 								<div class="modal-task-solution">
 									<div class="modal-task-solution-content">
-									<div class="close-button" on:click={handleCloseModalSolution}><MinimizeTaskSolution/></div>
-									<div class="ModalLabel">Task Solution</div>
-									<div class="SolutionInput-container1">
-										<p>1. What are some common problems or challenges faced by the aging population that your product aims to solve?</p>
-										<textarea class="SolutionInput" id="solution-input1"></textarea>
+									  <div class="close-button" on:click={handleCloseModalSolution}><MinimizeTaskSolution/></div>
+									  <div class="ModalLabel">Task Solution</div>
+								  
+									  {#each questions as question, index}
+										{#if index === currentQuestion}
+										  <div class="SolutionInput-container{index+1}">
+											<p>{index+1}. {question}</p>
+											<textarea class="SolutionInput" id="solution-input{index+1}" bind:value={answers[index]} on:input={handleInput}></textarea>
+										  </div>
+										{/if}
+									  {/each}
+									
+									  
+									{#if showError}
+									<div class="error-no-words">
+										<WarningIcon/> Your answer should have at least 50 words
+							  		</div>
+									{/if}
+
+								  
+									  <div class="progress-tracker">
+										<div class="progress-tracker-state">{currentQuestion+1}</div> of
+										<div class="progress-tracker-end">{questions.length}</div>
+									  </div>
+								  
+									  <div class="solution-submit-container">
+										{#if currentQuestion > 0}
+										  <div class="solution-back" on:click={prevQuestion}>Back</div>
+										{/if}
+								  
+										{#if currentQuestion < 3}
+										  <div class="solution-next" on:click={nextQuestion}>Next</div>
+										{:else}
+										  <div class="solution-submit" on:click={handleClickSolutionPopup}>Submit Answer</div>
+										{/if}
+									  </div>
+									  
 									</div>
-									<div class="SolutionInput-container2">
-										<p>2. What is your proposed product or service? Describe its functionality and how it helps the elderly in detail.</p>
-										<textarea class="SolutionInput" id="solution-input2"></textarea>
-									</div>
-									<div class="SolutionInput-container3">
-										<p>3. How does your product or service improve upon or differ from existing solutions in the market?</p>
-										<textarea class="SolutionInput" id="solution-input3"></textarea>
-									</div>
-									<div class="SolutionInput-container4">
-										<p>4. What is the feasibility of implementing your product? Consider factors such as cost, risk, and complexity.</p>
-										<textarea class="SolutionInput" id="solution-input4"></textarea>
-									</div>
-									<div class="progress-tracker">
-										<div class="progress-tracker-state">1</div>
-										of
-										<div class="progress-tracker-end">4</div>
-									</div>
-									<div class="solution-submit-container">
-										<div class="solution-next">Next</div>
-										<div class="solution-submit">Submit Answer</div>
-									</div>
-								</div>
-								</div>
+								  </div>
 								{/if}
 		<div class="chat-tabs-container">
 			{#each tabs as tab (tab.id)}  
@@ -293,9 +366,12 @@ onMount(() => {
 					{activeProblem}
 				</div>
 				{/if}
-				<div class="avatar-container">
+
+				{#if activeProblem} <!-- AND avatars selected -->
+				<div class="persona-container">
 					<Avatar />
 				</div>
+				{/if}
 				
 				{#if activeProblem}
 				<div class="add-avatar-container" on:click={handleClickAvatar}>
@@ -326,7 +402,7 @@ onMount(() => {
 						{/if}
 						{#if activeProblem} <!-- AND wenn kein avatar existiert -->
 						<div class="chat-input-text-no-ai-avatar-added" on:click={handleClickAvatar}>
-							Add an AI Avatar to your ideation session...
+							Add an AI Persona to your ideation session...
 							<div class="add-ai-persona-secondary">
 								<AddPersonaSecondary/>
 								add</div>
@@ -381,6 +457,18 @@ onMount(() => {
 </div>
 
 <style>
+
+.modal-task-soltuion-popup{
+	display: block;
+	position: absolute;
+	z-index: 1800;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+	background: #12121295;
+}
 
 .modal-task-avatar{
 	display: block;
@@ -512,7 +600,7 @@ onMount(() => {
 				} 
 				
 				.solution-submit{
-					display: none;
+					display: flex;
 					width: auto;
 					height: 44px;
 					box-sizing: border-box;
@@ -595,6 +683,43 @@ onMount(() => {
   	width: 515px;
 }
 
+.modal-task-soltuion-popup-content{
+	display: flex;
+  	flex-direction: column;
+	position: relative;
+  	background-color: #004A3D;
+  	color: #34E5B0;
+  	margin: 15% auto;
+ 	padding: 20px;
+  	border-radius: 10px;
+  	width: 515px;
+}
+
+
+				.modal-task-soltuion-popup-label{
+					display: flex;
+					font-size: 24px;
+					align-self: center;
+					margin-bottom: 5px;
+					font-family: 'Ubuntu Bold'
+				}
+
+				.submit-solution-button{
+					display: flex;
+					width: 100%;
+					height: 44px;
+					padding: 15px;
+					box-sizing: border-box;
+					background: #34E5B0;
+					color:#033129;
+					align-self: center;
+					margin-top: 25px;
+					border-radius: 5px;
+					cursor: pointer;
+					align-items: center;
+					gap: 5px;
+					justify-content: center;
+				}
 
 .modal-problem-description-label{
 	display: flex;
@@ -719,6 +844,12 @@ onMount(() => {
 						resize: none;
 						color: #34E5B0;
 					}
+
+.modal-task-soltuion-close{
+	display: flex;
+	margin-left: auto;
+	cursor: pointer;
+}
 
 .close-button {
   display: flex;
@@ -1061,8 +1192,8 @@ onMount(() => {
 					cursor: pointer;
 				}
 
-	.avatar-container{
-		display: none;
+	.persona-container{
+		display: flex;
 		flex-direction: column;
 		gap: 10px;
 	}
@@ -1118,5 +1249,20 @@ onMount(() => {
     display: flex;
     margin-left: 10px;
     cursor: pointer;
+  }
+
+  .solution-back{
+	display: flex;
+	width: auto;
+	padding: 15px;
+	cursor:pointer;
+  }
+
+  .error-no-words{
+	display: flex;
+	margin-top: 5px;
+	color: #FF7878;
+	align-items: center;
+	gap: 5px;
   }
 </style>

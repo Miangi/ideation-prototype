@@ -8,7 +8,7 @@
 		<div class="delete-icon"><DeletePersona /></div>
 		<div class="avatar-icon"><AIAvatar /></div>
 		<div class="avatar-description">Avatar Occupation</div>
-		<div class="avatar-background">Avatar Background</div>
+		<div class="avatar-background">insert GPT4 Persona details here and hide</div>
 	</div>
 </div>
 

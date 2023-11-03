@@ -24,7 +24,7 @@
         <div class="avatar-selection-selected">
             <div class="avatar-icon-selection-selected"><AIAvatarActive /></div>
             <div class="avatar-selection-description-selected">Avatar Occupation</div>
-            <div class="avatar-selection-background-selected">Avatar Background</div>
+            <div class="avatar-selection-background-selected">insert GPT4 Persona details here and hide</div>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
 	<div class="avatar-selection" id="select-avatar">
 		<div class="avatar-icon-selection"><AIAvatar /></div>
 		<div class="avatar-selection-description">Avatar Occupation</div>
-		<div class="avatar-selection-background">Avatar Background</div>
+		<div class="avatar-selection-background">insert GPT4 Persona details here and hide</div>
 	</div>
 </div>
 {/if}
