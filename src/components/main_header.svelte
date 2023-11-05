@@ -7,22 +7,20 @@
 	import GroupTag4 from '../assets/svg/group4.svelte';
 	import GroupTag5 from '../assets/svg/group5.svelte';
 
-
 	import { onMount } from 'svelte';
   
 	
 	let time;
 
   	onMount(() => {
-    const intervalId = setInterval(() => {
-      time = new Date().toLocaleString();
-    }, 1000);
+    	const intervalId = setInterval(() => {
+      		time = new Date().toLocaleString();
+    	}, 1000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  });
-
+		return () => {
+			clearInterval(intervalId);
+		};
+  	});
 </script>
 
 <div class="background-container-header">
