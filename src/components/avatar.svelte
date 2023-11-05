@@ -1,6 +1,6 @@
 <script>
-	import AIAvatar from '../svg/ai_persona.svelte';
-	import DeletePersona from '../svg/delete_persona.svelte';
+	import AIAvatar from '../assets/svg/ai_persona.svelte';
+	import DeletePersona from '../assets/svg/delete_persona.svelte';
 </script>
 
 <div class="component-avatar">

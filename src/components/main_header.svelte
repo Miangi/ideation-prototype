@@ -1,11 +1,11 @@
 <script>
-	import LogoSmall from '../svg/logo_small.svelte';
+	import LogoSmall from '../assets/svg/logo_small.svelte';
 
-	import GroupTag1 from '../svg/group1.svelte';
-	import GroupTag2 from '../svg/group2.svelte';
-	import GroupTag3 from '../svg/group3.svelte';
-	import GroupTag4 from '../svg/group4.svelte';
-	import GroupTag5 from '../svg/group5.svelte';
+	import GroupTag1 from '../assets/svg/group1.svelte';
+	import GroupTag2 from '../assets/svg/group2.svelte';
+	import GroupTag3 from '../assets/svg/group3.svelte';
+	import GroupTag4 from '../assets/svg/group4.svelte';
+	import GroupTag5 from '../assets/svg/group5.svelte';
 
 
 	import { onMount } from 'svelte';

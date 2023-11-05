@@ -1,8 +1,8 @@
 <script>
 	import { writable } from 'svelte/store';
-	import AIAvatar from '../svg/ai_persona.svelte';
-    import AIAvatarActive from '../svg/ai-persona-active.svelte';
-    import { selectedPersonas } from "../../lib/stores/persona-store";
+	import AIAvatar from '../assets/svg/ai_persona.svelte';
+    import AIAvatarActive from '../assets/svg/ai-persona-active.svelte';
+    import { selectedPersonas } from "../lib/stores/persona-store";
 
     let isSelected = writable(false);
     let selectionIsClicked = writable(false);

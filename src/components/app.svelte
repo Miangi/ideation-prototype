@@ -2,36 +2,36 @@
 	import Avatar from './avatar.svelte';
 	import AvatarInSelection from './avatar_selection.svelte';
 
-	import AddIcon from '../svg/add_24px.svelte';
-	import AddPersona from '../svg/add_persona_24px.svelte';
+	import AddIcon from '../assets/svg/add_24px.svelte';
+	import AddPersona from '../assets/svg/add_persona_24px.svelte';
 
-	import CloseTabIcon from '../svg/close_inactive_tab_18px.svelte';
-	import CloseActiveTabIcon from '../svg/close_tab_18px.svelte';
-	import AddTabIcon from '../svg/add_tab_18px.svelte';
-	import CloseIcon from '../svg/close_green_24px.svelte';
+	import CloseTabIcon from '../assets/svg/close_inactive_tab_18px.svelte';
+	import CloseActiveTabIcon from '../assets/svg/close_tab_18px.svelte';
+	import AddTabIcon from '../assets/svg/add_tab_18px.svelte';
+	import CloseIcon from '../assets/svg/close_green_24px.svelte';
 
 
-	import TaskInfoUnclicked from '../svg/taskinfo_notification.svelte';
-	import TaskInfoClicked from '../svg/task-info-clicked.svelte';
-	import MinimizeTaskInfo from '../svg/minimize_task_info24px.svelte';
-	import WarningIcon from '../svg/warning_amber_18px.svelte';
+	import TaskInfoUnclicked from '../assets/svg/taskinfo_notification.svelte';
+	import TaskInfoClicked from '../assets/svg/task-info-clicked.svelte';
+	import MinimizeTaskInfo from '../assets/svg/minimize_task_info24px.svelte';
+	import WarningIcon from '../assets/svg/warning_amber_18px.svelte';
 
-	import TaskUnclicked from '../svg/task_notofication.svelte';
-	import TaskClicked from '../svg/task-clicked.svelte';
-	import MinimizeTask from '../svg/minimize_task_24px.svelte';
+	import TaskUnclicked from '../assets/svg/task_notofication.svelte';
+	import TaskClicked from '../assets/svg/task-clicked.svelte';
+	import MinimizeTask from '../assets/svg/minimize_task_24px.svelte';
 
-	import TaskSolutionUnclicked from '../svg/tasksolution_notification.svelte';
-	import TaskSolutionClicked from '../svg/task-solution-clicked.svelte';
-	import MinimizeTaskSolution from '../svg/minimize_task_solution24px.svelte';
-	import CheckIcon from '../svg/check_circle_outline_16px.svelte'
+	import TaskSolutionUnclicked from '../assets/svg/tasksolution_notification.svelte';
+	import TaskSolutionClicked from '../assets/svg/task-solution-clicked.svelte';
+	import MinimizeTaskSolution from '../assets/svg/minimize_task_solution24px.svelte';
+	import CheckIcon from '../assets/svg/check_circle_outline_16px.svelte'
 
-	import AddProblemSecondary from '../svg/add_problem_circle_outlined_12px.svelte'
-	import AddPersonaSecondary from '../svg/add_ai_circle_outlined_12px.svelte'
+	import AddProblemSecondary from '../assets/svg/add_problem_circle_outlined_12px.svelte'
+	import AddPersonaSecondary from '../assets/svg/add_ai_circle_outlined_12px.svelte'
 
-	import SendIconInactive from '../svg/send_icon_inactive.svelte'
-	import SendIconActive from '../svg/send_icon_active.svelte'
+	import SendIconInactive from '../assets/svg/send_icon_inactive.svelte'
+	import SendIconActive from '../assets/svg/send_icon_active.svelte'
 
-	import ShuffleAiAvatars from '../svg/shuffle-ai-avatar.svelte';
+	import ShuffleAiAvatars from '../assets/svg/shuffle-ai-avatar.svelte';
 
 //tab management
 let tabs = [{ id: 1, title: 'Ideation 1'}];
