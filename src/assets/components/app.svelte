@@ -180,6 +180,7 @@ function submitAnswers() {
     goto('/ideation-task-2');
 
     console.log(answers);
+
 }
 
   //implementation AI persona modal
@@ -318,7 +319,7 @@ let sendMessage = () => {
 									  
 									{#if showError}
 									<div class="error-no-words">
-										<WarningIcon/> Your answer should have at least 50 words
+										<WarningIcon/> Your answer must have at least 50 words
 							  		</div>
 									{/if}
 

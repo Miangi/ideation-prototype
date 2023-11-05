@@ -2,18 +2,26 @@
 	import { writable } from 'svelte/store';
 	import AIAvatar from '../svg/ai_persona.svelte';
     import AIAvatarActive from '../svg/ai-persona-active.svelte';
+    import { selectedPersonas } from "../../lib/stores/persona-store";
 
     let isSelected = writable(false);
     let selectionIsClicked = writable(false);
+    
 
     function select () {
         isSelected.set(true);
         selectionIsClicked.set(true);
-        };
+        // Get the current selected personas, add this one, then update the store
+        $selectedPersonas.push({ name: 'Avatar Occupation', detail: 'insert GPT4 Persona details here and hide' });
+        console.log(selectedPersonas)
+    };
 
     function unselect () {
         isSelected.set(false);
-        };
+        // Filter out this persona from the selected personas and update the store
+        $selectedPersonas = $selectedPersonas.filter(persona => persona.name !== 'Avatar Occupation');
+    };
+
 
 
 </script>
