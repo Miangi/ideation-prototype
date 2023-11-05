@@ -1,6 +1,7 @@
 <script>
 import Avatar from './avatar.svelte';
 import AvatarInSelection from './avatar_selection.svelte';
+import TaskInfoModal from './modals/task_info_modal.svelte';
 
 import AddIcon from '../assets/svg/add_24px.svelte';
 import AddPersona from '../assets/svg/add_persona_24px.svelte';
@@ -18,7 +19,6 @@ import WarningIcon from '../assets/svg/warning_amber_18px.svelte';
 
 import TaskUnclicked from '../assets/svg/task_notofication.svelte';
 import TaskClicked from '../assets/svg/task-clicked.svelte';
-import MinimizeTask from '../assets/svg/minimize_task_24px.svelte';
 
 import TaskSolutionUnclicked from '../assets/svg/tasksolution_notification.svelte';
 import TaskSolutionClicked from '../assets/svg/task-solution-clicked.svelte';
@@ -290,17 +290,7 @@ let sendMessage = () => {
 		{/if}
 
 		{#if $modalOpenTask}
-			<div class="modal-task">
-				<div class="modal-task-content">
-				<div class="close-button" on:click={handleCloseModalTask}><MinimizeTask/></div>
-				<div class="ModalLabel">Task</div>
-				<p>Your job is to develop a new or improved product or service offering that meets the needs of older people - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life. <br>
-					<br><br>1. What are some <b>common problems or challenges faced by the aging population</b> that your product aims to solve? 
-					<br><br>2. What is your <b>proposed product or service</b>? Describe its functionality and how it helps the elderly in detail.
-					<br><br>3. How does your product or service <b>improve upon or differ from existing solutions in the market</b>?
-					<br><br>4. What is the <b>feasibility</b> (practicality or workability of a project, idea, or plan) of implementing your product? Consider factors such as cost, risk, and complexity. </p>
-				</div>
-			</div>
+			<TaskInfoModal on:close={handleCloseModalTask}/>
 		{/if}
 
 		{#if $modalOpenSolution}
@@ -510,18 +500,7 @@ let sendMessage = () => {
 	background: #12121280;
 }
 
-.modal-task{
-	display: block;
-	position: fixed;
-	z-index: 1000;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background: #12121280;
 
-}
 
 .modal-task-solution{
 	display: block;
@@ -546,18 +525,6 @@ let sendMessage = () => {
   width: 400px;
   color: #D3D3D3;
   word-break: normal;
-}
-
-.modal-task-content{
-	display: flex;
-  flex-direction: column;
-	position: relative;
-  background-color: #00274A;
-  color: #3EA2FF;
-  margin: 15% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
 }
 
 .modal-task-solution-content{
