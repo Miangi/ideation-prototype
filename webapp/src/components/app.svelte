@@ -1,4 +1,11 @@
 <script>
+import App from '../models/App.js'
+
+const app = new App({
+	backendUrl: BACKEND_SERVER_URL
+})
+
+
 import Avatar from './avatar.svelte';
 import AvatarInSelection from './avatar_selection.svelte';
 import TaskInfoModal from './modals/task_info_modal.svelte';
