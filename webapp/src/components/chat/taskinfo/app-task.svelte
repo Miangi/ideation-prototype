@@ -10,78 +10,20 @@ import TaskSolutionClicked from '../../../assets/svg/task-solution-clicked.svelt
 
 import { writable } from 'svelte/store';
 
-
-//implementation functions to handle the info, task and solution modals on the right side
-
-//handle viewing of task background
-
 let isClickedinfo = writable(false);
-let modalOpenInfo = writable(false);
-
-function handleClickinfo() {
-  isClickedinfo.set(true);
-  modalOpenInfo.set(true);
-};
-
-function handleCloseModalInfo () {
-	modalOpenInfo.set(false);
-};
-
-//handle viewing of task
-
 let isClickedtask = writable(false);
-let modalOpenTask = writable(false);
-
-function handleClicktask() {
-	isClickedtask.set(true);
-	modalOpenTask.set(true);
-};
-
-function handleCloseModalTask () {
-	modalOpenTask.set(false);
-};
-
-//handle viewing of users task solution
-
 let isClickedsolution = writable(false);
-let modalOpenSolution = writable(false);
 
-function handleClicksolution() {
-	isClickedsolution.set(true);
-	modalOpenSolution.set(true);
+function taskInfoClicked() {
+  isClickedinfo.set(true);
 };
-
-function handleCloseModalSolution () {
-	modalOpenSolution.set(false);
-};
-
-		// handle viewing of users task solution popup. This ensures users don't accidentally give incomplete answers
-
-
-				let isClickedSolutionPopup = writable(false);
-				let modalSolutionPopup = writable(false);
-
-				function handleClickSolutionPopup() {
-					if (!validAnswer) {
-						return;
-					}
-					
-					isClickedSolutionPopup.set(true);
-					modalSolutionPopup.set(true);
-				};
-
-				function handleCloseSolutionPopup () {
-					modalSolutionPopup.set(false);
-				};
-
-
 
 </script>
 
 <div class="app-task-container">
     <div class="task-info-container">
         {#if !$isClickedinfo}
-        <div class="task-info-unclicked" on:click={() => dispatch('open-info')}>
+        <div class="task-info-unclicked" on:click={() => dispatch('open-info')} on:click={taskInfoClicked}>
                 <TaskInfoUnclicked/>
         </div>
         {:else}
@@ -92,16 +34,16 @@ function handleCloseModalSolution () {
     </div>
     <div class="task-container">
         {#if !$isClickedtask}
-        <div class="task-unclicked" on:click={handleClicktask}><TaskUnclicked/></div>
+        <div class="task-unclicked"><TaskUnclicked/></div>
         {:else}
-        <div class="task-clicked" on:click={handleClicktask}><TaskClicked/></div>
+        <div class="task-clicked"><TaskClicked/></div>
         {/if}
     </div>
     <div class="task-solution-container">
         {#if !$isClickedsolution}
-        <div class="task-solution-unclicked" on:click={handleClicksolution}><TaskSolutionUnclicked/></div>
+        <div class="task-solution-unclicked"><TaskSolutionUnclicked/></div>
         {:else}
-        <div class="task-solution-clicked" on:click={handleClicksolution}><TaskSolutionClicked/></div>
+        <div class="task-solution-clicked"><TaskSolutionClicked/></div>
         {/if}
     </div>
 </div>
