@@ -88,15 +88,15 @@ function handleCloseModalSolution () {
 <div class="background-container-app">
 	<div class="container-app">
 		{#if $modalSolutionPopup}
-			<TaskSolutionPopup on:close={handleCloseSolutionPopup} on:open={handleCloseSolutionPopup}/>
+			<TaskSolutionPopup/>
 		{/if}
 
 		{#if $modalOpenInfo}
-			<TaskInfoModal on:close={handleCloseModalInfo} on:open={handleClickinfo}/>
+			<TaskInfoModal on:close-info={handleCloseModalInfo} on:open-info={handleClickinfo}/>
 		{/if}
 
 		{#if $modalOpenTask}
-			<TaskModal on:close={handleCloseModalTask}/>
+			<TaskModal/>
 		{/if}
 
 		{#if $modalOpenSolution}

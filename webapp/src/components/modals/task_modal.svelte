@@ -9,7 +9,7 @@
 
 <div class="modal-task">
 	<div class="modal-task-content">
-	<div class="close-button" on:click={() => dispatch('close')}><MinimizeTask/></div>
+	<div class="close-button" on:click={() => dispatch('close-info')}><MinimizeTask/></div>
 	<div class="ModalLabel">Task</div>
 	<p>Your job is to develop a new or improved product or service offering that meets the needs of older people - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life. <br>
 		<br><br>1. What are some <b>common problems or challenges faced by the aging population</b> that your product aims to solve? 
