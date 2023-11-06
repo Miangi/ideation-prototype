@@ -16,4 +16,9 @@ export default ({ port }) => {
 	})
 
 	log.info(`listening on port ${port}`)
+
+	return () => {
+		log.info(`shutting down`)
+		server.close()
+	}
 }

@@ -1,6 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
-import initBackendServer from '@pivoto/backend'
+import initBackendServer from '@pivoto-study/backend'
+import chokidar from 'chokidar'
 
 export default defineConfig(({ mode }) => ({
 	plugins: [
@@ -8,11 +9,20 @@ export default defineConfig(({ mode }) => ({
 		{
 			name: 'backendServer',
 			configureServer(server){
-				initBackendServer({
-					port: mode === 'production'
-						? 5390
-						: 8080
-				})
+				if(mode === 'production'){
+					initBackendServer({ port: 5390 })
+				}else{
+					let shutdown
+
+					function reload(){
+						if(shutdown) shutdown()
+						shutdown = initBackendServer({ port: 8080 })
+					}
+					
+					reload()
+					chokidar.watch('../backend').on('all', reload)
+				}
+				
 			}
 		}
 	],
