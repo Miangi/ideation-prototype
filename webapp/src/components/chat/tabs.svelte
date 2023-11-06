@@ -1,7 +1,7 @@
 <script>
-    import CloseTabIcon from '../../assets/svg/close_inactive_tab_18px.svelte';
-    import CloseActiveTabIcon from '../../assets/svg/close_tab_18px.svelte';
-    import AddTabIcon from '../../assets/svg/add_tab_18px.svelte';
+    import CloseTabIcon from '../../assets/svg/close_inactive_tab_18px.svelte'
+    import CloseActiveTabIcon from '../../assets/svg/close_tab_18px.svelte'
+    import AddTabIcon from '../../assets/svg/add_tab_18px.svelte'
 
 
 

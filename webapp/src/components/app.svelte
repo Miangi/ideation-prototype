@@ -1,160 +1,53 @@
 <script>
-import App from '../models/App.js'
+	import App from '../models/App.js'
 
-const app = new App({
-	backendUrl: `${BACKEND_SERVER_URL}?token=XTESTXYZ`
-})
+	const app = new App({
+		backendUrl: `${BACKEND_SERVER_URL}?token=XTESTXYZ`
+	})
+	
+	import TaskInfoModal from './task/modal-task-info.svelte'
+	import TaskInstructionsModal from './task/modal-task-instructions.svelte'
+	import TaskSolutionModal from './task/modal-task-solution.svelte'
+	import ChatTabs from './chat/tabs.svelte'
+	import ProblemBar from './chat/problem-bar.svelte'
+	import ChatWindow from './chat/chat-window.svelte'
+	import TaskBar from './task/task-bar.svelte'
 
-import Avatar from '../components/chat/visual/avatar.svelte';
-import TaskModal from './modals/task_modal.svelte';
-import TaskInfoModal from './modals/task_info_modal.svelte'
-import TaskSolutionPopup from './modals/task-solution-popup.svelte' 
-import TaskSolutionModal from './modals/task-solution.svelte'
-import TabManagement from './tab-management/tabs.svelte'
-	import ProblemAndAvatars from '../components/chat/visual/problem-and-avatars.svelte'
-    import Chat from '../components/chat/chat-field/chat.svelte'
-    import Taskinfo from '../components/chat/taskinfo/app-task.svelte'
-
-
-import { writable } from 'svelte/store';
-
-
-
-//implementation functions to handle the info, task and solution modals on the right side
-
-//handle viewing of task background
-
-export let isClickedinfo = writable(false);
-export let modalOpenInfo = writable(false);
-
-function handleClickinfo() {
-  isClickedinfo.set(true);
-  modalOpenInfo.set(true);
-};
-
-function handleCloseModalInfo () {
-	modalOpenInfo.set(false);
-};
-
-//handle viewing of task
-
-let isClickedtask = writable(false);
-let modalOpenTask = writable(false);
-
-function handleClicktask() {
-	isClickedtask.set(true);
-	modalOpenTask.set(true);
-};
-
-function handleCloseModalTask () {
-	modalOpenTask.set(false);
-};
-
-//handle viewing of users task solution
-
-let isClickedsolution = writable(false);
-let modalOpenSolution = writable(false);
-
-function handleClicksolution() {
-	isClickedsolution.set(true);
-	modalOpenSolution.set(true);
-};
-
-function handleCloseModalSolution () {
-	modalOpenSolution.set(false);
-};
-
-		// handle viewing of users task solution popup. This ensures users don't accidentally give incomplete answers
-
-
-				let isClickedSolutionPopup = writable(false);
-				let modalSolutionPopup = writable(false);
-
-				function handleClickSolutionPopup() {
-					if (!validAnswer) {
-						return;
-					}
-					
-					isClickedSolutionPopup.set(true);
-					modalSolutionPopup.set(true);
-				};
-
-				function handleCloseSolutionPopup () {
-					modalSolutionPopup.set(false);
-				};
-
+	import { visibleModals } from '../models/ui-state.js'
 </script>
 
-<div class="background-container-app">
-	<div class="container-app">
-		{#if $modalSolutionPopup}
-			<TaskSolutionPopup/>
-		{/if}
+<div class="app-container">
+	{#if $visibleModals.taskInfo}
+		<TaskInfoModal/>
+	{/if}
 
-		{#if $modalOpenInfo}
-			<TaskInfoModal on:close-info={handleCloseModalInfo} on:open-info={handleClickinfo}/>
-		{/if}
+	{#if $visibleModals.taskInstructions}
+		<TaskInstructionsModal/>
+	{/if}
 
-		{#if $modalOpenTask}
-			<TaskModal/>
-		{/if}
+	{#if $visibleModals.taskSolution}
+		<TaskSolutionModal/>
+	{/if}
 
-		{#if $modalOpenSolution}
-			<TaskSolutionModal/>
-		{/if}
-
-		<TabManagement/>
-		<div class="chat-app">
-			<ProblemAndAvatars />
-			<Chat />
-			<Taskinfo/>
-		</div>
+	<ChatTabs/>
+	<div class="chat-container">
+		<ProblemBar/>
+		<ChatWindow/>
+		<TaskBar/>
 	</div>
 </div>
 
-<style>
+<style lang="scss">
+	.app-container{
+		display: flex;
+		width: 100%;
+		height: 100%;
+		flex-direction: column;
 
-::-webkit-scrollbar {
-	width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-	background: none;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-	background: #888;
-	border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-	background: #9ca4a9;
-}
-
-::-webkit-scrollbar-corner {
-	background: none;
-}
-
-.background-container-app {
-	display: flex;
-	width: 100%;
-	height: 100%;
-}
-
-		.container-app {
+		> .chat-container {
 			display: flex;
 			width: 100%;
 			height: 100%;
-			flex-direction: column;
 		}
-
-
-				.chat-app {
-					display: flex;
-					width: 100%;
-					height: 100%;
-				}
+	}
 </style>
