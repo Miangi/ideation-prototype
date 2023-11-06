@@ -1,4 +1,10 @@
 <script>
+	import App from '../models/App.js'
+
+	const app = new App({
+		backendUrl: `${BACKEND_SERVER_URL}?token=XTESTXYZ`
+	})
+	
 	import TaskInfoModal from './task/modal-task-info.svelte'
 	import TaskInstructionsModal from './task/modal-task-instructions.svelte'
 	import TaskSolutionModal from './task/modal-task-solution.svelte'

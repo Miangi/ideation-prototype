@@ -1,4 +1,9 @@
 {
-	"name": "@pivoto/backend",
-	"module": "true"
+	"name": "@pivoto-study/backend",
+	"type": "module",
+	"main": "server.js",
+	"dependencies": {
+		"@mwni/log": "^2.2.0",
+		"ws": "^8.14.2"
+	}
 }
