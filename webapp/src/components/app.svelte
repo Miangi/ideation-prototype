@@ -5,7 +5,9 @@ import TaskInfoModal from './modals/task_info_modal.svelte'
 import TaskSolutionPopup from './modals/task-solution-popup.svelte' 
 import TaskSolutionModal from './modals/task-solution.svelte'
 import TabManagement from './tab-management/tabs.svelte'
-import Interaction from './chat/interaction.svelte'
+	import ProblemAndAvatars from '../components/chat/visual/problem-and-avatars.svelte'
+    import Chat from '../components/chat/chat-field/chat.svelte'
+    import Taskinfo from '../components/chat/taskinfo/app-task.svelte'
 
 
 import { writable } from 'svelte/store';
@@ -75,28 +77,16 @@ function handleCloseModalSolution () {
 					modalSolutionPopup.set(false);
 				};
 
-
-
-//implementation of adding a problem description
-
-let problemDescription = ""
-let activeProblem = "aas"
-
-const handleSubmit = () => {
-	activeProblem = problemDescription;
-	modalOpenProblem.set(false);
-};
-
 </script>
 
 <div class="background-container-app">
 	<div class="container-app">
 		{#if $modalSolutionPopup}
-			<TaskSolutionPopup on:close={handleCloseSolutionPopup}/>
+			<TaskSolutionPopup on:close={handleCloseSolutionPopup} on:open={handleCloseSolutionPopup}/>
 		{/if}
 
 		{#if $modalOpenInfo}
-			<TaskInfoModal on:close={handleCloseModalInfo} on:click={handleClickinfo}/>
+			<TaskInfoModal on:close={handleCloseModalInfo} on:open={handleClickinfo}/>
 		{/if}
 
 		{#if $modalOpenTask}
@@ -108,7 +98,11 @@ const handleSubmit = () => {
 		{/if}
 
 		<TabManagement/>
-		<Interaction/>
+		<div class="chat-app">
+			<ProblemAndAvatars />
+			<Chat />
+			<Taskinfo/>
+		</div>
 	</div>
 </div>
 
