@@ -2,7 +2,7 @@
 import App from '../models/App.js'
 
 const app = new App({
-	backendUrl: BACKEND_SERVER_URL
+	backendUrl: `${BACKEND_SERVER_URL}?token=XTESTXYZ`
 })
 
 
