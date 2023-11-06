@@ -81,11 +81,11 @@ function handleCloseModalSolution () {
 <div class="app-task-container">
     <div class="task-info-container">
         {#if !$isClickedinfo}
-        <div class="task-info-unclicked" on:click={handleClickinfo}>
+        <div class="task-info-unclicked" on:click={() => dispatch('open-info')}>
                 <TaskInfoUnclicked/>
         </div>
         {:else}
-        <div class="task-info-clicked" on:click={handleClickinfo}>
+        <div class="task-info-clicked" on:click={() => dispatch('open-info')}>
                 <TaskInfoClicked/>
         </div>
         {/if}
