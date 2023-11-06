@@ -1,36 +1,32 @@
 <script>
-    import SendIconActive from '../../../assets/svg/send_icon_active.svelte'
+    import SendIconActive from '../../assets/svg/send_icon_active.svelte'
+    import { writable } from 'svelte/store';
 
-//implementation Chat
+    let messageInput = ""; 
+    let messageId = 0;
+    const messages = writable([]);
+        
+    let chatContainer; 
 
-import { onMount, tick } from 'svelte';
-import { writable } from 'svelte/store';
+    // Uncomment below code if we have getResponseFromGPT4 function
+    /*
+    let botResponse = async(text) => {
+        let response = await getResponseFromGPT4(text);
+        messages.update(curr => [...curr, { text: response, sender: 'bot', id: messageId }]);
+    }
+    */
 
-let messageInput = ""; 
-let messageId = 0;
-const messages = writable([]);
-	
-let chatContainer; 
+    let sendMessage = () => {
+        messageId++;
+        messages.update(curr => [...curr, { text: messageInput, sender: 'user', id: messageId }]);
+        // botResponse(messageInput); Uncomment code if we have getResponseFromGPT4 function
+        messageInput = "";
 
-// Uncomment below code if we have getResponseFromGPT4 function
-/*
-let botResponse = async(text) => {
-	let response = await getResponseFromGPT4(text);
-	messages.update(curr => [...curr, { text: response, sender: 'bot', id: messageId }]);
-}
-*/
-
-let sendMessage = () => {
-	messageId++;
-	messages.update(curr => [...curr, { text: messageInput, sender: 'user', id: messageId }]);
-	// botResponse(messageInput); Uncomment code if we have getResponseFromGPT4 function
-	messageInput = "";
-
-	// Scroll to the newest message after sending
-	setTimeout(() => {
-		chatContainer.scrollTop = chatContainer.scrollHeight;
-	}, 0);
-};
+        // Scroll to the newest message after sending
+        setTimeout(() => {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 0);
+    };
 
 </script>
 

@@ -1,6 +1,7 @@
 <script>
-import MinimizeTaskSolution from '../../assets/svg/minimize_task_solution24px.svelte';
-import WarningIcon from '../../assets/svg/warning_amber_18px.svelte';
+import MinimizeTaskSolution from '../../assets/svg/minimize_task_solution24px.svelte'
+import WarningIcon from '../../assets/svg/warning_amber_18px.svelte'
+import { visibleModals } from '../../models/ui-state.js'
 
 let currentQuestion = 0
 let validAnswer = false;
@@ -42,15 +43,11 @@ function handleInput({ target }) {
 //    console.log(answers);
 //}
 
-
-// dispatcher
-import { createEventDispatcher } from 'svelte'
-const dispatch = createEventDispatcher()
 </script>
 
 <div class="modal-task-solution">
     <div class="modal-task-solution-content">
-        <div class="close-button" on:click={() => dispatch('close')}><MinimizeTaskSolution/></div>
+        <div class="close-button" on:click={() => $visibleModals.taskSolution = false}><MinimizeTaskSolution/></div>
         <div class="ModalLabel">Task Solution</div>
     
         {#each questions as question, index}
