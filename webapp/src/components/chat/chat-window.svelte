@@ -11,6 +11,9 @@
     import WarningModal from '../../components/chat/warning.svelte'
     import WarningAmber_18px from '../../assets/svg/warning_amber_18px.svelte';
 
+    import { onMount } from 'svelte';
+
+
     let messageInput = "";
     const messages = writable([]);
 
@@ -68,12 +71,23 @@
 		background: '#1A2950',
 	};
 
+
+    //script das dazu führt, dass die 'connection lost' Warnung nur bei Internetverlust kommt.
+    let online = navigator.onLine;
+
+    onMount(() => {
+        window.addEventListener('online', () => online = true);
+        window.addEventListener('offline', () => online = false);
+    });
+
 </script>   
 
 
 <div class="app-chat-container">
     <div class="chat-container" bind:this={chatContainer}>
+        {#if !online}
         <WarningModal/>
+        {/if}
         <div class="chat-message-container">
             <div class="chat-messages">
                 {#each $messages as message (message.id)}
