@@ -6,6 +6,8 @@
     import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
     import Triangle from '../../assets/svg/triangle.svelte'
 
+    import GeneratingAnswer from '../../assets/svg/generating-answer-icon.svelte'
+
     let messageInput = "";
     const messages = writable([]);
 
@@ -88,7 +90,7 @@
                 {/if}
             {/each}
             <div class="generating-answers-container">
-                points
+                <GeneratingAnswer/>
                 Generating answers
             </div>
             </div>
@@ -225,14 +227,12 @@
                                                 color: #4F76DB;
                                             }
 
-
-
                                             .generating-answers-container{
                                                 display: flex;
                                                 margin-left: 50px;
-                                                width: 220px;
+                                                width: 200px;
                                                 height: 44px;
-                                                padding: 15px;
+                                                gap: 10px;
                                                 box-sizing: border-box;
                                                 border-radius: 22px;
                                                 background-color: #03030370;

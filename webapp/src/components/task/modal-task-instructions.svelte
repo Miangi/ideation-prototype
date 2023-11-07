@@ -7,11 +7,11 @@
 	<div class="window">
 	<div class="close-button" on:click={() => $visibleModals.taskInstructions = false}><MinimizeTask/></div>
 	<div class="title">Task</div>
-	<p>Your job is to develop a new or improved product or service offering that meets the needs of older people - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life. <br>
-		<br><br>1. What are some <b>common problems or challenges faced by the aging population</b> that your product aims to solve? 
-		<br><br>2. What is your <b>proposed product or service</b>? Describe its functionality and how it helps the elderly in detail.
-		<br><br>3. How does your product or service <b>improve upon or differ from existing solutions in the market</b>?
-		<br><br>4. What is the <b>feasibility</b> (practicality or workability of a project, idea, or plan) of implementing your product? Consider factors such as cost, risk, and complexity. </p>
+	<p>Your job is to <span style="font-family: 'Ubuntu Bold';color: #5AB0FF;">develop a new or improved product or service offering that meets the needs of older people</span> - either to make healthcare more accessible, reduce the risk of accidents, or improve overall quality of life.<br>
+		<br><br>1. What are some <span style="font-family: 'Ubuntu Bold';color: #5AB0FF;">common problems or challenges faced by the aging population</span> that your product aims to solve? 
+		<br><br>2. What is your <span style="font-family: 'Ubuntu Bold';color: #5AB0FF;">proposed product or service</span>? Describe its functionality and how it helps the elderly in detail.
+		<br><br>3. How does your product or service <span style="font-family: 'Ubuntu Bold'; color: #5AB0FF;">improve upon or differ from existing solutions in the market</span>?
+		<br><br>4. What is the <span style="font-family: 'Ubuntu Bold';color: #5AB0FF;">feasibility</span> (practicality or workability of a project, idea, or plan) of implementing your product? Consider factors such as cost, risk, and complexity. </p>
 	</div>
 </div>
 
@@ -37,7 +37,8 @@
 			margin: 15% auto;
 			padding: 20px;
 			border-radius: 10px;
-			width: 400px;
+			width: 600px;
+			font-size: 16px;
 
 			> .title{
                 display: flex;

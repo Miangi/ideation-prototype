@@ -109,8 +109,9 @@ function handleInput({ target }) {
                 margin: 15% auto;
                 padding: 20px;
                 border-radius: 10px;
-                width: 400px;
+                width: 600px;
                 top: -200px;
+                font-size: 16px;
             }
 
             .close-button { /* this only styles position i think*/

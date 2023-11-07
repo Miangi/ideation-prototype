@@ -32,9 +32,10 @@
 			margin: 15% auto;
 			padding: 20px;
 			border-radius: 10px;
-			width: 400px;
+			width: 600px;
 			color: #D3D3D3;
 			word-break: normal;
+			font-size: 16px;
 
 			> .title{
                 display: flex;
