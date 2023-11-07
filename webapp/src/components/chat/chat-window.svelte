@@ -1,44 +1,96 @@
 <script>
     import SendIconActive from '../../assets/svg/send_icon_active.svelte'
+    import SendIconInactive from '../../assets/svg/send_icon_inactive.svelte'
     import { writable } from 'svelte/store';
 
-    let messageInput = ""; 
-    let messageId = 0;
+    import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
+    import Triangle from '../../assets/svg/triangle.svelte'
+
+    let messageInput = "";
     const messages = writable([]);
-        
-    let chatContainer; 
 
-    // Uncomment below code if we have getResponseFromGPT4 function
-    /*
-    let botResponse = async(text) => {
-        let response = await getResponseFromGPT4(text);
-        messages.update(curr => [...curr, { text: response, sender: 'bot', id: messageId }]);
+    function sendMessage(text, isUser = true) {
+        messages.update(allMessages => [
+            ...allMessages, 
+            { 
+                id: allMessages.length + 1, 
+                text, 
+                sender: isUser ? 'user' : 'ai', 
+                persona: isUser ? undefined : 'AIPersona1' // hier dynamische Persona Idenifizierung?
+            }
+        ]);
     }
-    */
 
-    let sendMessage = () => {
-        messageId++;
-        messages.update(curr => [...curr, { text: messageInput, sender: 'user', id: messageId }]);
-        // botResponse(messageInput); Uncomment code if we have getResponseFromGPT4 function
-        messageInput = "";
+    // Funktion für CSS Sub-Klassen
+    function aiBubbleClass(persona) {
+        switch (persona) {
+            case 'AIPersona1': return 'ai-persona-1';
+            case 'AIPersona2': return 'ai-persona-2';
+            case 'AIPersona3': return 'ai-persona-3';
+            case 'AIPersona4': return 'ai-persona-4';
+            default: return 'ai-persona-default';
+        }
+    }
 
-        // Scroll to the newest message after sending
-        setTimeout(() => {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }, 0);
-    };
+    //platzhalter für inputs
+    let namenachname = 'Max Mustermann';
+    let aipersonajobbeschreibung
+    let chatContainer
 
-</script>
+
+
+    const colorSheetPersona1 = {
+		primary: '#FF7878',
+        text: '#9E9E9E',
+		background: '#251010',
+	};
+
+    const colorSheetPersona2 = {
+		primary: '#DBA34F',
+        text: '#9E9E9E',
+		background: '#2D1A0B',
+	};
+
+    const colorSheetPersona3 = {
+		primary: '#CE90E4',
+        text: '#9E9E9E',
+		background: '#2C263F',
+	};
+
+    const colorSheetPersona4 = {
+		primary: '#4F76DB',
+        text: '#9E9E9E',
+		background: '#1A2950',
+	};
+
+</script>   
+
 
 <div class="app-chat-container">
     <div class="chat-container" bind:this={chatContainer}>
         <div class="chat-message-container">
             <div class="chat-messages">
                 {#each $messages as message (message.id)}
-                    <div class={`message-bubble ${message.sender === 'user' ? 'message-user' : 'message-bot'}`}>
-                        {message.text}
+                {#if message.sender === 'user'}
+                    <div class="user-message">
+                        <div class="username" style="color: #34E5B0;">{namenachname}</div>
+                        <div class="bubble user-bubble">{message.text}</div>
                     </div>
-                {/each}
+                {:else}
+                    <div class="ai-message">
+                        <div class="ai-icon"><AIIcon /></div>
+                        <div class={`bubble ${aiBubbleClass(message.persona)}`}>
+                            <div class="triangle"><Triangle/></div>
+                            <div class={`persona-name ${message.persona}`}>{aipersonajobbeschreibung}</div>
+                            {message.text}
+                        </div>
+                    </div>
+                {/if}
+            {/each}
+            <div class="generating-answers-container">
+                points
+                Generating answers
+            </div>
             </div>
         </div>
         <div class="chat-input">
@@ -87,24 +139,108 @@
                         }
 
 
-                                .message-bubble {
-                                    margin: 10px;
-                                    padding: 10px;
-                                    border-radius: 5px;
+                                .bubble {
+                                    display: flex;
+                                    flex-direction: column;
+                                    margin-top: 5px;
+                                    padding: 15px;
+                                    border-radius: 10px;
                                     max-width: 60%;
+                                    background-color:rgb(26, 26, 26);
+                                    color: #9E9E9E;
+                                    align-self: flex-end;
+                                    width: auto;
                                 }
 
-                                        .message-user {
+                                .triangle{
+                                    position: relative;
+                                    top:-5px;
+                                    left: -25px;
+                                }
+                            
+                                        .user-message {
+                                            display: flex;
+                                            flex-direction: column;
+                                            text-align: right;
                                             align-self: flex-end;
-                                            background-color: #004A3D;
+                                            margin-top: 15px;
+                                        }
+
+                                        .user-message .bubble{
+                                            background-color: #0B2E24;
                                             color: #34E5B0;
                                         }
 
-                                        .message-bot {
-                                            align-self: flex-start;
-                                            background-color: #505050;
-                                            color: #D3D3D3;
+                                        .ai-persona-1 .bubble {
+                                                background-color: #251010;
+                                            }
+
+                                            .ai-persona-2 .bubble {
+                                                background-color: #2D1A0B;
+                                            }
+
+                                            .ai-persona-3 .bubble {
+                                                background-color: #2C263F;
+                                            }
+
+                                            .ai-persona-4 .bubble {
+                                                background-color: #1A2950;
+                                            }
+
+
+                                        .ai-message{
+                                            display: flex;
+                                            width: auto;
+                                            max-width: 60%;
+                                            margin-top: 15px;
+                                            gap: 10px;
+                                            margin-left: 10px;
                                         }
+
+                                        .ai-icon{
+                                                margin-top:7px;
+                                            }
+
+                                        .persona-name{
+                                            display: flex;
+                                            font-size: 16px;
+                                            font-family: 'Ubuntu Bold';
+                                            margin-top: -20px;
+                                        }
+
+                                        
+                                            .AIPersona1 {
+                                                color: #FF7878;
+                                            }
+
+                                            .AIPersona2 {
+                                                color: #DBA34F;
+                                            }
+
+                                            .AIPersona3 {
+                                                color: #CE90E4;
+                                            }
+
+                                            .AIPersona4 {
+                                                color: #4F76DB;
+                                            }
+
+
+
+                                            .generating-answers-container{
+                                                display: flex;
+                                                margin-left: 50px;
+                                                width: 220px;
+                                                height: 44px;
+                                                padding: 15px;
+                                                box-sizing: border-box;
+                                                border-radius: 22px;
+                                                background-color: #03030370;
+                                                align-items: center;
+                                                justify-content: center;
+                                                margin-top: 10px;
+                                            }
+
 
                 .chat-input{
                     display: flex;
@@ -168,8 +304,8 @@
                         }
 
                         ::-webkit-scrollbar {
-	width: 10px;
-}
+                            width: 10px;
+                        }
 
 /* Track */
 ::-webkit-scrollbar-track {
