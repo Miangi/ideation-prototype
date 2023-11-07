@@ -8,6 +8,9 @@
 
     import GeneratingAnswer from '../../assets/svg/generating-answer-icon.svelte'
 
+    import WarningModal from '../../components/chat/warning.svelte'
+    import WarningAmber_18px from '../../assets/svg/warning_amber_18px.svelte';
+
     let messageInput = "";
     const messages = writable([]);
 
@@ -70,6 +73,7 @@
 
 <div class="app-chat-container">
     <div class="chat-container" bind:this={chatContainer}>
+        <WarningModal/>
         <div class="chat-message-container">
             <div class="chat-messages">
                 {#each $messages as message (message.id)}
