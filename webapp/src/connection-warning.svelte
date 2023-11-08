@@ -1,9 +1,9 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
 
-    import WarningIcon from '../../assets/svg/connection-lost.svelte'
-    import ReconnectionIcon from '../../assets/svg/reconnect.svelte'
-    import WaitIcon from '../../assets/svg/wait.svelte'
+    import WarningIcon from './assets/svg/connection-lost.svelte'
+    import ReconnectionIcon from './assets/svg/reconnect.svelte'
+    import WaitIcon from './assets/svg/wait.svelte'
 
 
     let message = 'connection lost';

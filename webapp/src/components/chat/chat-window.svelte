@@ -1,51 +1,10 @@
 <script>
 	import SendIconActive from '../../assets/svg/send_icon_active.svelte'
 	import SendIconInactive from '../../assets/svg/send_icon_inactive.svelte'
-	import { writable } from 'svelte/store';
-
 	import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
 	import Triangle from '../../assets/svg/triangle.svelte'
-
 	import ExpertComitee from './expert-comitee.svelte';
-
 	import GeneratingAnswer from '../../assets/svg/generating-answer-icon.svelte'
-
-	import WarningModal from '../../components/chat/warning.svelte'
-
-	import { onMount } from 'svelte';
-
-
-	let messageInput = "";
-	const messages = writable([]);
-
-	function sendMessage(text, isUser = true) {
-		messages.update(allMessages => [
-			...allMessages, 
-			{ 
-				id: allMessages.length + 1, 
-				text, 
-				sender: isUser ? 'user' : 'ai', 
-				persona: isUser ? undefined : 'AIPersona1' // hier dynamische Persona Idenifizierung?
-			}
-		]);
-	}
-
-	// Funktion für CSS Sub-Klassen
-	function aiBubbleClass(persona) {
-		switch (persona) {
-			case 'AIPersona1': return 'ai-persona-1';
-			case 'AIPersona2': return 'ai-persona-2';
-			case 'AIPersona3': return 'ai-persona-3';
-			case 'AIPersona4': return 'ai-persona-4';
-			default: return 'ai-persona-default';
-		}
-	}
-
-	//platzhalter für inputs
-	let namenachname = 'Max Mustermann';
-	let aipersonajobbeschreibung
-	let chatContainer
-
 
 
 	const colorSheetPersona1 = {
@@ -72,23 +31,11 @@
 		background: '#1A2950',
 	};
 
-
-	//script das dazu führt, dass die 'connection lost' Warnung nur bei Internetverlust kommt.
-	let online = navigator.onLine;
-
-	onMount(() => {
-		window.addEventListener('online', () => online = true);
-		window.addEventListener('offline', () => online = false);
-	});
-
 </script>   
 
 
 <div class="app-chat-container">
-	<div class="chat-container" bind:this={chatContainer}>
-		{#if !online}
-		<WarningModal/>
-		{/if}
+	<div class="chat-container">
 		<div class="chat-message-container">
 			<div class="chat-messages">
 				<div class="welcome-message">
@@ -100,23 +47,21 @@
 				<div class="start-message">
                     <span style="position: relative; bottom: 2px; margin-right: 3px;">👉</span> Feel free to ask questions or come up with ideas
                 </div>
-				{#each $messages as message (message.id)}
-				{#if message.sender === 'user'}
-					<div class="user-message">
-						<div class="username" style="color: #34E5B0;">{namenachname}</div>
-						<div class="bubble user-bubble">{message.text}</div>
+		
+				<div class="user-message">
+					<div class="username" style="color: #34E5B0;">Max Muster</div>
+					<div class="bubble user-bubble">What's up?</div>
+				</div>
+			
+				<div class="ai-message">
+					<div class="ai-icon"><AIIcon /></div>
+					<div class={`bubble ai-persona-1`}>
+						<div class="triangle"><Triangle/></div>
+						<div class={`persona-name ai-persona-1`}>Master Expert</div>
+						Let me interject for a moment, what you guys are referring to as Linux, is in fact, GNU/Linux, or as I've recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX. Many computer users run a modified version of the GNU system every day, without realizing it. Through a peculiar turn of events, the version of GNU which is widely used today is often called "Linux", and many of its users are not aware that it is basically the GNU system, developed by the GNU Project. There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine's resources to the other programs that you run. The kernel is an essential part of an operating system, but useless by itself; it can only function in the context of a complete operating system. Linux is normally used in combination with the GNU operating system: the whole system is basically GNU with Linux added, or GNU/Linux. All the so-called "Linux" distributions are really distributions of GNU/Linux. Thank you for taking your time to cooperate with with me, your friendly GNU+Linux neighbor, Richard Stallman.
 					</div>
-				{:else}
-					<div class="ai-message">
-						<div class="ai-icon"><AIIcon /></div>
-						<div class={`bubble ${aiBubbleClass(message.persona)}`}>
-							<div class="triangle"><Triangle/></div>
-							<div class={`persona-name ${message.persona}`}>{aipersonajobbeschreibung}</div>
-							{message.text}
-						</div>
-					</div>
-				{/if}
-			{/each}
+				</div>
+			
 			<div class="generating-answers-container">
 				<GeneratingAnswer/>
 				Generating answers
@@ -126,10 +71,10 @@
 		<div class="chat-input">
 			<div class="chat-input-text">
 				<div class="message-wrapper">
-					<textarea class='message-text-area' id='message-text-area' bind:value={messageInput} placeholder="Start your brainstorming session..."></textarea>
+					<textarea class='message-text-area' id='message-text-area' placeholder="Start your brainstorming session..."></textarea>
 				</div>
 			</div>
-			<div class="chat-input-send-icon" on:click={sendMessage}><SendIconActive/></div>
+			<div class="chat-input-send-icon"><SendIconActive/></div>
 		</div>
 	</div>
 </div>
