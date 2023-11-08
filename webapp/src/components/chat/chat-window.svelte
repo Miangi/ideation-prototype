@@ -1,10 +1,10 @@
 <script>
-	import ExpertCommittee from './expert-committee.svelte';
+	import ExpertCommittee from './expert-committee.svelte'
     import ChatInput from './chat-input.svelte'
-    import SystemMessage from './system-message.svelte';
-    import UserMessage from './user-message.svelte';
-    import ExpertMessage from './expert-message.svelte';
-    import GeneratingAnswers from './generating-answers.svelte';
+    import SystemMessage from './system-message.svelte'
+    import UserMessage from './user-message.svelte'
+    import ExpertMessage from './expert-message.svelte'
+    import GeneratingAnswer from './generating-answer.svelte'
 
 	const expertColors = [
 		{
@@ -38,7 +38,7 @@
 		{
 			name: 'Master Expert',
 			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			color: expertColors[2]
+			color: expertColors[1]
 		},
 		{
 			name: 'Master Expert',
@@ -67,6 +67,8 @@
 			<UserMessage/>
 
 			<ExpertMessage colors={expertColors[0]}/>
+
+			<GeneratingAnswer color={expertColors[0].primary}/>
 		</div>
 	<ChatInput/>
 </div>
@@ -123,29 +125,5 @@
 			align-self: flex-end;
 			width: auto;
 		}
-	}
-
-
-	.expert-comitee-container{
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		height: auto;
-		align-items: center;
-		margin-top: 15px;
-	}
-
-	.generating-answers-container{
-		display: flex;
-		margin-left: 50px;
-		width: 200px;
-		height: 44px;
-		gap: 10px;
-		box-sizing: border-box;
-		border-radius: 22px;
-		background-color: #03030370;
-		align-items: center;
-		justify-content: center;
-		margin-top: 10px;
 	}
 </style>
