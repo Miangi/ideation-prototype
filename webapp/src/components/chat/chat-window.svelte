@@ -6,10 +6,11 @@
 	import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
 	import Triangle from '../../assets/svg/triangle.svelte'
 
+	import ExpertComitee from './expert-comitee.svelte';
+
 	import GeneratingAnswer from '../../assets/svg/generating-answer-icon.svelte'
 
 	import WarningModal from '../../components/chat/warning.svelte'
-	import WarningAmber_18px from '../../assets/svg/warning_amber_18px.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -90,6 +91,15 @@
 		{/if}
 		<div class="chat-message-container">
 			<div class="chat-messages">
+				<div class="welcome-message">
+                    <span style="position: relative; bottom: 2px; margin-right: 3px;">👉</span> Start the session by describing the problem in your own words
+                </div>
+                <div class="expert-comitee-container">
+					<ExpertComitee/>
+                </div>
+				<div class="start-message">
+                    <span style="position: relative; bottom: 2px; margin-right: 3px;">👉</span> Feel free to ask questions or come up with ideas
+                </div>
 				{#each $messages as message (message.id)}
 				{#if message.sender === 'user'}
 					<div class="user-message">
@@ -157,6 +167,28 @@
 							height: auto;
 							flex-direction: column;
 						}
+
+						.welcome-message, .start-message{
+							display: flex;
+							align-self: center;
+							background-color: #0B2E24;
+							margin-top: 15px;
+							padding: 20px;
+							border-radius: 60px;
+							align-items: center;
+							font-size: 16px;
+							color: #34E5B0;
+						}
+
+						.expert-comitee-container{
+							display: flex;
+							flex-direction: column;
+							width: 100%;
+							height: auto;
+							align-items: center;
+							margin-top: 15px;
+						}
+
 
 
 								.bubble {

@@ -67,7 +67,7 @@
     display: flex;
     position: relative;
     top: 7%;
-    left: 50%;
+    left: 45%;
     width: fit-content;
     height: 44px;
     background-color:#300F0F90;
