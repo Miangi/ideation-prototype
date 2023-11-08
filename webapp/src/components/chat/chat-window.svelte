@@ -1,35 +1,56 @@
 <script>
-	import ExpertComitee from './expert-comitee.svelte';
-	import GeneratingAnswer from '../../assets/svg/generating-answer-icon.svelte'
+	import ExpertCommittee from './expert-committee.svelte';
     import ChatInput from './chat-input.svelte'
     import SystemMessage from './system-message.svelte';
     import UserMessage from './user-message.svelte';
     import ExpertMessage from './expert-message.svelte';
+    import GeneratingAnswers from './generating-answers.svelte';
 
+	const expertColors = [
+		{
+			primary: '#FF7878',
+			text: '#9E9E9E',
+			background: '#251010',
+		},
+		{
+			primary: '#DBA34F',
+			text: '#9E9E9E',
+			background: '#2D1A0B',
+		},
+		{
+			primary: '#CE90E4',
+			text: '#9E9E9E',
+			background: '#2C263F',
+		},
+		{
+			primary: '#4F76DB',
+			text: '#9E9E9E',
+			background: '#1A2950',
+		}
+	]
 
-	const colorSheetPersona1 = {
-		primary: '#FF7878',
-		text: '#9E9E9E',
-		background: '#251010',
-	};
-
-	const colorSheetPersona2 = {
-		primary: '#DBA34F',
-		text: '#9E9E9E',
-		background: '#2D1A0B',
-	};
-
-	const colorSheetPersona3 = {
-		primary: '#CE90E4',
-		text: '#9E9E9E',
-		background: '#2C263F',
-	};
-
-	const colorSheetPersona4 = {
-		primary: '#4F76DB',
-		text: '#9E9E9E',
-		background: '#1A2950',
-	};
+	let experts = [
+		{
+			name: 'Master Expert',
+			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			color: expertColors[0]
+		},
+		{
+			name: 'Master Expert',
+			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			color: expertColors[2]
+		},
+		{
+			name: 'Master Expert',
+			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			color: expertColors[2]
+		},
+		{
+			name: 'Master Expert',
+			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			color: expertColors[3]
+		}
+	]
 
 </script>   
 
@@ -39,19 +60,13 @@
 		<div class="messages">
 			<SystemMessage text="👉 Start the session by describing the problem in your own words"/>
 
-			<div class="expert-comitee-container">
-				<ExpertComitee/>
-			</div>
-			
+			<ExpertCommittee experts={experts}/>
+		
 			<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
 	
 			<UserMessage/>
-			<ExpertMessage colors={colorSheetPersona1}/>
-			
-			<div class="generating-answers-container">
-				<GeneratingAnswer/>
-				Generating answers
-			</div>
+
+			<ExpertMessage colors={expertColors[0]}/>
 		</div>
 	<ChatInput/>
 </div>
