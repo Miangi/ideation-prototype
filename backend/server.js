@@ -1,10 +1,14 @@
 import { WebSocketServer } from 'ws'
 import log from '@mwni/log'
-import { createSession } from './session.js'
+import createDBConnection from './database.js'
+import { validateUser } from './user.js'
+import { createGroupController } from './group.js'
 
 export default ({ port }) => {
-	let ctx = {}
-	let sessions = []
+	let ctx = {
+		db: createDBConnection()
+	}
+	let groups = []
 	let server = new WebSocketServer({
 		port
 	})
@@ -14,26 +18,24 @@ export default ({ port }) => {
 
 		log.info(`new connection from ${ip}`)
 
-		let session = await createSession({ ctx, socket, request })
+		try{
+			let user = await validateUser({ ctx, socket, request })
+			let group = groups.find(g => g.id === user.group.id)
 
-		sessions.push(session)
+			if(!group){
+				log.info(`creating group controller for "${user.group.name}"`)
+				group = createGroupController({ meta: user.group })
+				groups.push(group)
+			}
 
-		socket.on('close', code => {
-			log.info(`connection to ${ip} closed (code ${code})`)
-			session.close()
-			sessions = sessions.filter(s => s !== session)
-		})
+			group.joinUser({
+				socket,
+				user
+			})
+		}catch(error){
+			log.warn(`failed to validate user ${ip}: ${error.message}`)
+		}
 	})
 
 	log.info(`listening on port ${port}`)
-
-	return () => {
-		log.info(`shutting down`)
-
-		for(let session of sessions){
-			session.close()
-		}
-
-		server.close()
-	}
 }
