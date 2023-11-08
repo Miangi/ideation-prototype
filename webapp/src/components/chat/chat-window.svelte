@@ -1,10 +1,9 @@
 <script>
-	import SendIconActive from '../../assets/svg/send_icon_active.svelte'
-	import SendIconInactive from '../../assets/svg/send_icon_inactive.svelte'
 	import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
 	import Triangle from '../../assets/svg/triangle.svelte'
 	import ExpertComitee from './expert-comitee.svelte';
 	import GeneratingAnswer from '../../assets/svg/generating-answer-icon.svelte'
+    import ChatInput from './chat-input.svelte'
 
 
 	const colorSheetPersona1 = {
@@ -68,14 +67,7 @@
 			</div>
 			</div>
 		</div>
-		<div class="chat-input">
-			<div class="chat-input-text">
-				<div class="message-wrapper">
-					<textarea class='message-text-area' id='message-text-area' placeholder="Start your brainstorming session..."></textarea>
-				</div>
-			</div>
-			<div class="chat-input-send-icon"><SendIconActive/></div>
-		</div>
+		<ChatInput/>
 	</div>
 </div>
 
@@ -236,67 +228,6 @@
 												margin-top: 10px;
 											}
 
-
-				.chat-input{
-					display: flex;
-					background-color: #0A0A0A;
-					min-height: 44px;
-					height: auto;
-					border-radius: 30px;
-					align-items: center;
-					padding-left: 30px;
-					padding-right: 2px;
-					padding-top: 4px;
-					padding-bottom: 4px;
-					box-sizing: border-box;
-				}
-
-						.chat-input-text{
-							display: flex;
-							width: 100%;
-							height: auto;
-							gap: 10px;
-							color: #9CA4A9;
-						}
-
-								.message-wrapper {
-									width: 100%;
-									background-color: transparent;
-									max-height: 145px;
-									color: #fefefe;
-									align-items: center;
-									margin-top: 20px;
-									box-sizing: border-box;
-								}
-
-										.message-text-area{
-											display:flex;
-											min-height: 36px; /* prevent height collapsing when there is no text */
-											max-height: 250px;
-											width: 100%;
-											align-content: center;
-											outline: none;
-										}
-
-										#message-text-area{
-											display:flex;
-											min-height: 36px; /* prevent height collapsing when there is no text */
-											max-height: 250px;
-											width: 100%;
-											align-content: center;
-											outline: none;
-											overflow: scroll;
-											background-color: transparent;
-											color: #fefefe;
-											border: none;
-											resize: none;
-										}
-
-						.chat-input-send-icon{
-							display: flex;
-							cursor: pointer;
-							margin-right: 10px;
-						}
 
 						::-webkit-scrollbar {
 							width: 10px;
