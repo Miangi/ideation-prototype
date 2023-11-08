@@ -1,8 +1,11 @@
 <script>
 	import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
 	import Triangle from '../../assets/svg/triangle.svelte'
+	import expertColors from './expert-colors.js'
 
-	export let colors
+	export let expert
+
+	$: colors = expertColors[expert.index]
 </script>
 
 

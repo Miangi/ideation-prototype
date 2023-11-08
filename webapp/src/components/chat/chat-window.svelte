@@ -5,53 +5,8 @@
     import UserMessage from './user-message.svelte'
     import ExpertMessage from './expert-message.svelte'
     import GeneratingAnswer from './generating-answer.svelte'
-
-	const expertColors = [
-		{
-			primary: '#DBA34F',
-			text: '#9E9E9E',
-			background: '#2D1A0B',
-		},
-		{
-			primary: '#FF7878',
-			text: '#9E9E9E',
-			background: '#251010',
-		},
-		{
-			primary: '#CE90E4',
-			text: '#9E9E9E',
-			background: '#2C263F',
-		},
-		{
-			primary: '#4F76DB',
-			text: '#9E9E9E',
-			background: '#1A2950',
-		}
-	]
-
-	let experts = [
-		{
-			name: 'Master Expert',
-			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			color: expertColors[0]
-		},
-		{
-			name: 'Master Expert',
-			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			color: expertColors[1]
-		},
-		{
-			name: 'Master Expert',
-			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			color: expertColors[2]
-		},
-		{
-			name: 'Master Expert',
-			background: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			color: expertColors[3]
-		}
-	]
-
+	
+	import { app } from '../../models/state.js'
 </script>   
 
 
@@ -60,15 +15,15 @@
 		<div class="messages">
 			<SystemMessage text="👉 Start the session by describing the problem in your own words"/>
 
-			<ExpertCommittee experts={experts}/>
+			<ExpertCommittee experts={$app.currentChat.experts}/>
 		
 			<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
 	
 			<UserMessage/>
 
-			<ExpertMessage colors={expertColors[0]}/>
+			<ExpertMessage expert={$app.currentChat.experts[0]}/>
 
-			<GeneratingAnswer color={expertColors[0].primary}/>
+			<GeneratingAnswer expert={$app.currentChat.experts[0]}/>
 		</div>
 	<ChatInput/>
 </div>

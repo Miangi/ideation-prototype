@@ -1,5 +1,9 @@
 <script>
-	export let color
+	import expertColors from './expert-colors.js'
+
+	export let expert
+
+	$: color = expertColors[expert.index].primary
 </script>
 
 <div class="container">

@@ -1,13 +1,21 @@
 <script>
 	import AIIcon from '../../assets/svg/ai-persona-in-chat.svelte'
+	import expertColors from './expert-colors.js'
 
 	export let experts
+
+	$: expertsWithColor = experts.map(
+		expert => ({
+			...expert,
+			color: expertColors[expert.index]
+		})
+	)
 </script>
 
 <div class="committee">
 	<div class="headline">Your Expert Committee:</div>
 	<div class="experts">
-		{#each experts as expert}
+		{#each expertsWithColor as expert}
 			<div>
 				<div class="header">
 					<AIIcon color={expert.color.primary}/>
