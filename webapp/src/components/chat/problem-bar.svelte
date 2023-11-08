@@ -1,5 +1,5 @@
 <script>
-	import AIAvatar from '../../assets/svg/ai_persona.svelte'
+	import AIAvatar from '../../assets/svg/ai-persona-in-chat.svelte'
 
 	let activeProblem = undefined
 </script>
@@ -16,11 +16,9 @@
 			---
 		</div>
 		<div class="avatars">
-			{#each Array(5) as _, i}
+			{#each Array(4) as _, i}
 				<div class="avatar placeholder">
-					<div class="icon">
-						<AIAvatar/>
-					</div>
+					<AIAvatar color="#3f3f3f"/>
 				</div>
 			{/each}
 		</div>
@@ -85,10 +83,6 @@
 				flex-direction: column;
 				gap: 5px;
 				background-color: #212121;
-
-				.icon{
-					opacity: 0.15;
-				}
 			}
 		}
 	}
