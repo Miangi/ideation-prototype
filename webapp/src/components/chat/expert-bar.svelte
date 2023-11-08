@@ -33,7 +33,8 @@
 		height: 100%;
 		flex-direction: column;
 		gap: 10px;
-		margin-left:15px;
+		margin-left: 15px;
+		margin-right: 15px;
 
 		> .problem-summary{
 			display: flex;
