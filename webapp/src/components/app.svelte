@@ -9,7 +9,7 @@
 	import TaskInstructionsModal from './task/modal-task-instructions.svelte'
 	import TaskSolutionModal from './task/modal-task-solution.svelte'
 	import ChatTabs from './chat/tabs.svelte'
-	import ProblemBar from './chat/problem-bar.svelte'
+	import ExpertBar from './chat/expert-bar.svelte'
 	import ChatWindow from './chat/chat-window.svelte'
 	import TaskBar from './task/task-bar.svelte'
 
@@ -31,7 +31,7 @@
 
 	<ChatTabs/>
 	<div class="chat-container">
-		<ProblemBar/>
+		<ExpertBar/>
 		<ChatWindow/>
 		<TaskBar/>
 	</div>
