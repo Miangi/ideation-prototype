@@ -1,22 +1,34 @@
 <script>
 	import AIAvatar from '../../assets/svg/ai-persona-in-chat.svelte'
-
-	let activeProblem = undefined
+	import { app } from '../../models/state.js'
+    import expertColors from './expert-colors.js'
 </script>
 
 <div class="problem-bar">
-	{#if activeProblem}
+	{#if $app.currentChat.problemSummary}
 		<div class="problem-summary">
 			<div class="label">Problem Summary</div>
-			{activeProblem}
+			{$app.currentChat.problemSummary}
 		</div>
 	{:else}
 		<div class="problem-summary inactive">
 			<div class="label">Problem Summary</div>
 			---
 		</div>
+	{/if}
+
+	{#if $app.currentChat.experts}
 		<div class="avatars">
-			{#each Array(4) as _, i}
+			{#each $app.currentChat.experts as expert}
+				<div class="avatar">
+					<AIAvatar color={expertColors[expert.index].primary}/>
+					{expert.name}
+				</div>
+			{/each}
+		</div>
+	{:else}
+		<div class="avatars">
+			{#each Array(4) as _}
 				<div class="avatar placeholder">
 					<AIAvatar color="#3f3f3f"/>
 				</div>
@@ -72,18 +84,24 @@
 			flex-direction: column;
 			gap: 10px;
 
-			> .placeholder{
+			> .avatar{
 				display: flex;
 				width: 100%;
 				height: 90px;
-				border: 2px solid transparent;
+				border: 2px solid #565656;
 				border-radius: 15px;
 				justify-content: center;
 				align-items: center;
-				color: #b9b9b9;
-				flex-direction: column;
 				gap: 5px;
-				background-color: #212121;
+				flex-direction: column;
+				color: #B9B9B9;
+				background-color: #393939;
+				
+				&.placeholder{
+					color: #b9b9b9;
+					background-color: #212121;
+					border-color: transparent;
+				}
 			}
 		}
 	}
