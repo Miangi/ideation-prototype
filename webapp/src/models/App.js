@@ -42,4 +42,8 @@ export default class{
 	onDisconnect(){
 		console.warn('connection to backend lost')
 	}
+
+	submitSolution({ answers }){
+		console.log(`submit solution:`, answers)
+	}
 }
