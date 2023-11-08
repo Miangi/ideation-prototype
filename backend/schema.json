@@ -1,0 +1,192 @@
+{
+	"type": "object",
+	"properties": {
+		"groups": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Group"
+			}
+		},
+		"users": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/User"
+			}
+		},
+		"chats": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Chat"
+			}
+		},
+		"experts": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Expert"
+			}
+		},
+		"userMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/UserMessage"
+			}
+		},
+		"expertMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/ExpertMessage"
+			}
+		}
+	},
+	"definitions": {
+		"Group": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"name": {
+					"type": "string"
+				},
+				"code": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"code"
+			],
+			"unique": [
+				"code"
+			]
+		},
+		"User": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"group": {
+					"$ref": "#/definitions/Group"
+				},
+				"name": {
+					"type": "string"
+				},
+				"token": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"group",
+				"name",
+				"token"
+			],
+			"unique": [
+				"token"
+			]
+		},
+		"Chat": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"group": {
+					"$ref": "#/definitions/Group"
+				},
+				"title": {
+					"type": "string",
+					"default": "New Chat"
+				},
+				"problemDescription": {
+					"type": "string"
+				},
+				"problemSummary": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"group",
+				"title"
+			]
+		},
+		"Expert": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"chat": {
+					"$ref": "#/definitions/Chat"
+				},
+				"name": {
+					"type": "string"
+				},
+				"background": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"chat",
+				"name",
+				"background"
+			]
+		},
+		"UserMessage": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"chat": {
+					"$ref": "#/definitions/Chat"
+				},
+				"user": {
+					"$ref": "#/definitions/User"
+				},
+				"text": {
+					"type": "string"
+				},
+				"timeCreated": {
+					"type": "date"
+				}
+			},
+			"required": [
+				"chat",
+				"user",
+				"text"
+			]
+		},
+		"ExpertMessage": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"chat": {
+					"$ref": "#/definitions/Chat"
+				},
+				"expert": {
+					"$ref": "#/definitions/Expert"
+				},
+				"text": {
+					"type": "string"
+				},
+				"timeCreated": {
+					"type": "date"
+				}
+			},
+			"required": [
+				"chat",
+				"user",
+				"text"
+			]
+		}
+	}
+}
