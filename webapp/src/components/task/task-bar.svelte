@@ -8,7 +8,7 @@ import TaskClicked from '../../assets/svg/task-clicked.svelte';
 import TaskSolutionUnclicked from '../../assets/svg/tasksolution_notification.svelte';
 import TaskSolutionClicked from '../../assets/svg/task-solution-clicked.svelte';
 
-import { visibleModals, unseenContent } from '../../models/ui-state.js'
+import { visibleModals, unseenContent } from '../../models/state.js'
 
 function onTaskInfoClicked(){
 	$visibleModals.taskInfo = true

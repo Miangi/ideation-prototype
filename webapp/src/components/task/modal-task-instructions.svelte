@@ -1,6 +1,6 @@
 <script>
 	import MinimizeTask from '../../assets/svg/minimize_task_24px.svelte'
-	import { visibleModals } from '../../models/ui-state.js'
+	import { visibleModals } from '../../models/state.js'
 </script>
 
 <div class="modal">
