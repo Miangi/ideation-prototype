@@ -1,9 +1,4 @@
-import { parse as parseURL } from 'url'
-import { parse as parseQuery } from 'querystring'
-
-
-export async function validateUser({ ctx, socket, request }){
-	let query = parseQuery(parseURL(request.url).query)
+export async function validateUser({ ctx, query }){
 	let userToken = query.token
 	let user = await ctx.db.users.readOne({
 		where: {

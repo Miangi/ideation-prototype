@@ -1,5 +1,6 @@
-import { WebSocketServer } from 'ws'
+import { createServer } from 'http'
 import log from '@mwni/log'
+import createWss from '@mwni/wss'
 import createDBConnection from './database.js'
 import { validateUser } from './user.js'
 import { createGroupController } from './group.js'
@@ -8,34 +9,36 @@ export default ({ port }) => {
 	let ctx = {
 		db: createDBConnection()
 	}
+
 	let groups = []
-	let server = new WebSocketServer({
-		port
+	let server = createServer()
+	let wss = createWss({
+		server,
+		authorize: async ({ query }) => ({
+			user: await validateUser({ ctx, query })
+		})
 	})
 
-	server.on('connection', async (socket, request) => {
-		let ip = request.socket.remoteAddress
+	wss.on('accept', async client => {
+		log.info(`new connection from ${client.ip}`)
 
-		log.info(`new connection from ${ip}`)
+		let group = groups.find(
+			g => g.id === client.user.group.id
+		)
 
-		try{
-			let user = await validateUser({ ctx, socket, request })
-			let group = groups.find(g => g.id === user.group.id)
-
-			if(!group){
-				log.info(`creating group controller for "${user.group.name}"`)
-				group = createGroupController({ meta: user.group })
-				groups.push(group)
-			}
-
-			group.joinUser({
-				socket,
-				user
-			})
-		}catch(error){
-			log.warn(`failed to validate user ${ip}: ${error.message}`)
+		if(!group){
+			log.info(`creating group controller for "${client.user.group.name}"`)
+			group = createGroupController({ ctx, meta: client.user.group })
+			groups.push(group)
 		}
+
+		group.joinClient(client)
 	})
 
+	wss.on('reject', ({ ip, query }) => {
+		log.info(`rejected connection from ${ip} (token ${query.token})`)
+	})
+
+	server.listen(port)
 	log.info(`listening on port ${port}`)
 }
