@@ -95,6 +95,7 @@
 		flex-direction: column;
 		margin-left: auto;
 		gap: 7px;
+		min-height: 65px;
 	}
 
 	.participant-info-name {
