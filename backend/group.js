@@ -7,14 +7,22 @@ export function createGroupController({ meta }){
 	return {
 		...meta,
 		joinUser({ socket, user }){
+			let send = payload => socket.send(JSON.stringify(payload))
+
 			users.push({
 				...user,
-				socket
+				socket,
+				send,
 			})
 
 			socket.on('close', code => {
 				log.info(`connection from "${user.firstName}" closed (code ${code})`)
 				users = users.filter(u => u.socket !== socket)
+			})
+
+			send({
+				event: 'user',
+				user
 			})
 
 			log.info(`user "${user.firstName}" joined "${meta.name}"`)
