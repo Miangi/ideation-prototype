@@ -1,13 +1,4 @@
 <script>
-	import { app, visibleModals } from '../models/state.js'
-	import App from '../models/app.js'
-
-	app.update(
-		() => new App({
-			backendUrl: `${BACKEND_SERVER_URL}?token=XTESTXYZ`
-		})
-	)
-	
 	import TaskInfoModal from './task/modal-task-info.svelte'
 	import TaskInstructionsModal from './task/modal-task-instructions.svelte'
 	import TaskSolutionModal from './task/modal-task-solution.svelte'
@@ -15,6 +6,11 @@
 	import ExpertBar from './chat/expert-bar.svelte'
 	import ChatWindow from './chat/chat-window.svelte'
 	import TaskBar from './task/task-bar.svelte'
+
+	import { visibleModals } from '../models/state.js'
+	import { connect } from '../models/app.js'
+
+	connect({ url: `${BACKEND_SERVER_URL}?token=XTESTXYZ` })
 </script>
 
 <div class="app-container">

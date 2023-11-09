@@ -1,14 +1,14 @@
 <script>
 	import AIAvatar from '../../assets/svg/ai-persona-in-chat.svelte'
-	import { app } from '../../models/state.js'
+	import { currentChat } from '../../models/app.js'
     import expertColors from './expert-colors.js'
 </script>
 
 <div class="problem-bar">
-	{#if $app.currentChat.problemSummary}
+	{#if $currentChat.problemSummary}
 		<div class="problem-summary">
 			<div class="label">Problem Summary</div>
-			{$app.currentChat.problemSummary}
+			{$currentChat.problemSummary}
 		</div>
 	{:else}
 		<div class="problem-summary inactive">
@@ -17,9 +17,9 @@
 		</div>
 	{/if}
 
-	{#if $app.currentChat.experts}
+	{#if $currentChat.experts}
 		<div class="avatars">
-			{#each $app.currentChat.experts as expert}
+			{#each $currentChat.experts as expert}
 				<div class="avatar">
 					<AIAvatar color={expertColors[expert.index].primary}/>
 					{expert.name}

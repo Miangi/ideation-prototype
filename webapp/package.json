@@ -9,7 +9,6 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@mwni/events": "^3.0.0",
 		"@mwni/socket": "^1.2.0",
 		"@pivoto-study/backend": "file:../backend",
 		"@sveltejs/adapter-node": "^1.3.1",

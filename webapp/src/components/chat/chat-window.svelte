@@ -6,7 +6,7 @@
     import ExpertMessage from './expert-message.svelte'
     import GeneratingAnswer from './generating-answer.svelte'
 	
-	import { app } from '../../models/state.js'
+	import { currentChat } from '../../models/app.js'
 </script>   
 
 
@@ -15,15 +15,15 @@
 		<div class="messages">
 			<SystemMessage text="👉 Start the session by describing the problem in your own words"/>
 
-			<ExpertCommittee experts={$app.currentChat.experts}/>
+			<ExpertCommittee experts={$currentChat.experts}/>
 		
 			<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
 	
 			<UserMessage/>
 
-			<ExpertMessage expert={$app.currentChat.experts[0]}/>
+			<ExpertMessage expert={$currentChat.experts[0]}/>
 
-			<GeneratingAnswer expert={$app.currentChat.experts[0]}/>
+			<GeneratingAnswer expert={$currentChat.experts[0]}/>
 		</div>
 	<ChatInput/>
 </div>
