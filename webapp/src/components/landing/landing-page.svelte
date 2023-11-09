@@ -1,5 +1,6 @@
 <script>
 	import URlogo from '../../assets/svg/URlogo.svelte'
+    import WaveFx from './wave-fx.svelte';
 
 </script>
 
@@ -16,14 +17,19 @@
 		<div class="instruction">Once we start, please enter your registration code</div>
 	</div>
 </div>
+<div class="wave-fx">
+	<WaveFx/>
+</div>
 
 
 <style lang="scss">
 .landing-container{
 	display: flex;
-	flex-direction:column;
+	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	z-index: 10;
+	position: relative;
 }
 
 .logo-UR{
@@ -80,6 +86,16 @@
 		margin-top: 10px;
 		color: #959595;
 	}
+}
+
+.wave-fx{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: calc(20vh - 250px);
+	height: 400px;
+	overflow: hidden;
+	z-index: 1;
 }
 
 </style>
