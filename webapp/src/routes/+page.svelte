@@ -64,7 +64,7 @@
         & input{
             border: none;
             height: 44px;
-            width: 35vh;
+            width: 380px;
             background-color: transparent;
             border-bottom: solid #CACACA;
             justify-content: center;
