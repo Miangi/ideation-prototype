@@ -2,6 +2,8 @@
 	import URlogo from '../../assets/svg/URlogo.svelte'
     import WaveFx from './wave-fx.svelte';
 
+	import InputForm from './inputs.svelte'
+
 </script>
 
 <div class="landing-container">
@@ -12,10 +14,7 @@
 		<div class="label">Welcome to the study</div>
 		<div class="subtext">You will be brainstorming with AI</div>
 	</div>
-	<div class="code-input-container">
-		<input type="text" id="registration-code" placeholder="Your Registration Code">
-		<div class="instruction">Once we start, please enter your registration code</div>
-	</div>
+	<InputForm/>
 </div>
 <div class="wave-fx">
 	<WaveFx/>
@@ -51,40 +50,6 @@
 	.label{
 		font-size: 36px;
 		font-weight: bold;
-	}
-}
-
-.code-input-container{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-top: 5%;
-
-	input{
-		border: none;
-		height: 44px;
-		width: 380px;
-		background-color: transparent;
-		border-bottom: solid #CACACA;
-		justify-content: center;
-		outline: none;
-		color: #FEFEFE;
-		text-align: center;
-		font-size: 24px;
-		font-family: inherit;
-		font-weight: bold;
-
-		&::placeholder {
-			text-align: center;
-			font-size: 24px;
-			font-weight: bold;
-			color: #3E3E3E;
-		}
-	}
-
-	.instruction{
-		margin-top: 10px;
-		color: #959595;
 	}
 }
 
