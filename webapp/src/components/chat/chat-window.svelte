@@ -15,15 +15,12 @@
 		<div class="messages">
 			<SystemMessage text="👉 Start the session by describing the problem in your own words"/>
 
-			<ExpertCommittee experts={$currentChat.experts}/>
-		
-			<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
-	
-			<UserMessage/>
-
-			<ExpertMessage expert={$currentChat.experts[0]}/>
-
-			<GeneratingAnswer expert={$currentChat.experts[0]}/>
+			{#if $currentChat.experts}
+				<ExpertCommittee experts={$currentChat.experts}/>
+				<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
+			{:else}
+				<span/>
+			{/if}
 		</div>
 	<ChatInput/>
 </div>
@@ -42,10 +39,10 @@
 	.messages{
 		display: flex;
 		width: 100%;
+		height: 100%;
 		min-width: 500px;
 		box-sizing: border-box;
 		padding: 10px;
-		height: auto;
 		overflow-y: auto;
 		flex-direction: column;
 
