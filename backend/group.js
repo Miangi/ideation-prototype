@@ -13,11 +13,11 @@ export function createGroupController({ meta }){
 			})
 
 			socket.on('close', code => {
-				log.info(`connection from "${user.name}" closed (code ${code})`)
+				log.info(`connection from "${user.firstName}" closed (code ${code})`)
 				users = users.filter(u => u.socket !== socket)
 			})
 
-			log.info(`user "${user.name}" joined "${meta.name}"`)
+			log.info(`user "${user.firstName}" joined "${meta.name}"`)
 		}
 	}
 }

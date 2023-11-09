@@ -71,7 +71,10 @@
 				"group": {
 					"$ref": "#/definitions/Group"
 				},
-				"name": {
+				"firstName": {
+					"type": "string"
+				},
+				"lastName": {
 					"type": "string"
 				},
 				"token": {
@@ -80,7 +83,8 @@
 			},
 			"required": [
 				"group",
-				"name",
+				"firstName",
+				"lastName",
 				"token"
 			],
 			"unique": [
