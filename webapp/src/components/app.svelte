@@ -1,4 +1,5 @@
 <script>
+    import ConnectionWarning from './connection-warning.svelte';
 	import TaskInfoModal from './task/modal-task-info.svelte'
 	import TaskInstructionsModal from './task/modal-task-instructions.svelte'
 	import TaskSolutionModal from './task/modal-task-solution.svelte'
@@ -8,12 +9,16 @@
 	import TaskBar from './task/task-bar.svelte'
 
 	import { visibleModals } from '../models/state.js'
-	import { connect } from '../models/app.js'
+	import { connect, connectionState } from '../models/app.js'
 
 	connect({ url: `${BACKEND_SERVER_URL}?token=XTESTXYZ` })
 </script>
 
 <div class="app-container">
+	{#if $connectionState === 'lost'}
+		<ConnectionWarning/>
+	{/if}
+
 	{#if $visibleModals.taskInfo}
 		<TaskInfoModal/>
 	{/if}
