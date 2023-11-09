@@ -13,9 +13,9 @@
 <div class="chat-window">
 	<div class="chat-message-container"></div>
 		<div class="messages">
-			<SystemMessage text="👉 Start the session by describing the problem in your own words"/>
+			<SystemMessage text="👉 Start the chat by describing the problem in your own words"/>
 
-			{#if $currentChat.experts}
+			{#if $currentChat?.experts?.length > 0}
 				<ExpertCommittee experts={$currentChat.experts}/>
 				<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
 			{:else}

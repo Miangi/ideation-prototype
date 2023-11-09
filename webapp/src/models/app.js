@@ -1,10 +1,11 @@
 import createSocket from '@mwni/socket'
-import { writable } from 'svelte/store'
+import { writable, get } from 'svelte/store'
 
 
 export const connectionState = writable()
-export const currentChat = writable()
 export const userMeta = writable()
+export const chats = writable([])
+export const currentChat = writable()
 
 let socket
 
@@ -24,12 +25,35 @@ export function connect({ url }){
 	socket.on('user', ({ user }) => {
 		userMeta.set(user)
 	})
+
+	socket.on('chats', ({ chats: c }) => {
+		chats.set(c)
+
+		if(get(currentChat)){
+			currentChat.set(c.find(c => c.id === get(currentChat).id))
+		}else{
+			currentChat.set(c[0])
+		}
+	})
+
+	socket.on('chat', ({ chat }) => {
+		chats.update(chats => chats.map(c => c.id === chat.id ? chat: c))
+
+		if(get(currentChat).id === chat)
+			currentChat.set(chat)
+	})
+}
+
+export function setChatInput(text){
+	text = text.trim()
+
+	socket.send({
+		command: 'type',
+		chat: get(currentChat).id,
+		text
+	})
 }
 
 export function submitSolution({ answers }){
 	console.log(`submit solution:`, answers)
 }
-
-currentChat.set({
-	experts: undefined
-})

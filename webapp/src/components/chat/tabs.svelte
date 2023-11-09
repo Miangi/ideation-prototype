@@ -2,57 +2,43 @@
     import CloseTabIcon from '../../assets/svg/close_inactive_tab_18px.svelte'
     import CloseActiveTabIcon from '../../assets/svg/close_tab_18px.svelte'
     import AddTabIcon from '../../assets/svg/add_tab_18px.svelte'
+    import { chats, currentChat } from '../../models/app'
 
+    function createChat(){
 
+    }
 
-    //tab management
-        let tabs = [{ id: 1, title: 'Ideation 1'}];
-        let activeTab = tabs[0];
+    function selectChat(chat){
 
-        function addTab() {
-        const id = Math.random()
-        .toString(16)
-        .slice(2, 10)
-        .toUpperCase()
+    }
 
-        const newTab = { id, title: `Ideation` };
-        tabs = [...tabs, newTab];
-        activeTab = newTab;
-        }
+    function removeChat(chat){
 
-
-        function removeTab(id) {
-        tabs = tabs.filter(tab => tab.id !== id);
-        if (activeTab.id === id) {
-            activeTab = tabs[0] || {};
-        }
-        }
-
-        function selectTab(tab) {
-        activeTab = tab;
-        }
-
-
-
+    }
 </script>
 
-<div class="chat-tabs-container">
-    {#each tabs as tab (tab.id)}  
-        <div class={activeTab.id === tab.id ? 'tab-container active' : 'tab-container'} on:click={() => selectTab(tab)}>
-            <div class="tab-title">{tab.title}</div>
-            <div class="tab-close" on:click|stopPropagation={() => removeTab(tab.id)}><CloseActiveTabIcon /></div>
+<div class="tabs">
+    {#each $chats as chat}  
+        <div class={chat.id === $currentChat?.id ? 'tab-container active' : 'tab-container'} on:click={() => selectChat(chats)}>
+            <div class="tab-title">{chat.title}</div>
+            <div class="tab-close" on:click|stopPropagation={() => removeChat(chat)}>
+                <CloseActiveTabIcon/>
+            </div>
         </div>
     {/each}
-    <div class="add-tab-container" on:click={addTab}><AddTabIcon /></div>
+    <div class="add-tab-container" on:click={createChat}>
+        <AddTabIcon/>
+    </div>
 </div>
 
 <style>
-    .chat-tabs-container {
+    .tabs {
         display: flex;
         background-color: #1d1d1d;
         width: auto;
         align-items: center;
         margin-left: 17.2em;
+        min-height: 23px;
     }
 
                     .tab-close {

@@ -5,7 +5,7 @@
 </script>
 
 <div class="problem-bar">
-	{#if $currentChat.problemSummary}
+	{#if $currentChat?.problemSummary}
 		<div class="problem-summary">
 			<div class="label">Problem Summary</div>
 			{$currentChat.problemSummary}
@@ -17,7 +17,7 @@
 		</div>
 	{/if}
 
-	{#if $currentChat.experts}
+	{#if $currentChat?.experts?.length > 0}
 		<div class="avatars">
 			{#each $currentChat.experts as expert}
 				<div class="avatar">
