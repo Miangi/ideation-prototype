@@ -1,18 +1,26 @@
 <script>
+    import { onMount } from 'svelte';
 	import SendIconActive from '../../assets/svg/send_icon_active.svelte'
 	import SendIconInactive from '../../assets/svg/send_icon_inactive.svelte'
 	import autosize from 'svelte-autosize'
+    import { setChatInput } from '../../models/app.js'
 
 	let inputDom
 
 	function sendMessage(){
-
+		
 	}
+
+	onMount(() => {
+		inputDom.addEventListener('input', () => {
+			setChatInput(inputDom.value)
+		})
+	})
 </script>
 
 
 <div class="chat-input">
-	<textarea use:autosize bind:value={inputDom} rows="1" placeholder="Describe the problem in your own words"></textarea>
+	<textarea use:autosize bind:this={inputDom} rows="1" placeholder="Describe the problem in your own words"></textarea>
 	<div class="send" on:click={sendMessage}>
 		<SendIconActive/>
 	</div>
