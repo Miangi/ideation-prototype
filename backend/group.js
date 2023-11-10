@@ -17,6 +17,11 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			log.info(`creating genesis chat`)
 			await createChat()
 		}
+
+		broadcast({
+			event: 'chats',
+			chats
+		})
 	}
 
 	async function setupClient(client){
@@ -78,8 +83,8 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	}
 
 	function broadcast(payload){
-		for(let user of users){
-			user.send(payload)
+		for(let client of clients){
+			client.send(payload)
 		}
 	}
 
