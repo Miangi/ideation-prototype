@@ -1,5 +1,6 @@
 <script>
     import ArrowBack from '../../assets/svg/arrow_back.svelte';
+    import Warning from '../../assets/svg/warning_amber_18px.svelte'
 
     import { onMount } from 'svelte';
 
@@ -59,8 +60,12 @@
 <div class="code-input-container">
     {#if step === 1}
       <div class='input-code'>
+        <div class="lds-circle"><div></div></div>
         <input type="text" id="registration-code" placeholder="Your Registration Code" on:keypress={(e) => handleKeyPress(e, 'registrationCode')}>
         <div class="instruction">Once we start, please enter your registration code</div>
+        <div class="error">
+            <Warning/>
+            The code you entered is incorrect</div>
       </div>
     {/if}
   
@@ -142,6 +147,38 @@
                         color: #3E3E3E;
                     }
                 }
+
+.lds-circle {
+  display: inline-block;
+  transform: translateZ(1px);
+}
+.lds-circle > div {
+  display: inline-block;
+  position:absolute;
+  top: 15px;
+  left: 170px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #34E5B0;
+  animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+@keyframes lds-circle {
+  0%, 100% {
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+  }
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(1800deg);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+  }
+  100% {
+    transform: rotateY(3600deg);
+  }
+}
+
 	}
 
     .input-surname{
@@ -278,6 +315,13 @@
         color: #959595;
         width: 100%;
         justify-content: center;
+    }
+
+    .error{
+        display: flex;
+        align-items: center;
+        color: #FF7878;
+        margin-top: 5px;
     }
 
     .start-button{
