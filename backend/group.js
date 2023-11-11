@@ -16,6 +16,12 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		if(chats.length === 0){
 			log.info(`creating genesis chat`)
 			await createChat()
+		}else{
+			chats = chats.map(chat => ({
+				...chat,
+				typingUsers: {}
+			}))
+			log.info(`resumed ${chats.length} chat(s)`)
 		}
 
 		broadcast({
@@ -27,18 +33,8 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	async function setupClient(client){
 		client.on('type', ({ chat: chatId, text }) => {
 			let chat = chats.find(c => c.id === chatId)
-			let typingUser = chat.typingUsers.find(
-				e => e.user.id === client.user.id
-			)
 
-			if(text.length > 0){
-				if(!typingUser){
-					chat.typingUsers.push(typingUser = { user: client.user, text: '' })
-					typingUser.text = text
-				}
-			}else{
-				chat.typingUsers = chat.typingUsers.filter(e => e !== typingUser)
-			}
+			chat.typingUsers[client.user.id] = text
 
 			broadcast({
 				event: 'chat',
@@ -49,6 +45,11 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		client.send({
 			event: 'user',
 			user: client.user
+		})
+
+		client.send({
+			event: 'users',
+			users: clients.map(client => client.user)
 		})
 
 		client.send({
@@ -71,7 +72,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		})
 
 		Object.assign(chat, {
-			typingUsers: []
+			typingUsers: {}
 		})
 
 		chats.push(chat)
@@ -96,7 +97,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		joinClient(client){
 			clients.push(client)
 
-			client.on('disconnect', code => {
+			client.on('disconnect', ({ code }) => {
 				log.info(`connection from "${client.user.firstName}" closed (code ${code})`)
 				clients = clients.filter(c => c !== client)
 			})

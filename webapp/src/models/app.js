@@ -4,6 +4,7 @@ import { writable, get } from 'svelte/store'
 
 export const connectionState = writable()
 export const userMeta = writable()
+export const users = writable([])
 export const chats = writable([])
 export const currentChat = writable()
 
@@ -24,6 +25,10 @@ export function connect({ url }){
 
 	socket.on('user', ({ user }) => {
 		userMeta.set(user)
+	})
+
+	socket.on('users', ({ users: u }) => {
+		users.set(u)
 	})
 
 	socket.on('chats', ({ chats: c }) => {
