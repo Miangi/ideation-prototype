@@ -49,6 +49,29 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			})
 		})
 
+		client.on('reply', ({ chat: chatId, text }) => {
+			let chat = chats.find(c => c.id === chatId)
+
+			delete chat.typingUsers[client.user.id]
+
+			if(!chat.locked){
+				chat.userMessages.push({
+					user: {
+						id: client.user.id
+					},
+					text,
+					timeCreated: Date.now()/1000
+				})
+	
+				chat.locked = true
+			}
+
+			broadcast({
+				event: 'chat',
+				chat
+			})
+		})
+
 		client.send({
 			event: 'user',
 			user: client.user

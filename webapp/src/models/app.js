@@ -49,6 +49,13 @@ export function connect({ url }){
 	})
 }
 
+export function getChatTransscript(chat){
+	return [
+		...chat.userMessages,
+		...chat.expertMessages
+	].sort((a, b) => a.timeCreated - b.timeCreated)
+}
+
 export function setChatInput(text){
 	text = text.trim()
 
@@ -56,6 +63,19 @@ export function setChatInput(text){
 		command: 'type',
 		chat: get(currentChat).id,
 		text: text.length > 0 ? text : null
+	})
+}
+
+export function submitChatInput(text){
+	text = text.trim()
+
+	if(text.length === 0)
+		return
+
+	socket.send({
+		command: 'reply',
+		chat: get(currentChat).id,
+		text
 	})
 }
 

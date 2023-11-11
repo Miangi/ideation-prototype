@@ -6,7 +6,7 @@
     import ExpertMessage from './expert-message.svelte'
     import GeneratingAnswer from './generating-answer.svelte'
 	
-	import { currentChat, users } from '../../models/app.js'
+	import { currentChat, getChatTransscript, users } from '../../models/app.js'
 </script>   
 
 
@@ -22,6 +22,15 @@
 				{:else}
 					<span/>
 				{/if}
+
+				{#each getChatTransscript($currentChat) as message}
+					{#if message.user}
+						<UserMessage
+							user={$users.find(user => user.id == message.user.id)}
+							text={message.text}
+						/>
+					{/if}
+				{/each}
 
 				{#each Object.entries($currentChat.typingUsers) as [id, text]}
 					{#if text}
