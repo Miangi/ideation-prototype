@@ -10,6 +10,11 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		chats = await ctx.db.chats.readMany({
 			where: {
 				group: groupMeta
+			},
+			include: {
+				experts: true,
+				expertMessages: true,
+				userMessages: true
 			}
 		})
 
@@ -31,6 +36,8 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	}
 
 	async function setupClient(client){
+		clients.push(client)
+
 		client.on('type', ({ chat: chatId, text }) => {
 			let chat = chats.find(c => c.id === chatId)
 
@@ -55,6 +62,25 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		client.send({
 			event: 'chats',
 			chats
+		})
+
+		client.on('disconnect', ({ code }) => {
+			log.info(`connection from "${client.user.firstName}" closed (code ${code})`)
+			clients = clients.filter(c => c !== client)
+
+			for(let chat of chats){
+				delete chat.typingUsers[client.user.id]
+			}
+
+			broadcast({
+				event: 'chats',
+				chats
+			})
+
+			broadcast({
+				event: 'users',
+				user: clients.map(client => client.user)
+			})
 		})
 	}
 
@@ -95,15 +121,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	return {
 		...groupMeta,
 		joinClient(client){
-			clients.push(client)
-
-			client.on('disconnect', ({ code }) => {
-				log.info(`connection from "${client.user.firstName}" closed (code ${code})`)
-				clients = clients.filter(c => c !== client)
-			})
-			
 			log.info(`user "${client.user.firstName}" joined`)
-
 			setupClient(client)
 		}
 	}

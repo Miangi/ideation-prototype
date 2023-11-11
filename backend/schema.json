@@ -110,6 +110,24 @@
 				},
 				"problemSummary": {
 					"type": "string"
+				},
+				"experts": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Expert"
+					}
+				},
+				"userMessages": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/UserMessage"
+					}
+				},
+				"expertMessages": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/ExpertMessage"
+					}
 				}
 			},
 			"required": [
