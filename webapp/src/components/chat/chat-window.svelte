@@ -6,7 +6,7 @@
     import ExpertMessage from './expert-message.svelte'
     import GeneratingAnswer from './generating-answer.svelte'
 	
-	import { currentChat } from '../../models/app.js'
+	import { currentChat, users } from '../../models/app.js'
 </script>   
 
 
@@ -15,11 +15,23 @@
 		<div class="messages">
 			<SystemMessage text="👉 Start the chat by describing the problem in your own words"/>
 
-			{#if $currentChat?.experts?.length > 0}
-				<ExpertCommittee experts={$currentChat.experts}/>
-				<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
-			{:else}
-				<span/>
+			{#if $currentChat}
+				{#if $currentChat.experts.length > 0}
+					<ExpertCommittee experts={$currentChat.experts}/>
+					<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
+				{:else}
+					<span/>
+				{/if}
+
+				{#each Object.entries($currentChat.typingUsers) as [id, text]}
+					{#if text}
+						<UserMessage
+							user={$users.find(user => user.id == parseInt(id))}
+							text={text}
+							tentative={true}
+						/>
+					{/if}
+				{/each}
 			{/if}
 		</div>
 	<ChatInput/>

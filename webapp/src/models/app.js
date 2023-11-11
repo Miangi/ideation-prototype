@@ -44,7 +44,7 @@ export function connect({ url }){
 	socket.on('chat', ({ chat }) => {
 		chats.update(chats => chats.map(c => c.id === chat.id ? chat: c))
 
-		if(get(currentChat).id === chat)
+		if(get(currentChat).id === chat.id)
 			currentChat.set(chat)
 	})
 }
@@ -55,7 +55,7 @@ export function setChatInput(text){
 	socket.send({
 		command: 'type',
 		chat: get(currentChat).id,
-		text
+		text: text.length > 0 ? text : null
 	})
 }
 
