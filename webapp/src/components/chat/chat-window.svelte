@@ -7,6 +7,9 @@
     import GeneratingAnswer from './generating-answer.svelte'
 	
 	import { currentChat, getChatTransscript, users } from '../../models/app.js'
+    import SystemProcedure from './system-procedure.svelte';
+
+	$: transscript = $currentChat ? getChatTransscript($currentChat) : []
 </script>   
 
 
@@ -16,14 +19,23 @@
 			<SystemMessage text="👉 Start the chat by describing the problem in your own words"/>
 
 			{#if $currentChat}
+				{#if transscript[0]}
+					<UserMessage
+						user={$users.find(user => user.id == transscript[0].user.id)}
+						text={transscript[0].text}
+					/>
+				{/if}
+
 				{#if $currentChat.experts.length > 0}
 					<ExpertCommittee experts={$currentChat.experts}/>
 					<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
 				{:else}
-					<span/>
+					{#if $currentChat.locked}
+						<SystemProcedure text="Your expert committee is being generated. Please wait a moment."/>
+					{/if}
 				{/if}
 
-				{#each getChatTransscript($currentChat) as message}
+				{#each transscript.slice(1) as message}
 					{#if message.user}
 						<UserMessage
 							user={$users.find(user => user.id == message.user.id)}
