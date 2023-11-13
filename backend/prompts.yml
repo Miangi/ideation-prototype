@@ -1,0 +1,41 @@
+validate_problem:
+  system: |-
+    This is an AI augmented brainstorming session.
+    A group of users is trying to find a specific solution for a new innovation that could be developed.
+
+  prompt: |-
+    The problem is described as follows:
+
+    "{problem}"
+
+    Is this problem description sufficiently detailed to function as a baseline for the brainstorming session?
+
+    {choices}
+
+  choices:
+    A: Yes, it describes the problem well enough
+    B: No, the description is unclear
+
+
+generate_experts:
+  system: |-
+    This is an AI augmented brainstorming session.
+    A group of users is trying to find a specific solution for a new innovation that could be developed.
+
+  prompt: |-
+    The problem is described as follows:
+
+    "{poblem}""
+
+    Your task is to invent a committee of exactly four experts that will assist the users in this brainstorming session.
+    These experts should have diverse backgrounds, experiences, and expertise. This diversity will bring different viewpoints and ideas to the table, fostering innovation.
+
+    The four experts should be presented as follows:
+
+    1. (Job Title)
+    (Concise 2 sentence introduction from the expert about their background)
+
+    2. (Job Title)
+    (Concise 2 sentence introduction from the expert about their background)
+
+    etc
