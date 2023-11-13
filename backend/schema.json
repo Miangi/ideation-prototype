@@ -83,6 +83,9 @@
 				"lastName": {
 					"type": "string"
 				},
+				"email": {
+					"type": "string"
+				},
 				"token": {
 					"type": "string"
 				}

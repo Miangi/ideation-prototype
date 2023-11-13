@@ -34,8 +34,11 @@ export default defineConfig(({ mode }) => ({
 		}
 	],
 	define: {
-		BACKEND_SERVER_URL: mode === 'production'
+		BACKEND_SOCKET_URL: mode === 'production'
 			? '"wss://study.pivoto.ai/api"'
-			: '"ws://localhost:8080"'
+			: '"ws://localhost:8080"',
+		BACKEND_REST_URL: mode === 'production'
+			? '"https://study.pivoto.ai/api"'
+			: '"http://localhost:8080"'
 	}
 }));

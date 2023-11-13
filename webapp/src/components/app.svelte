@@ -11,7 +11,13 @@
 	import { visibleModals } from '../models/state.js'
 	import { connect, connectionState } from '../models/app.js'
 
-	connect({ url: `${BACKEND_SERVER_URL}?token=XTESTXYZ` })
+	let cookies = Object.fromEntries(
+		new URLSearchParams(
+			document.cookie.replace(/; /g, "&")
+		)
+	)
+
+	connect({ url: `${BACKEND_SOCKET_URL}?token=${cookies.token}` })
 </script>
 
 <div class="app-container">

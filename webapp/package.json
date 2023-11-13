@@ -21,5 +21,8 @@
 		"svelte-autosize": "^1.1.0",
 		"vite": "^4.4.2",
 		"vitest": "^0.34.6"
+	},
+	"dependencies": {
+		"@mwni/fetch": "^1.0.0"
 	}
 }

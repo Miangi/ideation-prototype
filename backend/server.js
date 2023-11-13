@@ -1,9 +1,14 @@
 import { createServer } from 'http'
 import log from '@mwni/log'
+import Koa from 'koa'
+import KoaRouter from '@koa/router'
+import KoaCors from '@koa/cors'
+import KoaBody from 'koa-bodyparser'
 import createWss from '@mwni/wss'
 import createDBConnection from './database.js'
 import { validateUser } from './user.js'
 import { createGroupController } from './group.js'
+import { initApi } from './api.js'
 
 export default ({ port }) => {
 	let ctx = {
@@ -11,13 +16,24 @@ export default ({ port }) => {
 	}
 
 	let groups = []
-	let server = createServer()
+	let koa = new Koa()
+	let router = new KoaRouter()
+	let server = createServer(koa.callback())
 	let wss = createWss({
 		server,
 		authorize: async ({ query }) => ({
 			user: await validateUser({ ctx, query })
 		})
 	})
+
+	initApi({ ctx, router })
+
+	koa.use(KoaCors())
+	koa.use(KoaBody())
+	koa.use(
+		router.routes(), 
+		router.allowedMethods()
+	)
 
 	wss.on('accept', async client => {
 		log.info(`new connection from ${client.ip}`)
