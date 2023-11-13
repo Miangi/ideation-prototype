@@ -6,13 +6,48 @@
     import ExpertMessage from './expert-message.svelte'
     import GeneratingAnswer from './generating-answer.svelte'
 	
+    import { onMount } from 'svelte'
 	import { currentChat, users } from '../../models/app.js'
+
+	let messagesContainerDom
+	let detached = false
+
+	function scrollToBottom(){
+		if(detached)
+			return
+
+		messagesContainerDom.scrollTo({
+			top: 999999,
+			behavior: 'smooth'
+		})
+	}
+
+	function handleScroll(e){
+		let maxScrollTop = messagesContainerDom.scrollHeight - messagesContainerDom.clientHeight
+		let distanceFromBottom = maxScrollTop - messagesContainerDom.scrollTop
+		
+		if(distanceFromBottom > 5){
+			detached = true
+		}else{
+			detached = false
+		}
+	}
+
+	onMount(() => {
+		let unsubscribe = currentChat.subscribe(scrollToBottom)
+		messagesContainerDom.addEventListener('scroll', handleScroll)
+
+		return () => {
+			unsubscribe()
+			messagesContainerDom.removeEventListener('scroll', handleScroll)
+		}
+	})
 </script>   
 
 
 <div class="chat-window">
 	<div class="chat-message-container"></div>
-		<div class="messages">
+		<div class="messages" bind:this={messagesContainerDom}>
 			{#if $currentChat}
 				{#each $currentChat.messages as message}
 					{#if message.user}
@@ -65,6 +100,7 @@
 		padding: 10px;
 		overflow-y: auto;
 		flex-direction: column;
+		padding-bottom: 50px;
 
 		&::-webkit-scrollbar {
 			width: 10px;
