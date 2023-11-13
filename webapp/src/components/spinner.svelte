@@ -1,26 +1,9 @@
-<script>
-	export let text
-</script>
-
-<div class="system-procedure">
-	<div class="lds-circle"><div/></div>
-	{text}
+<div class="spinner">
+	<div/>
 </div>
 
 <style>
-	.system-procedure{
-		display: flex;
-		align-self: center;
-		background-color: #0B2E24;
-		margin-top: 15px;
-		padding: 20px;
-		border-radius: 60px;
-		align-items: center;
-		font-size: 16px;
-		color: #34E5B0;
-	}
-
-	.lds-circle {
+	.spinner {
 		display: inline-block;
 		transform: translateZ(1px);
 		position: relative;
@@ -29,7 +12,7 @@
 		margin-right: 15px;
 	}
 
-	.lds-circle > div {
+	.spinner > div {
 		display: inline-block;
 		position: absolute;
 		top: 0;

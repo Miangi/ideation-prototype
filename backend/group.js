@@ -31,6 +31,15 @@ export function createGroupController({ ctx, meta: groupMeta }){
 				flushChat(chat)
 				return
 			}
+
+			chat.messages.push({
+				text: `(experts)`,
+				timeCreated: new Date()
+			})
+			
+			broadcast({ event: 'chat', chat })
+
+			// 👉 Feel free to ask questions or come up with ideas
 		}
 	}
 

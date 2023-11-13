@@ -7,7 +7,6 @@
     import GeneratingAnswer from './generating-answer.svelte'
 	
 	import { currentChat, users } from '../../models/app.js'
-    import SystemProcedure from './system-procedure.svelte';
 </script>   
 
 
@@ -24,18 +23,13 @@
 					{:else if message.expert}
 						<ExpertMessage/>
 					{:else}
-						<SystemMessage text={message.text}/>
+						{#if message.text === '(experts)'}
+							<ExpertCommittee experts={$currentChat.experts}/>
+						{:else}
+							<SystemMessage text={message.text}/>
+						{/if}
 					{/if}
 				{/each}
-
-				{#if $currentChat.experts.length > 0}
-					<ExpertCommittee experts={$currentChat.experts}/>
-					<SystemMessage text="👉 Feel free to ask questions or come up with ideas"/>
-				{:else}
-					{#if $currentChat.locked}
-						<SystemProcedure text="Your expert committee is being generated. Please wait a moment."/>
-					{/if}
-				{/if}
 
 				{#each Object.entries($currentChat.typingUsers) as [id, text]}
 					{#if text}
