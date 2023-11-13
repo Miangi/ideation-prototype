@@ -32,7 +32,16 @@
 
 
 <div class="chat-input">
-	<textarea use:autosize bind:this={inputDom} rows="1" placeholder="Describe the problem in your own words"></textarea>
+	<textarea 
+		use:autosize 
+		bind:this={inputDom} 
+		rows="1" 
+		placeholder={
+			$currentChat?.experts.length > 0
+				? `Chat with the experts`
+				: `Describe the problem in your own words`
+		}
+	/>
 	{#if $currentChat && !$currentChat?.locked}
 		<div class="send" on:click={sendMessage}>
 			<SendIconActive/>
