@@ -2,8 +2,6 @@ import { formatChoices, parseChoice, queryLLM } from './llm.js'
 import prompts from './prompts.js'
 
 export async function validateProblem({ ctx, problem }){
-	return true
-
 	let result = await queryLLM({
 		system: prompts.validate_problem.system,
 		messages: [{
