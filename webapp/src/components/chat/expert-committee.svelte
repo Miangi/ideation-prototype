@@ -4,6 +4,7 @@
 	import expertColors from './expert-colors.js'
 
 	export let experts
+	export let tentative
 
 	$: expertsWithColor = experts.map(
 		expert => ({
@@ -16,7 +17,7 @@
 </script>
 
 <div class="committee">
-	{#if expertsWithColor.length === 4}
+	{#if !tentative}
 		<div class="headline">Your Expert Committee:</div>
 	{:else}
 		<div class="busy">

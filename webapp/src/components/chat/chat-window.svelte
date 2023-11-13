@@ -53,7 +53,7 @@
 	<div class="chat-message-container"></div>
 		<div class="messages" bind:this={messagesContainerDom}>
 			{#if $currentChat}
-				{#each $currentChat.messages as message}
+				{#each $currentChat.messages as message, i}
 					{#if message.user}
 						<UserMessage
 							user={$users.find(user => user.id == message.user.id)}
@@ -63,7 +63,10 @@
 						<ExpertMessage/>
 					{:else}
 						{#if message.text === '(experts)'}
-							<ExpertCommittee experts={$currentChat.experts}/>
+							<ExpertCommittee 
+								experts={$currentChat.experts}
+								tentative={$currentChat.messages.length - 1 === i}
+							/>
 						{:else}
 							<SystemMessage text={message.text}/>
 						{/if}
