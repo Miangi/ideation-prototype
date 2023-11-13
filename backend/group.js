@@ -6,6 +6,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	let log = logging.fork({ name: groupMeta.name })
 	let clients = []
 	let chats = []
+	let offlineUsers = []
 
 	async function handleUserMessage({ client, chat, text }){
 		chat.messages.push({
@@ -81,6 +82,12 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	}
 
 	async function setupGroup(){
+		offlineUsers = await ctx.db.users.readMany({
+			where: {
+				group: groupMeta
+			}
+		})
+
 		chats = await ctx.db.chats.readMany({
 			where: {
 				group: groupMeta
@@ -141,7 +148,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 
 		client.send({
 			event: 'users',
-			users: clients.map(client => client.user)
+			users: clients.map(client => client.user).concat(offlineUsers)
 		})
 
 		client.send({
@@ -164,7 +171,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 
 			broadcast({
 				event: 'users',
-				user: clients.map(client => client.user)
+				user: clients.map(client => client.user).concat(offlineUsers)
 			})
 		})
 	}
