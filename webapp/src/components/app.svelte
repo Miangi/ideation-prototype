@@ -8,6 +8,7 @@
 	import ChatWindow from './chat/chat-window.svelte'
 	import TaskBar from './task/task-bar.svelte'
 
+	import { goto } from '$app/navigation'
 	import { visibleModals } from '../models/state.js'
 	import { connect, connectionState } from '../models/app.js'
 
@@ -17,7 +18,10 @@
 		)
 	)
 
-	connect({ url: `${BACKEND_SOCKET_URL}?token=${cookies.token}` })
+	if(!cookies.token)
+		goto('/')
+	else
+		connect({ url: `${BACKEND_SOCKET_URL}?token=${cookies.token}` })
 </script>
 
 <div class="app-container">
