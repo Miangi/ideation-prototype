@@ -25,6 +25,42 @@ export async function validateProblem({ ctx, problem }){
 	return choice === 'A'
 }
 
-export async function generateExperts({ ctx, problem }){
+export async function* generateExperts({ ctx, problem }){
+	let stream = await queryLLM({
+		system: prompts.generate_experts.system,
+		messages: [{
+			user: prompts.generate_experts.prompt.format({ 
+				problem
+			})
+		}],
+		stream: true
+	})
+
+	for await(let result of stream){
+		yield parseExperts(result.last.toString())
+	}
+}
+
+function parseExperts(text){
+	let segments = text.split('\n\n')
 	
+	return segments.map(
+		(segment, index) => {
+			let firstLineBreak = segment.indexOf('\n')
+
+			if(firstLineBreak > 0){
+				return {
+					index,
+					name: segment.slice(0, firstLineBreak).slice(2).trim(),
+					background: segment.slice(firstLineBreak+1).trim().replaceAll(/(^")|("$)/g, '')
+				}
+			}else{
+				return {
+					index,
+					name: segment.slice(2).trim(),
+					background: ''
+				}
+			}
+		}
+	)
 }

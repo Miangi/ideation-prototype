@@ -25,7 +25,7 @@ generate_experts:
   prompt: |-
     The problem is described as follows:
 
-    "{poblem}""
+    "{problem}"
 
     Your task is to invent a committee of exactly four experts that will assist the users in this brainstorming session.
     These experts should have diverse backgrounds, experiences, and expertise. This diversity will bring different viewpoints and ideas to the table, fostering innovation.

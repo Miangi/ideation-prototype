@@ -157,6 +157,9 @@
 				"chat": {
 					"$ref": "#/definitions/Chat"
 				},
+				"index": {
+					"type": "integer"
+				},
 				"name": {
 					"type": "string"
 				},
@@ -166,6 +169,7 @@
 			},
 			"required": [
 				"chat",
+				"index",
 				"name",
 				"background"
 			]

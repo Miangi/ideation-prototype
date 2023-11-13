@@ -36,10 +36,23 @@ export function createGroupController({ ctx, meta: groupMeta }){
 				text: `(experts)`,
 				timeCreated: new Date()
 			})
-			
+
 			broadcast({ event: 'chat', chat })
 
-			// 👉 Feel free to ask questions or come up with ideas
+			for await(var experts of generateExperts({ ctx, problem: text })){
+				chat.experts = experts
+				broadcast({ event: 'chat', chat })
+			}
+
+			chat.messages.push({
+				text: `👉 Continue by asking questions or propose ideas`,
+				timeCreated: new Date()
+			})
+
+			chat.locked = false
+
+			broadcast({ event: 'chat', chat })
+			flushChat(chat)
 		}
 	}
 
@@ -180,19 +193,41 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			if(message.id)
 				continue
 
-			let data = {
-				...message,
-				chat: {
-					id: chat.id
-				}
-			}
+			let table
 
 			if(message.user)
-				await ctx.db.userMessages.createOne({ data })
+				table = ctx.db.userMessages
 			else if(message.expert)
-				await ctx.db.expertMessages.createOne({ data })
+				table = ctx.db.expertMessages
 			else
-				await ctx.db.systemMessages.createOne({ data })
+				table = ctx.db.systemMessages
+
+			let { id } = await table.createOne({
+				data: {
+					...message,
+					chat: {
+						id: chat.id
+					}
+				}
+			})
+
+			message.id = id
+		}
+
+		for(let expert of chat.experts){
+			if(expert.id)
+				continue
+
+			let { id } = await ctx.db.experts.createOne({
+				data: {
+					...expert,
+					chat: {
+						id: chat.id
+					}
+				}
+			})
+
+			expert.id = id
 		}
 	}
 

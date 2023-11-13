@@ -11,7 +11,6 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, strea
 
 	log.time.debug('llm.query', `querying ${model}`)
 
-	let text = ''
 	let completion = await openai.chat.completions.create({
 		model,
 		messages: llmMessages,
@@ -19,16 +18,26 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, strea
 	})
 
 	if(stream){
-		for await (const chunk of completion){
-			text += chunk.choices[0]?.delta?.content || ''
+		async function* iterate(){
+			for await (const chunk of completion){
+				let text = chunk.choices[0]?.delta?.content || ''
+
+				if(text.length === 0)
+					continue
+
+				thread.appendStreamingDelta(text)
+
+				yield thread
+			}
+
+			log.time.debug('llm.query', `querying ${model} took %`)
 		}
+		return iterate()
 	}else{
 		thread.appendResult(completion.choices[0].message.content)
+		log.time.debug('llm.query', `querying ${model} took %`)
+		return thread
 	}
-
-	log.time.debug('llm.query', `querying ${model} took %`)
-
-	return thread
 }
 
 export function formatChoices({ choices }){
@@ -71,6 +80,17 @@ export class LLMThread extends Array{
 
 	appendResult(result){
 		this.push(new Message({ assistant: result }))
+	}
+
+	appendStreamingDelta(delta){
+		let text = ''
+
+		if(this.last.role === 'assistant'){
+			text = this.last.toString()
+			this.pop()
+		}
+
+		this.appendResult(text + delta)
 	}
 }
 
