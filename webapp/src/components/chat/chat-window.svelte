@@ -12,13 +12,15 @@
 	let messagesContainerDom
 	let detached = false
 
-	function scrollToBottom(){
+	async function scrollToBottom(instant){
 		if(detached)
 			return
 
+		await Promise.resolve()
+
 		messagesContainerDom.scrollTo({
 			top: 999999,
-			behavior: 'smooth'
+			behavior: instant ? 'instant' : 'smooth'
 		})
 	}
 
@@ -36,6 +38,8 @@
 	onMount(() => {
 		let unsubscribe = currentChat.subscribe(scrollToBottom)
 		messagesContainerDom.addEventListener('scroll', handleScroll)
+
+		scrollToBottom(true)
 
 		return () => {
 			unsubscribe()
