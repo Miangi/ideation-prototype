@@ -2,8 +2,8 @@ import logging from '@mwni/log'
 import { generateExperts, summarizeProblem, validateProblem } from './prompting.js'
 
 
-export function createGroupController({ ctx, meta: groupMeta }){
-	let log = logging.fork({ name: groupMeta.name })
+export function createTeamController({ ctx, meta: teamMeta }){
+	let log = logging.fork({ name: teamMeta.name })
 	let clients = []
 	let chats = []
 	let offlineUsers = []
@@ -81,16 +81,16 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		}
 	}
 
-	async function setupGroup(){
+	async function setupTeam(){
 		offlineUsers = await ctx.db.users.readMany({
 			where: {
-				group: groupMeta
+				team: teamMeta
 			}
 		})
 
 		chats = await ctx.db.chats.readMany({
 			where: {
-				group: groupMeta
+				team: teamMeta
 			},
 			include: {
 				experts: true,
@@ -179,7 +179,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	async function createChat(){
 		let chat = await ctx.db.chats.createOne({
 			data: {
-				group: groupMeta,
+				team: teamMeta,
 				title: `Ideation ${chats.length + 1}`
 			}
 		})
@@ -279,11 +279,11 @@ export function createGroupController({ ctx, meta: groupMeta }){
 		}
 	}
 
-	setupGroup()
-		.catch(error => log.warn(`group setup failed: ${error.message}`))
+	setupTeam()
+		.catch(error => log.warn(`team setup failed: ${error.message}`))
 
 	return {
-		...groupMeta,
+		...teamMeta,
 		joinClient(client){
 			log.info(`user "${client.user.firstName}" joined`)
 			setupClient(client)

@@ -1,7 +1,7 @@
 validate_problem:
   system: |-
     This is an AI augmented brainstorming session.
-    A group of users is trying to find a specific solution for a given problem.
+    A team of users is trying to find a specific solution for a given problem.
 
   prompt: |-
     The problem is described as follows:
@@ -33,7 +33,7 @@ summarize_problem:
 generate_experts:
   system: |-
     This is an AI augmented brainstorming session.
-    A group of users is trying to find a specific solution for a new innovation that could be developed.
+    A team of users is trying to find a specific solution for a new innovation that could be developed.
 
   prompt: |-
     The problem is described as follows:

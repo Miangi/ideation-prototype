@@ -1,10 +1,10 @@
 {
 	"type": "object",
 	"properties": {
-		"groups": {
+		"teams": {
 			"type": "array",
 			"items": {
-				"$ref": "#/definitions/Group"
+				"$ref": "#/definitions/Team"
 			}
 		},
 		"users": {
@@ -45,7 +45,7 @@
 		}
 	},
 	"definitions": {
-		"Group": {
+		"Team": {
 			"type": "object",
 			"properties": {
 				"id": {
@@ -74,8 +74,8 @@
 					"type": "integer",
 					"id": true
 				},
-				"group": {
-					"$ref": "#/definitions/Group"
+				"team": {
+					"$ref": "#/definitions/Team"
 				},
 				"firstName": {
 					"type": "string"
@@ -91,7 +91,7 @@
 				}
 			},
 			"required": [
-				"group",
+				"team",
 				"firstName",
 				"lastName",
 				"token"
@@ -107,8 +107,8 @@
 					"type": "integer",
 					"id": true
 				},
-				"group": {
-					"$ref": "#/definitions/Group"
+				"team": {
+					"$ref": "#/definitions/Team"
 				},
 				"title": {
 					"type": "string",
@@ -146,7 +146,7 @@
 				}
 			},
 			"required": [
-				"group",
+				"team",
 				"title"
 			]
 		},

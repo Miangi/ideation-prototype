@@ -5,7 +5,7 @@ export async function validateUser({ ctx, query }){
 			token: userToken
 		},
 		include: {
-			group: true
+			team: true
 		}
 	})
 

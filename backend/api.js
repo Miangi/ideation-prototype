@@ -1,25 +1,25 @@
 export function initApi({ ctx: serverCtx, router }){
 	router.get('/check-code', async ctx => {
-		let group = await serverCtx.db.groups.readOne({
+		let team = await serverCtx.db.teams.readOne({
 			where: {
 				code: ctx.query.code
 			}
 		})
 
 		ctx.body = {
-			valid: !!group
+			valid: !!team
 		}
 	})
 
 	router.post('/register', async ctx => {
 		let { code, surname: firstName, name: lastName, email } = ctx.request.body
-		let group = await serverCtx.db.groups.readOne({
+		let team = await serverCtx.db.teams.readOne({
 			where: {
 				code
 			}
 		})
 
-		if(!group){
+		if(!team){
 			ctx.status = 400
 			ctx.body = {
 				message: 'Invalid Code'
@@ -35,7 +35,7 @@ export function initApi({ ctx: serverCtx, router }){
 
 		await serverCtx.db.users.createOne({
 			data: {
-				group,
+				team,
 				token,
 				firstName,
 				lastName,

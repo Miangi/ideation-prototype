@@ -7,7 +7,7 @@ import KoaBody from 'koa-bodyparser'
 import createWss from '@mwni/wss'
 import createDBConnection from './database.js'
 import { validateUser } from './user.js'
-import { createGroupController } from './group.js'
+import { createTeamController } from './team.js'
 import { initApi } from './api.js'
 
 export default ({ port }) => {
@@ -15,7 +15,7 @@ export default ({ port }) => {
 		db: createDBConnection()
 	}
 
-	let groups = []
+	let teams = []
 	let koa = new Koa()
 	let router = new KoaRouter()
 	let server = createServer(koa.callback())
@@ -38,17 +38,17 @@ export default ({ port }) => {
 	wss.on('accept', async client => {
 		log.info(`new connection from ${client.ip}`)
 
-		let group = groups.find(
-			g => g.id === client.user.group.id
+		let team = teams.find(
+			g => g.id === client.user.team.id
 		)
 
-		if(!group){
-			log.info(`creating group controller for "${client.user.group.name}"`)
-			group = createGroupController({ ctx, meta: client.user.group })
-			groups.push(group)
+		if(!team){
+			log.info(`creating team controller for "${client.user.team.name}"`)
+			team = createTeamController({ ctx, meta: client.user.team })
+			teams.push(team)
 		}
 
-		group.joinClient(client)
+		team.joinClient(client)
 	})
 
 	wss.on('reject', ({ ip, query }) => {
