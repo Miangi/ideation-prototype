@@ -6,25 +6,27 @@
     import ExpertMessage from './expert-message.svelte'
     import GeneratingAnswer from './generating-answer.svelte'
 	
-	import { currentChat, getChatTransscript, users } from '../../models/app.js'
+	import { currentChat, users } from '../../models/app.js'
     import SystemProcedure from './system-procedure.svelte';
-
-	$: transscript = $currentChat ? getChatTransscript($currentChat) : []
 </script>   
 
 
 <div class="chat-window">
 	<div class="chat-message-container"></div>
 		<div class="messages">
-			<SystemMessage text="👉 Start the chat by describing the problem in your own words"/>
-
 			{#if $currentChat}
-				{#if transscript[0]}
-					<UserMessage
-						user={$users.find(user => user.id == transscript[0].user.id)}
-						text={transscript[0].text}
-					/>
-				{/if}
+				{#each $currentChat.messages as message}
+					{#if message.user}
+						<UserMessage
+							user={$users.find(user => user.id == message.user.id)}
+							text={message.text}
+						/>
+					{:else if message.expert}
+						<ExpertMessage/>
+					{:else}
+						<SystemMessage text={message.text}/>
+					{/if}
+				{/each}
 
 				{#if $currentChat.experts.length > 0}
 					<ExpertCommittee experts={$currentChat.experts}/>
@@ -34,15 +36,6 @@
 						<SystemProcedure text="Your expert committee is being generated. Please wait a moment."/>
 					{/if}
 				{/if}
-
-				{#each transscript.slice(1) as message}
-					{#if message.user}
-						<UserMessage
-							user={$users.find(user => user.id == message.user.id)}
-							text={message.text}
-						/>
-					{/if}
-				{/each}
 
 				{#each Object.entries($currentChat.typingUsers) as [id, text]}
 					{#if text}

@@ -1,10 +1,38 @@
 import logging from '@mwni/log'
+import { generateExperts, validateProblem } from './prompting.js'
 
 
 export function createGroupController({ ctx, meta: groupMeta }){
 	let log = logging.fork({ name: groupMeta.name })
 	let clients = []
 	let chats = []
+
+	async function handleUserMessage({ client, chat, text }){
+		chat.messages.push({
+			user: {
+				id: client.user.id
+			},
+			text,
+			timeCreated: new Date()
+		})
+
+		chat.locked = true
+
+		broadcast({ event: 'chat', chat })
+
+		if(chat.experts.length === 0){
+			if(!await validateProblem({ ctx, problem: text })){
+				chat.messages.push({
+					text: `⚠️ The problem description is not clear enough. Please rephrase it.`,
+					timeCreated: new Date()
+				})
+				chat.locked = false
+				broadcast({ event: 'chat', chat })
+				flushChat(chat)
+				return
+			}
+		}
+	}
 
 	async function setupGroup(){
 		chats = await ctx.db.chats.readMany({
@@ -14,7 +42,8 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			include: {
 				experts: true,
 				expertMessages: true,
-				userMessages: true
+				userMessages: true,
+				systemMessages: true
 			}
 		})
 
@@ -22,10 +51,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			log.info(`creating genesis chat`)
 			await createChat()
 		}else{
-			chats = chats.map(chat => ({
-				...chat,
-				typingUsers: {}
-			}))
+			chats = chats.map(chat => setupChat(chat))
 			log.info(`resumed ${chats.length} chat(s)`)
 		}
 
@@ -43,33 +69,19 @@ export function createGroupController({ ctx, meta: groupMeta }){
 
 			chat.typingUsers[client.user.id] = text
 
-			broadcast({
-				event: 'chat',
-				chat
-			})
+			broadcast({ event: 'chat', chat })
 		})
 
-		client.on('reply', ({ chat: chatId, text }) => {
+		client.on('reply', async ({ chat: chatId, text }) => {
 			let chat = chats.find(c => c.id === chatId)
 
 			delete chat.typingUsers[client.user.id]
 
 			if(!chat.locked){
-				chat.userMessages.push({
-					user: {
-						id: client.user.id
-					},
-					text,
-					timeCreated: Date.now()/1000
-				})
-	
-				chat.locked = true
+				await handleUserMessage({ client, chat, text })
+			}else{
+				broadcast({ event: 'chat', chat })
 			}
-
-			broadcast({
-				event: 'chat',
-				chat
-			})
 		})
 
 		client.send({
@@ -116,20 +128,63 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			include: {
 				experts: true,
 				expertMessages: true,
-				userMessages: true
+				userMessages: true,
+				systemMessages: true
 			}
 		})
 
-		Object.assign(chat, {
-			typingUsers: {}
-		})
-
-		chats.push(chat)
+		chats.push(setupChat(chat))
 
 		broadcast({
 			event: 'chats',
 			chats
 		})
+	}
+
+	function setupChat(chat){
+		let messages = [
+			...chat.userMessages,
+			...chat.expertMessages,
+			...chat.systemMessages
+		].sort((a, b) => a.timeCreated - b.timeCreated)
+
+		if(messages.length === 0){
+			messages.push({
+				text: `👉 Start the chat by describing the problem in your own words`,
+				timeCreated: new Date()
+			})
+		}
+
+		return {
+			id: chat.id,
+			title: chat.title,
+			problemDescription: chat.problemDescription,
+			problemSummary: chat.problemSummary,
+			experts: chat.experts,
+			typingUsers: {},
+			messages
+		}
+	}
+
+	async function flushChat(chat){
+		for(let message of chat.messages){
+			if(message.id)
+				continue
+
+			let data = {
+				...message,
+				chat: {
+					id: chat.id
+				}
+			}
+
+			if(message.user)
+				await ctx.db.userMessages.createOne({ data })
+			else if(message.expert)
+				await ctx.db.expertMessages.createOne({ data })
+			else
+				await ctx.db.systemMessages.createOne({ data })
+		}
 	}
 
 	function broadcast(payload){

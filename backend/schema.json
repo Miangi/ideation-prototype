@@ -36,6 +36,12 @@
 			"items": {
 				"$ref": "#/definitions/ExpertMessage"
 			}
+		},
+		"systemMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/SystemMessage"
+			}
 		}
 	},
 	"definitions": {
@@ -128,6 +134,12 @@
 					"items": {
 						"$ref": "#/definitions/ExpertMessage"
 					}
+				},
+				"systemMessages": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/SystemMessage"
+					}
 				}
 			},
 			"required": [
@@ -207,6 +219,28 @@
 			"required": [
 				"chat",
 				"user",
+				"text"
+			]
+		},
+		"SystemMessage": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"chat": {
+					"$ref": "#/definitions/Chat"
+				},
+				"text": {
+					"type": "string"
+				},
+				"timeCreated": {
+					"type": "date"
+				}
+			},
+			"required": [
+				"chat",
 				"text"
 			]
 		}
