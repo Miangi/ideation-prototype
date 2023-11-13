@@ -52,7 +52,7 @@
 		width: 100%;
 		height: auto;
 		align-items: center;
-		margin-top: 15px;
+		margin-top: 30px;
 
 		> .headline{
 			font-size: 24px;
