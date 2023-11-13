@@ -1,19 +1,19 @@
 validate_problem:
   system: |-
     This is an AI augmented brainstorming session.
-    A group of users is trying to find a specific solution for a new innovation that could be developed.
+    A group of users is trying to find a specific solution for a given problem.
 
   prompt: |-
     The problem is described as follows:
 
     "{problem}"
 
-    Is this problem description sufficiently detailed to function as a baseline for the brainstorming session?
+    Is this describing a problem that could be solved during a brainstorming session?
 
     {choices}
 
   choices:
-    A: Yes, it describes the problem well enough
+    A: Yes, this describes a problem
     B: No, the description is unclear
 
 

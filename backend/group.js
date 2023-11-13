@@ -29,6 +29,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 				chat.locked = false
 				broadcast({ event: 'chat', chat })
 				flushChat(chat)
+				log.info(`problem "${text}" was deemed unclear`)
 				return
 			}
 
