@@ -1,5 +1,5 @@
 import logging from '@mwni/log'
-import { generateExperts, validateProblem } from './prompting.js'
+import { generateExperts, summarizeProblem, validateProblem } from './prompting.js'
 
 
 export function createGroupController({ ctx, meta: groupMeta }){
@@ -33,6 +33,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 				return
 			}
 
+			chat.problemDescription = text
 			chat.messages.push({
 				text: `(experts)`,
 				timeCreated: new Date()
@@ -40,10 +41,10 @@ export function createGroupController({ ctx, meta: groupMeta }){
 
 			broadcast({ event: 'chat', chat })
 
-			for await(var experts of generateExperts({ ctx, problem: text })){
-				chat.experts = experts
-				broadcast({ event: 'chat', chat })
-			}
+			await Promise.all([
+				handleExpertGeneration({ chat, problem: text }),
+				handleProblemSummarization({ chat, problem: text })
+			])
 
 			chat.messages.push({
 				text: `👉 Continue by asking questions or propose ideas`,
@@ -54,6 +55,28 @@ export function createGroupController({ ctx, meta: groupMeta }){
 
 			broadcast({ event: 'chat', chat })
 			flushChat(chat)
+		}
+	}
+
+	async function handleExpertGeneration({ chat, problem }){
+		for await(var experts of generateExperts({ ctx, problem })){
+			chat.experts = experts
+			broadcast({ event: 'chat', chat })
+		}
+	}
+
+	async function handleProblemSummarization({ chat, problem }){
+		try{
+			let { title, summary } = await summarizeProblem({ ctx, problem })
+			
+			Object.assign(chat, {
+				title,
+				problemSummary: summary
+			})
+
+			broadcast({ event: 'chat', chat })
+		}catch(error){
+			log.warn(`failed to create problem summary for "${problem}":`, error)
 		}
 	}
 
@@ -190,6 +213,17 @@ export function createGroupController({ ctx, meta: groupMeta }){
 	}
 
 	async function flushChat(chat){
+		await ctx.db.chats.updateOne({
+			data: {
+				title: chat.title,
+				problemDescription: chat.problemDescription,
+				problemSummary: chat.problemSummary
+			},
+			where: {
+				id: chat.id
+			}
+		})
+
 		for(let message of chat.messages){
 			if(message.id)
 				continue

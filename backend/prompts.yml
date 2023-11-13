@@ -17,6 +17,19 @@ validate_problem:
     B: No, the description is unclear
 
 
+summarize_problem:
+  prompt: |-
+    "{problem}"
+
+    Summarize the problem description above in the following manner:
+
+    Title: (Short title of the problem no longer than 2 words)
+    Summary: (Short summary of the problem no longer than 7 words)
+
+  preface: |-
+    Title: 
+
+
 generate_experts:
   system: |-
     This is an AI augmented brainstorming session.

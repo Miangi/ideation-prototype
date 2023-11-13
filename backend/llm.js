@@ -34,7 +34,7 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, strea
 		}
 		return iterate()
 	}else{
-		thread.appendResult(completion.choices[0].message.content)
+		thread.appendResult((preface || '') + completion.choices[0].message.content)
 		log.time.debug('llm.query', `querying ${model} took %`)
 		return thread
 	}
