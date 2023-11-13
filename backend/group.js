@@ -106,6 +106,10 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			}
 		})
 
+		client.on('new_chat', async () => {
+			await createChat()
+		})
+
 		client.send({
 			event: 'user',
 			user: client.user
@@ -146,12 +150,6 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			data: {
 				group: groupMeta,
 				title: `Ideation ${chats.length + 1}`
-			},
-			include: {
-				experts: true,
-				expertMessages: true,
-				userMessages: true,
-				systemMessages: true
 			}
 		})
 
@@ -161,13 +159,15 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			event: 'chats',
 			chats
 		})
+
+		log.info(`created new chat`)
 	}
 
 	function setupChat(chat){
 		let messages = [
-			...chat.userMessages,
-			...chat.expertMessages,
-			...chat.systemMessages
+			...(chat.userMessages || []),
+			...(chat.expertMessages || []),
+			...(chat.systemMessages || [])
 		].sort((a, b) => a.timeCreated - b.timeCreated)
 
 		if(messages.length === 0){
@@ -182,7 +182,7 @@ export function createGroupController({ ctx, meta: groupMeta }){
 			title: chat.title,
 			problemDescription: chat.problemDescription,
 			problemSummary: chat.problemSummary,
-			experts: chat.experts,
+			experts: chat.experts || [],
 			typingUsers: {},
 			messages
 		}

@@ -34,26 +34,45 @@ export function connect({ url }){
 	socket.on('chats', ({ chats: c }) => {
 		chats.set(c)
 
-		if(get(currentChat)){
-			currentChat.set(c.find(c => c.id === get(currentChat).id))
-		}else{
-			currentChat.set(c[0])
-		}
+		currentChat.update(
+			current => current
+				? (
+					current.id
+						? c.find(c => c.id === get(currentChat).id)
+						: c[c.length - 1]
+				)
+				: c[0]
+		)
 	})
 
 	socket.on('chat', ({ chat }) => {
 		chats.update(chats => chats.map(c => c.id === chat.id ? chat: c))
 
-		if(get(currentChat).id === chat.id)
+		if(get(currentChat)?.id === chat.id)
 			currentChat.set(chat)
 	})
 }
 
-export function getChatTransscript(chat){
-	return [
-		...chat.userMessages,
-		...chat.expertMessages
-	].sort((a, b) => a.timeCreated - b.timeCreated)
+export function createNewChat(){
+	let tentativeChat = {
+		title: `Ideation ${get(chats).length + 1}`,
+		experts: [],
+		messages: [],
+		typingUsers: {}
+	}
+
+	chats.update(chats => [...chats, tentativeChat])
+	currentChat.set(tentativeChat)
+
+	socket.send({ command: 'new_chat' })
+}
+
+export function selectChat(chat){
+	currentChat.set(
+		get(chats).find(
+			c => c.id === chat.id
+		)
+	)
 }
 
 export function setChatInput(text){

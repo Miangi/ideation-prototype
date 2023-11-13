@@ -33,7 +33,7 @@
 
 <div class="chat-input">
 	<textarea use:autosize bind:this={inputDom} rows="1" placeholder="Describe the problem in your own words"></textarea>
-	{#if !$currentChat?.locked}
+	{#if $currentChat && !$currentChat?.locked}
 		<div class="send" on:click={sendMessage}>
 			<SendIconActive/>
 		</div>
