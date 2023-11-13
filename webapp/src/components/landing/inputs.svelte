@@ -322,6 +322,7 @@
         align-items: center;
         color: #FF7878;
         margin-top: 5px;
+        gap: 3px;
     }
 
     .start-button{
