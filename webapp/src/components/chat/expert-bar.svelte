@@ -4,7 +4,7 @@
     import expertColors from './expert-colors.js'
 </script>
 
-<div class="problem-bar">
+<div class="expert-bar">
 	{#if $currentChat?.problemSummary}
 		<div class="problem-summary">
 			<div class="label">Problem Summary</div>
@@ -38,7 +38,7 @@
 </div>
 
 <style lang="scss">
-	.problem-bar{
+	.expert-bar{
 		display: flex;
 		width: 15em;
 		min-width: 15em;
@@ -96,6 +96,9 @@
 				flex-direction: column;
 				color: #B9B9B9;
 				background-color: #393939;
+				padding: 4px;
+				box-sizing: border-box;
+				text-align: center;
 				
 				&.placeholder{
 					color: #b9b9b9;

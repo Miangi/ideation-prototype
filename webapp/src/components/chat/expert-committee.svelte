@@ -96,6 +96,7 @@
 			.name{
 				font-size: 16px;
 				font-weight: bold;
+				text-align: center;
 			}
 
 			.background{
