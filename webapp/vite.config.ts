@@ -1,7 +1,6 @@
 import { fork } from 'child_process'
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
-import initBackendServer from '@pivoto-study/backend'
+import { sveltekit } from '@sveltejs/kit/vite'
+import { defineConfig } from 'vitest/config'
 import chokidar from 'chokidar'
 
 export default defineConfig(({ mode }) => ({
@@ -10,26 +9,21 @@ export default defineConfig(({ mode }) => ({
 		{
 			name: 'backendServer',
 			configureServer(server){
-				if(mode === 'production'){
-					initBackendServer({ port: 5390 })
-				}else{
-					let serverProcess
-					let timer
+				let serverProcess
+				let timer
 
-					async function reload(){
-						if(serverProcess) 
-							serverProcess.kill()
+				async function reload(){
+					if(serverProcess) 
+						serverProcess.kill()
 
-						serverProcess = fork('./devserver.js')
-					}
-					
-					reload()
-					chokidar.watch('../backend').on('all', () => {
-						clearTimeout(timer)
-						timer = setTimeout(reload, 500)
-					})
+					serverProcess = fork('./devserver.js')
 				}
 				
+				reload()
+				chokidar.watch('../backend').on('all', () => {
+					clearTimeout(timer)
+					timer = setTimeout(reload, 500)
+				})
 			}
 		}
 	],

@@ -9,6 +9,7 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
+		"@mwni/fetch": "^1.0.0",
 		"@mwni/socket": "^1.3.0",
 		"@pivoto-study/backend": "file:../backend",
 		"@sveltejs/adapter-node": "^1.3.1",
@@ -23,6 +24,6 @@
 		"vitest": "^0.34.6"
 	},
 	"dependencies": {
-		"@mwni/fetch": "^1.0.0"
+		"express": "^4.18.2"
 	}
 }
