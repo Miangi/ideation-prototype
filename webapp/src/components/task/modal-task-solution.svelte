@@ -148,6 +148,10 @@
 					flex-direction: column;
 				}
 
+					.SolutionInput{
+						height: 100px;
+					}
+
 
 					#solution-input1{
 						display: flex;
