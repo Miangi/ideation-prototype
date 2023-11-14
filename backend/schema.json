@@ -7,6 +7,12 @@
 				"$ref": "#/definitions/Team"
 			}
 		},
+		"tasks": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Task"
+			}
+		},
 		"users": {
 			"type": "array",
 			"items": {
@@ -67,6 +73,31 @@
 				"code"
 			]
 		},
+		"Task": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer",
+					"id": true
+				},
+				"team": {
+					"$ref": "#/definitions/Team"
+				},
+				"definition": {
+					"type": "string"
+				},
+				"solution": {
+					"type": "any"
+				}
+			},
+			"required": [
+				"definition",
+				"team"
+			],
+			"unique": [
+				["taskId", "team"]
+			]
+		},
 		"User": {
 			"type": "object",
 			"properties": {
@@ -109,6 +140,9 @@
 				},
 				"team": {
 					"$ref": "#/definitions/Team"
+				},
+				"task": {
+					"$ref": "#/definitions/Task"
 				},
 				"title": {
 					"type": "string",

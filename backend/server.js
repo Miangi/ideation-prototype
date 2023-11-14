@@ -7,15 +7,15 @@ import KoaBody from 'koa-bodyparser'
 import createWss from '@mwni/wss'
 import createDBConnection from './database.js'
 import { validateUser } from './user.js'
-import { createTeamController } from './team.js'
 import { initApi } from './api.js'
+import { createTeamSession } from './session.js'
 
-export default ({ port }) => {
+export default async ({ port }) => {
 	let ctx = {
-		db: createDBConnection()
+		db: createDBConnection(),
+		sessions: []
 	}
 
-	let teams = []
 	let koa = new Koa()
 	let router = new KoaRouter()
 	let server = createServer(koa.callback())
@@ -38,22 +38,25 @@ export default ({ port }) => {
 	wss.on('accept', async client => {
 		log.info(`new connection from ${client.ip}`)
 
-		let team = teams.find(
+		let session = ctx.sessions.find(
 			g => g.id === client.user.team.id
 		)
 
-		if(!team){
-			log.info(`creating team controller for "${client.user.team.name}"`)
-			team = createTeamController({ ctx, meta: client.user.team })
-			teams.push(team)
+		if(!session){
+			log.warn(`no team session exists for user "${client.user.firstName}"`)
+			return
 		}
 
-		team.joinClient(client)
+		session.joinClient(client)
 	})
 
 	wss.on('reject', ({ ip, query }) => {
 		log.info(`rejected connection from ${ip} (token ${query.token})`)
 	})
+
+	for(let team of await ctx.db.teams.readMany()){
+		ctx.sessions.push(await createTeamSession({ ctx, team }))
+	}
 
 	server.listen(port)
 	log.info(`listening on port ${port}`)

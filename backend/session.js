@@ -2,10 +2,53 @@ import logging from '@mwni/log'
 import { generateExperts, summarizeProblem, validateProblem } from './prompting.js'
 
 
-export function createTeamController({ ctx, meta: teamMeta }){
-	let log = logging.fork({ name: teamMeta.name })
+export async function createTeamSession({ ctx, team }){
+	let log = logging.fork({ name: team.name })
 	let clients = []
 	let chats = []
+	let tasks = await ctx.db.tasks.readMany({
+		where: {
+			team,
+			solution: null
+		}
+	})
+
+	async function setupTask({ task }){
+		log.info(`setting up task "${task.definition}"`)
+
+		chats = await ctx.db.chats.readMany({
+			where: {
+				team,
+				task
+			},
+			include: {
+				experts: true,
+				expertMessages: true,
+				userMessages: {
+					user: true
+				},
+				systemMessages: true
+			}
+		})
+
+		if(chats.length === 0){
+			log.info(`creating genesis chat`)
+			await createChat({ task })
+		}else{
+			chats = chats.map(chat => setupChat(chat))
+			log.info(`resumed ${chats.length} chat(s)`)
+		}
+
+		broadcast({
+			event: 'task',
+			task
+		})
+
+		broadcast({
+			event: 'chats',
+			chats
+		})
+	}
 
 	async function handleUserMessage({ client, chat, text }){
 		chat.messages.push({
@@ -82,35 +125,6 @@ export function createTeamController({ ctx, meta: teamMeta }){
 		}
 	}
 
-	async function setupTeam(){
-		chats = await ctx.db.chats.readMany({
-			where: {
-				team: teamMeta
-			},
-			include: {
-				experts: true,
-				expertMessages: true,
-				userMessages: {
-					user: true
-				},
-				systemMessages: true
-			}
-		})
-
-		if(chats.length === 0){
-			log.info(`creating genesis chat`)
-			await createChat()
-		}else{
-			chats = chats.map(chat => setupChat(chat))
-			log.info(`resumed ${chats.length} chat(s)`)
-		}
-
-		broadcast({
-			event: 'chats',
-			chats
-		})
-	}
-
 	async function setupClient(client){
 		clients.push(client)
 
@@ -136,6 +150,7 @@ export function createTeamController({ ctx, meta: teamMeta }){
 
 		client.on('new_chat', async () => {
 			await createChat()
+			log.info(`user "${client.user.firstName}" created a new chat`)
 		})
 
 		client.send({
@@ -173,10 +188,13 @@ export function createTeamController({ ctx, meta: teamMeta }){
 		})
 	}
 
-	async function createChat(){
+	async function createChat({ task }){
 		let chat = await ctx.db.chats.createOne({
 			data: {
-				team: teamMeta,
+				team,
+				task: {
+					id: task.id
+				},
 				title: `Ideation ${chats.length + 1}`
 			}
 		})
@@ -187,8 +205,6 @@ export function createTeamController({ ctx, meta: teamMeta }){
 			event: 'chats',
 			chats
 		})
-
-		log.info(`created new chat`)
 	}
 
 	function setupChat(chat){
@@ -284,11 +300,10 @@ export function createTeamController({ ctx, meta: teamMeta }){
 		}
 	}
 
-	setupTeam()
-		.catch(error => log.warn(`team setup failed: ${error.message}`))
+	await setupTask({ task: tasks[0] })
 
 	return {
-		...teamMeta,
+		...team,
 		joinClient(client){
 			log.info(`user "${client.user.firstName}" joined`)
 			setupClient(client)

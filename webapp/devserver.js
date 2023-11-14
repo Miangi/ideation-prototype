@@ -1,3 +1,3 @@
 import initBackendServer from '@pivoto-study/backend'
 
-initBackendServer({ port: 8080 })
+await initBackendServer({ port: 8080 })
