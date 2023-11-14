@@ -173,7 +173,7 @@ export async function createTeamSession({ ctx, team }){
 			}
 		})
 
-		broadcast({
+		client.send({
 			event: 'task',
 			task: tasks[0]
 		})
@@ -183,7 +183,7 @@ export async function createTeamSession({ ctx, team }){
 			user: client.user
 		})
 
-		client.send({
+		broadcast({
 			event: 'users',
 			users: clients.map(client => client.user)
 		})
