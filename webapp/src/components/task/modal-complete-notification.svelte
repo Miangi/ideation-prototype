@@ -9,7 +9,7 @@
         <div class="label">
             <CheckCircle/>
             Task 1 has been completed! </div>
-        <div class="sub-text">🎉 Congratulations</div>
+        <div class="sub-text">Your task solution has been saved successfully</div>
         <div class="button">
             <Countdown/>
             Next Task
