@@ -6,12 +6,13 @@ export function createTeamController({ ctx, meta: teamMeta }){
 	let log = logging.fork({ name: teamMeta.name })
 	let clients = []
 	let chats = []
-	let offlineUsers = []
 
 	async function handleUserMessage({ client, chat, text }){
 		chat.messages.push({
 			user: {
-				id: client.user.id
+				id: client.user.id,
+				firstName: client.user.firstName,
+				lastName: client.user.lastName
 			},
 			text,
 			timeCreated: new Date()
@@ -82,12 +83,6 @@ export function createTeamController({ ctx, meta: teamMeta }){
 	}
 
 	async function setupTeam(){
-		offlineUsers = await ctx.db.users.readMany({
-			where: {
-				team: teamMeta
-			}
-		})
-
 		chats = await ctx.db.chats.readMany({
 			where: {
 				team: teamMeta
@@ -95,7 +90,9 @@ export function createTeamController({ ctx, meta: teamMeta }){
 			include: {
 				experts: true,
 				expertMessages: true,
-				userMessages: true,
+				userMessages: {
+					user: true
+				},
 				systemMessages: true
 			}
 		})
@@ -148,7 +145,7 @@ export function createTeamController({ ctx, meta: teamMeta }){
 
 		client.send({
 			event: 'users',
-			users: clients.map(client => client.user).concat(offlineUsers)
+			users: clients.map(client => client.user)
 		})
 
 		client.send({
@@ -171,7 +168,7 @@ export function createTeamController({ ctx, meta: teamMeta }){
 
 			broadcast({
 				event: 'users',
-				user: clients.map(client => client.user).concat(offlineUsers)
+				user: clients.map(client => client.user)
 			})
 		})
 	}
@@ -196,7 +193,15 @@ export function createTeamController({ ctx, meta: teamMeta }){
 
 	function setupChat(chat){
 		let messages = [
-			...(chat.userMessages || []),
+			...(chat.userMessages || [])
+				.map(message => ({
+					...message,
+					user: {
+						id: message.user.id,
+						firstName: message.user.firstName,
+						lastName: message.user.lastName
+					}
+				})),
 			...(chat.expertMessages || []),
 			...(chat.systemMessages || [])
 		].sort((a, b) => a.timeCreated - b.timeCreated)

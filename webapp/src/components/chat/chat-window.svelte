@@ -56,7 +56,7 @@
 				{#each $currentChat.messages as message, i}
 					{#if message.user}
 						<UserMessage
-							user={$users.find(user => user.id == message.user.id)}
+							user={message.user}
 							text={message.text}
 						/>
 					{:else if message.expert}
