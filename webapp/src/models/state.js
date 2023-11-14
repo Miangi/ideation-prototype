@@ -5,7 +5,8 @@ export const app = writable()
 export const visibleModals = writable({
 	taskInfo: false,
 	taskInstructions: false,
-	taskSolution: false
+	taskSolution: false,
+	taskFinished: false
 })
 
 export const unseenContent = writable({

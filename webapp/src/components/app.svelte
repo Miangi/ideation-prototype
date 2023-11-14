@@ -3,6 +3,7 @@
 	import TaskInfoModal from './task/modal-task-info.svelte'
 	import TaskInstructionsModal from './task/modal-task-instructions.svelte'
 	import TaskSolutionModal from './task/modal-task-solution.svelte'
+	import TaskFinishedModal from './task/modal-task-finished.svelte'
 	import ChatTabs from './chat/tabs.svelte'
 	import ExpertBar from './chat/expert-bar.svelte'
 	import ChatWindow from './chat/chat-window.svelte'
@@ -36,6 +37,10 @@
 
 	{#if $visibleModals.taskSolution}
 		<TaskSolutionModal/>
+	{/if}
+
+	{#if $visibleModals.taskFinished}
+		<TaskFinishedModal/>
 	{/if}
 
 	<ChatTabs/>
