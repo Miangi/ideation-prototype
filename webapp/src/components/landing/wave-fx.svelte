@@ -63,6 +63,7 @@
 		window.addEventListener('resize', updateSize)
 		updateSize()
 		tick()
+		setTimeout(updateSize, 100)
 	})
 
 	onDestroy(() => {
