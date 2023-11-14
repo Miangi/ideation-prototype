@@ -83,19 +83,19 @@
 				"team": {
 					"$ref": "#/definitions/Team"
 				},
-				"definition": {
-					"type": "string"
+				"number": {
+					"type": "integer"
 				},
 				"solution": {
 					"type": "any"
 				}
 			},
 			"required": [
-				"definition",
-				"team"
+				"team",
+				"number"
 			],
 			"unique": [
-				["taskId", "team"]
+				["team", "number"]
 			]
 		},
 		"User": {

@@ -7,6 +7,7 @@ export const userMeta = writable()
 export const users = writable([])
 export const chats = writable([])
 export const currentChat = writable()
+export const currentTask = writable()
 
 let socket
 
@@ -21,6 +22,10 @@ export function connect({ url }){
 	socket.on('disconnect', () => {
 		console.warn('connection to backend lost')
 		connectionState.set('lost')
+	})
+
+	socket.on('task', ({ task }) => {
+		currentTask.set(task)
 	})
 
 	socket.on('user', ({ user }) => {
@@ -100,4 +105,8 @@ export function submitChatInput(text){
 
 export function submitSolution({ answers }){
 	console.log(`submit solution:`, answers)
+	socket.send({
+		command: 'solution',
+		answers
+	})
 }

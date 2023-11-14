@@ -8,7 +8,7 @@
 	import GroupTag5 from '../assets/svg/group5.svelte'
 
 	import { onMount } from 'svelte'
-    import { userMeta } from '../models/app.js'
+    import { currentTask, userMeta } from '../models/app.js'
   
 	const groupTagMap = {
 		'Gruppe 1': GroupTag1,
@@ -41,7 +41,15 @@
 			<div class="logo">
 				<LogoSmall />
 			</div>
-			<div class="task-header">Task 1: Product / Service innovation for elderly</div>
+			<div class="task-header">
+				{#if $currentTask?.number === 1}
+					Task 1: Product / Service innovation for elderly
+				{:else if $currentTask?.number === 2}
+					Task 2: Business Model innovation regarding autonomous driving
+				{:else}
+					Loading Task ...
+				{/if}
+			</div>
 			<div class="participant-info">
 				<div class="participant-info-name">
 					{#if $userMeta}

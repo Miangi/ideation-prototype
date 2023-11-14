@@ -153,6 +153,11 @@ export async function createTeamSession({ ctx, team }){
 			log.info(`user "${client.user.firstName}" created a new chat`)
 		})
 
+		broadcast({
+			event: 'task',
+			task: tasks[0]
+		})
+
 		client.send({
 			event: 'user',
 			user: client.user
