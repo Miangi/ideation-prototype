@@ -3,7 +3,7 @@
     import { visibleModals, lastFinishedTask } from '../../models/state.js'
 	import { goto } from '$app/navigation'
 
-	let time = 5
+	let time = 6
 	let timer = setInterval(tick, 1000)
 
 	function tick(){
