@@ -4,3 +4,9 @@
 </script>
 
 <slot />
+
+<style>
+	:global(html), :global(body){
+		overflow: hidden;
+	}
+</style>
