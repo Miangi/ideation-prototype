@@ -14,7 +14,7 @@ export async function createTeamSession({ ctx, team }){
 	})
 
 	async function setupTask({ task }){
-		log.info(`setting up task "${task.definition}"`)
+		log.info(`setting up task #${task.number}`)
 
 		chats = await ctx.db.chats.readMany({
 			where: {
@@ -149,8 +149,28 @@ export async function createTeamSession({ ctx, team }){
 		})
 
 		client.on('new_chat', async () => {
-			await createChat()
+			await createChat({ task: tasks[0] })
 			log.info(`user "${client.user.firstName}" created a new chat`)
+		})
+
+		client.on('solution', async ({ answers }) => {
+			await ctx.db.tasks.updateOne({
+				data: {
+					solution: answers
+				},
+				where: {
+					id: tasks[0].id
+				}
+			})
+
+			log.info(`user "${client.user.firstName}" submitted a solution for task #${tasks[0].number}`)
+			
+			broadcast({ event: 'task-complete' })
+			tasks.shift()
+
+			if(tasks.length > 0){	
+				await setupTask({ task: tasks[0] })
+			}
 		})
 
 		broadcast({
@@ -305,7 +325,19 @@ export async function createTeamSession({ ctx, team }){
 		}
 	}
 
-	await setupTask({ task: tasks[0] })
+	if(tasks.length > 0){
+		await setupTask({ task: tasks[0] })
+	}else{
+		return {
+			...team,
+			joinClient(client){
+				client.send({
+					event: 'task',
+					task: null
+				})
+			}
+		}
+	}
 
 	return {
 		...team,

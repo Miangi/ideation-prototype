@@ -14,3 +14,5 @@ export const unseenContent = writable({
 	taskInstructions: true,
 	taskSolution: true
 })
+
+export const lastFinishedTask = writable(1)

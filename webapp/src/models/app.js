@@ -1,5 +1,7 @@
 import createSocket from '@mwni/socket'
 import { writable, get } from 'svelte/store'
+import { visibleModals, lastFinishedTask, unseenContent } from './state.js'
+import { goto } from '$app/navigation'
 
 
 export const connectionState = writable()
@@ -25,7 +27,29 @@ export function connect({ url }){
 	})
 
 	socket.on('task', ({ task }) => {
+		if(!task){
+			goto('/thank-you')
+			return
+		}
+		
 		currentTask.set(task)
+	})
+
+	socket.on('task-complete', () => {
+		lastFinishedTask.set(get(currentTask).number)
+
+		visibleModals.update(
+			visible => ({
+				...visible,
+				taskFinished: true
+			})
+		)
+
+		unseenContent.set({
+			taskInfo: true,
+			taskInstructions: true,
+			taskSolution: true
+		})
 	})
 
 	socket.on('user', ({ user }) => {
@@ -43,7 +67,7 @@ export function connect({ url }){
 			current => current
 				? (
 					current.id
-						? c.find(c => c.id === get(currentChat).id)
+						? c.find(c => c.id === get(currentChat).id) || c[0]
 						: c[c.length - 1]
 				)
 				: c[0]

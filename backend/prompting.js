@@ -35,8 +35,6 @@ export async function summarizeProblem({ ctx, problem }){
 		stream: false
 	})
 
-	console.log(result.last)
-
 	let match = /(?:Title:\s*)(.*)(?:\n*)(?:Summary:\s*)(.*)/g.exec(result.last)
 
 	return {

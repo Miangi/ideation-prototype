@@ -1,6 +1,7 @@
 <script>
 	import CheckCircle from '../../assets/svg/check_circle_outline_34px.svelte'
-    import { visibleModals } from '../../models/state'
+    import { visibleModals, lastFinishedTask } from '../../models/state.js'
+	import { goto } from '$app/navigation'
 
 	let time = 5
 	let timer = setInterval(tick, 1000)
@@ -13,7 +14,13 @@
 
 	function close(){
 		clearInterval(timer)
-		$visibleModals.taskFinished = false
+
+		if($lastFinishedTask === 2){
+			goto('/thank-you')
+		}else{
+			$visibleModals.taskFinished = false
+		}
+		
 	}
 </script>
 
@@ -22,11 +29,15 @@
 		<div class="text">🎉 Congratulations</div>
 		<div class="label">
 			<CheckCircle/>
-			Task 1 has been completed! </div>
+			Task {$lastFinishedTask} has been completed! </div>
 		<div class="sub-text">You or someone from your team has submitted a solution for this task.</div>
 		<button on:click={close}>
 			<div class="counter">{time}</div>
-			Next Task
+			{#if $lastFinishedTask === 1}
+				Next Task
+			{:else}
+				Time for Beer
+			{/if}
 		</button>
 	</div>
 </div>

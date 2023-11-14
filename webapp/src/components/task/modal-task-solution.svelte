@@ -1,50 +1,49 @@
 <script>
-import MinimizeTaskSolution from '../../assets/svg/minimize_task_solution24px.svelte'
-import WarningIcon from '../../assets/svg/warning_amber_18px.svelte'
-import CheckIcon from '../../assets/svg/check_circle_outline_16px.svelte'
-import CloseIcon from '../../assets/svg/close_green_24px.svelte'
-import { app, visibleModals } from '../../models/state.js'
+	import MinimizeTaskSolution from '../../assets/svg/minimize_task_solution24px.svelte'
+	import WarningIcon from '../../assets/svg/warning_amber_18px.svelte'
+	import CheckIcon from '../../assets/svg/check_circle_outline_16px.svelte'
+	import CloseIcon from '../../assets/svg/close_green_24px.svelte'
+	import { visibleModals } from '../../models/state.js'
+	import { submitSolution } from '../../models/app'
 
-const minWordsPerAnswer = 30
-const questions = [
-	'What are some common problems or challenges faced by the aging population that your product aims to solve?',
-	'What is your proposed product or service? Describe its functionality and how it helps the elderly in detail.',
-	'How does your product or service improve upon or differ from existing solutions in the market?',
-	'What is the feasibility of implementing your product? Consider factors such as cost, risk, and complexity.'
-]
+	const minWordsPerAnswer = 30
+	const questions = [
+		'What are some common problems or challenges faced by the aging population that your product aims to solve?',
+		'What is your proposed product or service? Describe its functionality and how it helps the elderly in detail.',
+		'How does your product or service improve upon or differ from existing solutions in the market?',
+		'What is the feasibility of implementing your product? Consider factors such as cost, risk, and complexity.'
+	]
 
-let currentQuestion = 0
-let validAnswer = false
-let answers = ['', '', '', '']
-let showError = false
-let showFinalPopup = false
+	let currentQuestion = 0
+	let validAnswer = false
+	let answers = ['', '', '', '']
+	let showError = false
+	let showFinalPopup = false
 
-$: showError = !validAnswer
+	$: showError = !validAnswer
 
-function nextQuestion() {
-	if (validAnswer){
-		currentQuestion += 1
+	function nextQuestion() {
+		if (validAnswer){
+			currentQuestion += 1
+		}
 	}
-}
 
-function prevQuestion() {
-	if (currentQuestion > 0){
-		currentQuestion -= 1
+	function prevQuestion() {
+		if (currentQuestion > 0){
+			currentQuestion -= 1
+		}
 	}
-}
 
-function handleInput({ target }){
-	answers[currentQuestion] = target.value
-	validAnswer = answers[currentQuestion].split(' ').length >= minWordsPerAnswer
-}
-
-
-function submit(){
-	$app.submitSolution({ answers })
-	$visibleModals.taskSolution = false
-}
+	function handleInput({ target }){
+		answers[currentQuestion] = target.value
+		validAnswer = answers[currentQuestion].split(' ').length >= minWordsPerAnswer
+	}
 
 
+	function submit(){
+		submitSolution({ answers })
+		$visibleModals.taskSolution = false
+	}
 </script>
 
 {#if !showFinalPopup}

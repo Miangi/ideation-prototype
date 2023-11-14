@@ -1,7 +1,7 @@
 <script>
-	import URlogo from '../../assets/svg/URlogo.svelte'
-    import WaveFx from '../landing/wave-fx.svelte'
-	import OpenAILogo from '../../assets/svg/openai-plus.svelte'
+	import URlogo from '../assets/svg/URlogo.svelte'
+    import WaveFx from './landing/wave-fx.svelte'
+	import OpenAILogo from '../assets/svg/openai-plus.svelte'
 </script>
 
 <div class="ending-container">
@@ -9,7 +9,7 @@
 		<URlogo/>
 	</div>
 	<div class="text">
-		<div class="label">🎉 Congratulations!</div>
+		<div class="label">🎉 Thank You!</div>
 		<div class="subtext">You successfully completed the study!</div>
 	</div>
     <div class="thank-you">
@@ -47,7 +47,7 @@
 		margin-top: 70px;
 
 		>.label{
-			font-size: 36px;
+			font-size: 50px;
 			font-family: 'Ubuntu Bold';
 		}
 
