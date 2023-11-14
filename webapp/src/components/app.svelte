@@ -11,12 +11,9 @@
 	import { goto } from '$app/navigation'
 	import { visibleModals } from '../models/state.js'
 	import { connect, connectionState } from '../models/app.js'
+	import { getCookies } from '../models/cookies.js'
 
-	let cookies = Object.fromEntries(
-		new URLSearchParams(
-			document.cookie.replace(/; /g, "&")
-		)
-	)
+	let cookies = getCookies()
 
 	if(!cookies.token)
 		goto('/')

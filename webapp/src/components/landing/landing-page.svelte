@@ -1,9 +1,13 @@
 <script>
 	import URlogo from '../../assets/svg/URlogo.svelte'
-    import WaveFx from './wave-fx.svelte';
-
+    import WaveFx from './wave-fx.svelte'
 	import InputForm from './inputs.svelte'
 
+	import { goto } from '$app/navigation'
+	import { getCookies } from '../../models/cookies.js'
+
+	if(getCookies().token)
+		goto('/ideation')
 </script>
 
 <div class="landing-container">
