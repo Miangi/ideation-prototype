@@ -64,7 +64,7 @@
 				</div>
 				<div class="time-and-date">{time}</div>
 				<div class="assigned-group">
-					<svelte:component this={groupTagMap[$userMeta?.group?.name]}/>
+					<svelte:component this={groupTagMap[$userMeta?.team?.name]}/>
 				</div>
 			</div>
 		</div>
