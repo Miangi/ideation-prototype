@@ -3,6 +3,7 @@ import prompts from './prompts.js'
 
 export async function validateProblem({ ctx, problem }){
 	let result = await queryLLM({
+		model: 'gpt-3.5-turbo',
 		system: prompts.validate_problem.system,
 		messages: [{
 			user: prompts.validate_problem.prompt.format({ 
@@ -25,6 +26,7 @@ export async function validateProblem({ ctx, problem }){
 
 export async function validateMessage({ ctx, chat }){
 	let result = await queryLLM({
+		model: 'gpt-3.5-turbo',
 		system: prompts.validate_message.system.format({
 			problem: chat.problemDescription
 		}),
