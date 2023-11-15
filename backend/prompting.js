@@ -214,6 +214,7 @@ function compileTransscript(chat){
 				? `User (${message.user.firstName}):\n${message.text}`
 				: `${message.expert.name}:\n${message.text}`
 		)
+		.slice(-25)
 		.join('\n\n')
 }
 
