@@ -75,6 +75,7 @@
 		box-sizing: border-box;
 		padding: 15px;
 		width: 100%;
+		max-width: 1220px;
 
 		> div{
 			display: flex;
