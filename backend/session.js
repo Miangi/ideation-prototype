@@ -53,7 +53,7 @@ export async function createTeamSession({ ctx, team }){
 	}
 
 	async function handleUserMessage({ client, chat, text }){
-		chat.messages.push({
+		let userMessage = {
 			user: {
 				id: client.user.id,
 				firstName: client.user.firstName,
@@ -61,8 +61,9 @@ export async function createTeamSession({ ctx, team }){
 			},
 			text,
 			timeCreated: new Date()
-		})
+		}
 
+		chat.messages.push(userMessage)
 		chat.locked = true
 
 		broadcast({ event: 'chat', chat })
@@ -106,7 +107,8 @@ export async function createTeamSession({ ctx, team }){
 			flushChat(chat)
 		}else{
 			if(!await validateMessage({ ctx, chat })){
-				chat.messages[chat.messages.length - 1].valid = false
+				userMessage.valid = false
+
 				chat.messages.push({
 					text: `⚠️ Your message makes no sense. Please rephrase it.`,
 					timeCreated: new Date()
@@ -118,6 +120,8 @@ export async function createTeamSession({ ctx, team }){
 
 				log.info(`message "${text}" makes no sense`)
 				return
+			}else{
+				userMessage.valid = true
 			}
 
 			let expertRanking = await rankExperts({ ctx, chat })

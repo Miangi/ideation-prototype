@@ -53,7 +53,7 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 	let lastMessage = chat.messages[chat.messages.length - 1]
 	let transscript = compileTransscript(chat)
 	let system = prompts.generate_expert_response.system.format({
-		name: expert.name,
+		role: expert.name,
 		background: expert.background,
 		problem: chat.problemDescription
 	})
@@ -62,7 +62,8 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 	if(lastMessage.user){
 		thread = [{
 			user: prompts.generate_expert_response.first.prompt.format({ 
-				transscript
+				transscript,
+				role: expert.name
 			})
 		}]
 	}else{
@@ -71,6 +72,7 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 			messages: [{
 				user: prompts.generate_expert_response.subsequent_evaluate.prompt.format({
 					transscript,
+					role: expert.name,
 					choices: formatChoices({ 
 						choices: prompts.generate_expert_response.subsequent_evaluate.choices 
 					})
@@ -88,9 +90,13 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 			return
 
 		thread.push({
-			user: prompts.generate_expert_response.subsequent_execute.prompt
+			user: prompts.generate_expert_response.subsequent_execute.prompt.format({
+				role: expert.name
+			})
 		})
 	}
+
+	console.log(thread)
 
 	let stream = await queryLLM({
 		system,

@@ -115,7 +115,7 @@ generate_expert_response:
     A team of users is trying to find a specific solution for a given problem.
     
     You are on of four experts assigned with providing assistance to the team.
-    Your job title: {name}
+    Your job title: {role}
     Your background: {background}
 
     The problem is defined as follows:
@@ -127,23 +127,23 @@ generate_expert_response:
       {transscript}
 
 
-      Given your expertise, write a concise response to the last message that advances this brainstorming session.
-      The response should be no longer than two sentences.
+      Given your expertise as {role}, write a concise response to the last message that advances this brainstorming session.
+      The response should be no longer than three sentences.
 
   subsequent_evaluate:
     prompt: |-
       {transscript}
 
 
-      Have the last expert replies already given a sufficient answer, or is there something significant missing that you would like to add?
+      As {role}, do you have something to add to this?
 
       {choices}
 
     choices:
-      B: Yes, there are significant aspects missing.
-      A: No, the last expert's reponse is sufficient.
+      B: Yes, there are aspects missing that I want to add.
+      A: No, I have nothing to add.
 
   subsequent_execute:
     prompt: |-
-      Then please, given your expertise, write a concise addition to the last expert reply.
+      Then please, given your expertise as {role}, write a concise addition to the last expert reply.
       The addition should be no longer than one sentence.
