@@ -35,7 +35,8 @@
 	<textarea 
 		use:autosize 
 		bind:this={inputDom} 
-		rows="1" 
+		rows="1"
+		maxlength="500"
 		placeholder={
 			$currentChat?.experts.length > 0
 				? `Chat with the experts`
