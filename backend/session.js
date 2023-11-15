@@ -289,7 +289,7 @@ export async function createTeamSession({ ctx, team }){
 
 			broadcast({
 				event: 'users',
-				user: clients.map(client => client.user)
+				users: clients.map(client => client.user)
 			})
 		})
 	}
