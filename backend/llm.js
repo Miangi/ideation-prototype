@@ -51,7 +51,7 @@ export function parseChoice({ choices, text }){
 		.map(key => ({ key, pos: text.indexOf(key) }))
 		.filter(({ pos }) => pos >= 0)
 		.sort((a, b) => a.pos - b.pos)
-		[0].key
+		[0]?.key
 }
 
 export class LLMThread extends Array{

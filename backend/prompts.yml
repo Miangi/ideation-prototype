@@ -52,3 +52,31 @@ generate_experts:
     (Concise 2 sentence introduction from the expert about their background)
 
     etc
+
+
+transscript: |-
+    This is the discussion so far:
+
+    {messages}
+
+
+validate_message:
+  system: |-
+    This is an AI augmented brainstorming session.
+    A team of users is trying to find a specific solution for a given problem.
+    A team of experts is present to assist the users with their expertise.
+
+    The problem is defined as follows:
+
+    {problem}
+
+  prompt: |-
+    {transscript}
+
+    In the context of this discussion, does the last message make sense?
+
+    {choices}
+
+  choices:
+    A: Yes, what the last user said advances the brainstorming session
+    B: No, what the last user said makes no sense

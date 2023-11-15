@@ -23,6 +23,32 @@ export async function validateProblem({ ctx, problem }){
 	return choice === 'A'
 }
 
+export async function validateMessage({ ctx, chat }){
+	let result = await queryLLM({
+		system: prompts.validate_message.system.format({
+			problem: chat.problemDescription
+		}),
+		messages: [{
+			user: prompts.validate_message.prompt.format({
+				transscript: compileTransscript(chat),
+				choices: formatChoices({ 
+					choices: prompts.validate_message.choices 
+				})
+			})
+		}],
+		stream: false
+	})
+
+	console.log(result)
+
+	let choice = parseChoice({
+		choices: prompts.validate_message.choices,
+		text: result.last
+	})
+
+	return choice === 'A'
+}
+
 export async function summarizeProblem({ ctx, problem }){
 	let result = await queryLLM({
 		system: prompts.summarize_problem.system,
@@ -81,4 +107,24 @@ function parseExperts(text){
 			}
 		}
 	)
+}
+
+function compileTransscript(chat){
+	return getValidSessionMessages(chat)
+		.map(
+			message => message.user
+				? `User (${message.user.firstName}):\n${message.text}`
+				: `${message.expert.name}:\n${message.text}`
+		)
+		.join('\n\n')
+}
+
+function getValidSessionMessages(chat){
+	let expertsIndex = chat.messages.findIndex(
+		message => message.text === '(experts)'
+	)
+
+	return chat.messages
+		.slice(expertsIndex + 1)
+		.filter(message => message.expert || (message.user && message.valid !== false))
 }

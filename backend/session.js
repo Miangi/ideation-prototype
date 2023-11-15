@@ -1,5 +1,5 @@
 import logging from '@mwni/log'
-import { generateExperts, summarizeProblem, validateProblem } from './prompting.js'
+import { generateExperts, summarizeProblem, validateMessage, validateProblem } from './prompting.js'
 
 
 export async function createTeamSession({ ctx, team }){
@@ -100,6 +100,19 @@ export async function createTeamSession({ ctx, team }){
 
 			broadcast({ event: 'chat', chat })
 			flushChat(chat)
+		}else{
+			if(!await validateMessage({ ctx, chat })){
+				chat.messages[chat.messages.length - 1].valid = false
+				chat.messages.push({
+					text: `⚠️ Your message makes no sense. Please rephrase it.`,
+					timeCreated: new Date()
+				})
+				chat.locked = false
+				broadcast({ event: 'chat', chat })
+				flushChat(chat)
+				log.info(`message "${text}" makes no sense`)
+				return
+			}
 		}
 	}
 
