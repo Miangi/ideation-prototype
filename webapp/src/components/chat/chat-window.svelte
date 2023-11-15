@@ -76,6 +76,13 @@
 					{/if}
 				{/each}
 
+				{#if $currentChat.locked && $currentChat.busyStatus}
+					<GeneratingAnswer
+						text={$currentChat.busyStatus.text}
+						colorIndex={$currentChat.busyStatus.colorIndex}
+					/>
+				{/if}
+
 				{#each Object.entries($currentChat.typingUsers) as [id, text]}
 					{#if text}
 						<UserMessage

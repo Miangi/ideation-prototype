@@ -107,6 +107,9 @@ export async function createTeamSession({ ctx, team }){
 				broadcast({ event: 'chat', chat })
 				flushChat(chat)
 			}else{
+				chat.busyStatus = { text: 'The experts are thinking' }
+				broadcast({ event: 'chat', chat })
+
 				if(!await validateMessage({ ctx, chat })){
 					userMessage.valid = false
 	
@@ -129,6 +132,12 @@ export async function createTeamSession({ ctx, team }){
 	
 				for(let expert of expertRanking.slice(0, 3)){
 					let lastMessage
+
+					chat.busyStatus = { 
+						text: `${expert.name} is thinking`, 
+						colorIndex: expert.index 
+					}
+					broadcast({ event: 'chat', chat })
 	
 					for await(let text of generateExpertResponse({ ctx, chat, expert })){
 						lastMessage = chat.messages[chat.messages.length - 1]
@@ -147,6 +156,8 @@ export async function createTeamSession({ ctx, team }){
 						}
 	
 						lastMessage.text = text
+
+						chat.busyStatus = undefined
 	
 						broadcast({ event: 'chat', chat })
 					}

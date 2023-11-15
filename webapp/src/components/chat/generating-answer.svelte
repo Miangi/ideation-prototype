@@ -1,9 +1,10 @@
 <script>
 	import expertColors from './expert-colors.js'
 
-	export let expert
+	export let colorIndex
+	export let text
 
-	$: color = expertColors[expert.index].primary
+	$: color = typeof colorIndex === 'number' ? expertColors[colorIndex].primary : '#34E5B0'
 </script>
 
 <div class="container">
@@ -12,18 +13,19 @@
 		<span style={`background-color: ${color}`}/>
 		<span style={`background-color: ${color}`}/>
 	</div>
-	Generating answer
+	{text}
 </div>
 
 <style lang="scss">
 	.container{
-		display: flex;
+		display: inline-flex;
 		margin-left: 50px;
-		width: 200px;
-		height: 44px;
+		padding: 0 12px;
+		width: min-content;
+		height: 38px;
 		gap: 10px;
 		box-sizing: border-box;
-		border-radius: 22px;
+		border-radius: 10px;
 		background-color: #03030370;
 		align-items: center;
 		justify-content: center;
