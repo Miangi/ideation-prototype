@@ -1,23 +1,9 @@
 <script>
 	import LogoSmall from '../assets/svg/logo_small.svelte'
 
-	import GroupTag1 from '../assets/svg/group1.svelte'
-	import GroupTag2 from '../assets/svg/group2.svelte'
-	import GroupTag3 from '../assets/svg/group3.svelte'
-	import GroupTag4 from '../assets/svg/group4.svelte'
-	import GroupTag5 from '../assets/svg/group5.svelte'
-
 	import { onMount } from 'svelte'
     import { currentTask, userMeta } from '../models/app.js'
-  
-	const groupTagMap = {
-		'Gruppe 1': GroupTag1,
-		'Gruppe 2': GroupTag2,
-		'Gruppe 3': GroupTag3,
-		'Gruppe 4': GroupTag4,
-		'Gruppe 5': GroupTag5,
-	}
-	
+
 	let time
 
 	function tick(){
@@ -64,7 +50,7 @@
 				</div>
 				<div class="time-and-date">{time}</div>
 				<div class="assigned-group">
-					<svelte:component this={groupTagMap[$userMeta?.team?.name]}/>
+					{$userMeta?.team?.name}
 				</div>
 			</div>
 		</div>
@@ -120,5 +106,11 @@
 	.assigned-group {
 		display: flex;
 		align-self: center;
+		font-size: 11px;
+		background-color: #191E49;
+		color: #4F87DB;
+		border-radius: 100px;
+		padding: 6px 10px;
+		margin-bottom: -4px;
 	}
 </style>
