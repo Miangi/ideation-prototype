@@ -54,12 +54,6 @@ generate_experts:
     etc
 
 
-transscript: |-
-    This is the discussion so far:
-
-    {messages}
-
-
 validate_message:
   system: |-
     This is an AI augmented brainstorming session.
@@ -71,6 +65,8 @@ validate_message:
     {problem}
 
   prompt: |-
+    This is the discussion so far:
+
     {transscript}
 
     In the context of this discussion, does the last message make sense?
