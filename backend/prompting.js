@@ -41,8 +41,6 @@ export async function validateMessage({ ctx, chat }){
 		stream: false
 	})
 
-	console.log(result)
-
 	let choice = parseChoice({
 		choices: prompts.validate_message.choices,
 		text: result.last
@@ -89,8 +87,6 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 			text: thread.last
 		})
 
-		console.log(thread, choice)
-
 		if(choice !== 'A')
 			return
 
@@ -100,8 +96,6 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 			})
 		})
 	}
-
-	console.log(thread)
 
 	let stream = await queryLLM({
 		system,
@@ -164,8 +158,6 @@ export async function rankExperts({ ctx, chat }){
 		preface: prompts.rank_experts.preface,
 		stream: false
 	})
-
-	console.log(result)
 
 	return parseExpertsRanking({
 		experts: chat.experts,
