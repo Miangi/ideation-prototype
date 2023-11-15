@@ -8,8 +8,9 @@ const openai = new OpenAI({
 export async function queryLLM({ model='gpt-4', system, messages, preface, stop, stream }){
 	let thread = new LLMThread(...messages)
 	let llmMessages = thread.forQuery({ system, preface })
+	let xid = Math.random()
 
-	log.time.debug('llm.query', `querying ${model}`)
+	log.time.debug(`llm.query${xid}`, `querying ${model}`)
 
 	let completion = await openai.chat.completions.create({
 		model,
@@ -32,12 +33,12 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, stop,
 				yield thread
 			}
 
-			log.time.debug('llm.query', `querying ${model} took %`)
+			log.time.debug(`llm.query${xid}`, `querying ${model} took %`)
 		}
 		return iterate()
 	}else{
 		thread.appendResult((preface || '') + completion.choices[0].message.content)
-		log.time.debug('llm.query', `querying ${model} took %`)
+		log.time.debug(`llm.query${xid}`, `querying ${model} took %`)
 		return thread
 	}
 }
