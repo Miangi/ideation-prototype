@@ -60,7 +60,10 @@
 							text={message.text}
 						/>
 					{:else if message.expert}
-						<ExpertMessage/>
+						<ExpertMessage
+							expert={message.expert}
+							text={message.text}
+						/>
 					{:else}
 						{#if message.text === '(experts)'}
 							<ExpertCommittee 

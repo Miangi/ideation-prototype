@@ -1,5 +1,5 @@
 import logging from '@mwni/log'
-import { generateExperts, summarizeProblem, validateMessage, validateProblem } from './prompting.js'
+import { generateExpertResponse, generateExperts, rankExperts, summarizeProblem, validateMessage, validateProblem } from './prompting.js'
 
 
 export async function createTeamSession({ ctx, team }){
@@ -23,7 +23,9 @@ export async function createTeamSession({ ctx, team }){
 			},
 			include: {
 				experts: true,
-				expertMessages: true,
+				expertMessages: {
+					expert: true
+				},
 				userMessages: {
 					user: true
 				},
@@ -71,9 +73,12 @@ export async function createTeamSession({ ctx, team }){
 					text: `⚠️ The problem description is not clear enough. Please rephrase it.`,
 					timeCreated: new Date()
 				})
+
 				chat.locked = false
+
 				broadcast({ event: 'chat', chat })
 				flushChat(chat)
+
 				log.info(`problem "${text}" was deemed unclear`)
 				return
 			}
@@ -95,7 +100,6 @@ export async function createTeamSession({ ctx, team }){
 				text: `👉 Continue by asking questions or propose ideas`,
 				timeCreated: new Date()
 			})
-
 			chat.locked = false
 
 			broadcast({ event: 'chat', chat })
@@ -108,11 +112,43 @@ export async function createTeamSession({ ctx, team }){
 					timeCreated: new Date()
 				})
 				chat.locked = false
+
 				broadcast({ event: 'chat', chat })
 				flushChat(chat)
+
 				log.info(`message "${text}" makes no sense`)
 				return
 			}
+
+			let expertRanking = await rankExperts({ ctx, chat })
+
+			for(let expert of expertRanking){
+				for await(let text of generateExpertResponse({ ctx, chat, expert })){
+					let message = chat.messages[chat.messages.length - 1]
+
+					if(message.expert?.id !== expert.id){
+						message = {
+							expert: {
+								id: expert.id,
+								index: expert.index,
+								name: expert.name
+							},
+							timeCreated: new Date()
+						}
+						
+						chat.messages.push(message)
+					}
+
+					message.text = text
+
+					broadcast({ event: 'chat', chat })
+				}
+			}
+
+			chat.locked = false
+
+			broadcast({ event: 'chat', chat })
+			flushChat(chat)
 		}
 	}
 

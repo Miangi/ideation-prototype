@@ -49,6 +49,60 @@ export async function validateMessage({ ctx, chat }){
 	return choice === 'A'
 }
 
+export async function* generateExpertResponse({ ctx, chat, expert }){
+	let lastMessage = chat.messages[chat.messages.length - 1]
+	let transscript = compileTransscript(chat)
+	let system = prompts.generate_expert_response.system.format({
+		name: expert.name,
+		background: expert.background,
+		problem: chat.problemDescription
+	})
+	let thread
+
+	if(lastMessage.user){
+		thread = [{
+			user: prompts.generate_expert_response.first.prompt.format({ 
+				transscript
+			})
+		}]
+	}else{
+		thread = await queryLLM({
+			system,
+			messages: [{
+				user: prompts.generate_expert_response.subsequent_evaluate.prompt.format({
+					transscript,
+					choices: formatChoices({ 
+						choices: prompts.generate_expert_response.subsequent_evaluate.choices 
+					})
+				})
+			}],
+			stream: false
+		})
+	
+		let choice = parseChoice({
+			choices: prompts.generate_expert_response.subsequent_evaluate.choices,
+			text: thread.last
+		})
+
+		if(choice !== 'A')
+			return
+
+		thread.push({
+			user: prompts.generate_expert_response.subsequent_execute.prompt
+		})
+	}
+
+	let stream = await queryLLM({
+		system,
+		messages: thread,
+		stream: true
+	})
+
+	for await(let result of stream){
+		yield result.last.trim().replaceAll(/(^")|("$)/g, '')
+	}
+}
+
 export async function summarizeProblem({ ctx, problem }){
 	let result = await queryLLM({
 		system: prompts.summarize_problem.system,
@@ -85,6 +139,29 @@ export async function* generateExperts({ ctx, problem }){
 	}
 }
 
+export async function rankExperts({ ctx, chat }){
+	let result = await queryLLM({
+		system: prompts.rank_experts.system.format({
+			problem: chat.problemDescription
+		}),
+		messages: [{
+			user: prompts.rank_experts.prompt.format({
+				transscript: compileTransscript(chat),
+				experts: compileExpertList(chat),
+			})
+		}],
+		preface: prompts.rank_experts.preface,
+		stream: false
+	})
+
+	console.log(result)
+
+	return parseExpertsRanking({
+		experts: chat.experts,
+		text: result.last
+	})
+}
+
 function parseExperts(text){
 	let segments = text.split('\n\n')
 	
@@ -107,6 +184,24 @@ function parseExperts(text){
 			}
 		}
 	)
+}
+
+function parseExpertsRanking({ experts, text }){
+	return text
+		.split(/\n+/g)
+		.slice(0, 4)
+		.map(line => line.replace(/^\d\. ?/g, '').trim())
+		.map(
+			name => experts.find(
+				expert => expert.name.toLowerCase() === name.toLowerCase()
+			)
+		)
+}
+
+function compileExpertList(chat){
+	return chat.experts
+		.map(expert => `- ${expert.name}`)
+		.join('\n')
 }
 
 function compileTransscript(chat){

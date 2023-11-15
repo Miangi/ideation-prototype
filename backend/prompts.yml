@@ -69,6 +69,7 @@ validate_message:
 
     {transscript}
 
+
     In the context of this discussion, does the last message make sense?
 
     {choices}
@@ -76,3 +77,73 @@ validate_message:
   choices:
     A: Yes, what the last user said advances the brainstorming session
     B: No, what the last user said makes no sense
+
+
+rank_experts:
+  system: |-
+    This is an AI augmented brainstorming session.
+    A team of users is trying to find a specific solution for a given problem.
+    A team of experts is present to assist the users with their expertise.
+
+    The problem is defined as follows:
+
+    {problem}
+
+  prompt: |-
+    This is the discussion so far:
+
+    {transscript}
+
+
+    The following four experts are present:
+    {experts}
+
+    Based on the discussion so far, rank the individual experts by how well suited they are for answering the message of the last user, like so:
+
+    1. (Best suited expert)
+    2. (Second best suited expert)
+
+    etc
+
+  preface: |-
+    1.
+
+
+generate_expert_response:
+  system: |-
+    This is an AI augmented brainstorming session.
+    A team of users is trying to find a specific solution for a given problem.
+    
+    You are on of four experts assigned with providing assistance to the team.
+    Your job title: {name}
+    Your background: {background}
+
+    The problem is defined as follows:
+
+    {problem}
+
+  first:
+    prompt: |-
+      {transscript}
+
+
+      Given your expertise, write a concise response to the last message that advances this brainstorming session.
+      The response should be no longer than two sentences.
+
+  subsequent_evaluate:
+    prompt: |-
+      {transscript}
+
+
+      Have the last expert replies already given a sufficient answer, or is there something significant missing that you would like to add?
+
+      {choices}
+
+    choices:
+      B: Yes, there are significant aspects missing.
+      A: No, the last expert's reponse is sufficient.
+
+  subsequent_execute:
+    prompt: |-
+      Then please, given your expertise, write a concise addition to the last expert reply.
+      The addition should be no longer than one sentence.
