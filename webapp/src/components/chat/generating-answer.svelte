@@ -31,6 +31,7 @@
 		justify-content: center;
 		margin-top: 10px;
 		flex-shrink: 0;
+		white-space: nowrap;
 	}
 
 	.dots{
