@@ -14,6 +14,7 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, strea
 	let completion = await openai.chat.completions.create({
 		model,
 		messages: llmMessages,
+		temperature: 0,
 		stream,
 	})
 
