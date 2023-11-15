@@ -135,13 +135,13 @@ generate_expert_response:
       {transscript}
 
 
-      As {role}, do you have something to add to this?
+      Have the last expert replies already given a sufficient answer, or is there something significant missing that you, as a {role}, would like to add?
 
       {choices}
 
     choices:
-      B: Yes, there are aspects missing that I want to add.
-      A: No, I have nothing to add.
+      A: Yes, there are significant aspects missing that I want to add.
+      B: No, I have nothing to add.
 
   subsequent_execute:
     prompt: |-

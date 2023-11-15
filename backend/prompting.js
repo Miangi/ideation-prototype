@@ -78,6 +78,7 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 					})
 				})
 			}],
+			stop: '.',
 			stream: false
 		})
 	
@@ -85,6 +86,8 @@ export async function* generateExpertResponse({ ctx, chat, expert }){
 			choices: prompts.generate_expert_response.subsequent_evaluate.choices,
 			text: thread.last
 		})
+
+		console.log(thread, choice)
 
 		if(choice !== 'A')
 			return

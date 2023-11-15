@@ -5,7 +5,7 @@ const openai = new OpenAI({
 	apiKey: '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'
 })
 
-export async function queryLLM({ model='gpt-4', system, messages, preface, stream }){
+export async function queryLLM({ model='gpt-4', system, messages, preface, stop, stream }){
 	let thread = new LLMThread(...messages)
 	let llmMessages = thread.forQuery({ system, preface })
 
@@ -15,6 +15,7 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, strea
 		model,
 		messages: llmMessages,
 		temperature: 0,
+		stop,
 		stream,
 	})
 
@@ -35,6 +36,7 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, strea
 		}
 		return iterate()
 	}else{
+		console.log(stop, completion.choices[0])
 		thread.appendResult((preface || '') + completion.choices[0].message.content)
 		log.time.debug('llm.query', `querying ${model} took %`)
 		return thread

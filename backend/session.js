@@ -132,7 +132,7 @@ export async function createTeamSession({ ctx, team }){
 				for await(let text of generateExpertResponse({ ctx, chat, expert })){
 					lastMessage = chat.messages[chat.messages.length - 1]
 
-					if(message.expert?.id !== expert.id){
+					if(lastMessage.expert?.id !== expert.id){
 						lastMessage = {
 							expert: {
 								id: expert.id,
