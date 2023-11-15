@@ -224,5 +224,5 @@ function getValidSessionMessages(chat){
 
 	return chat.messages
 		.slice(expertsIndex + 1)
-		.filter(message => message.expert || (message.user && message.valid !== false))
+		.filter(message => message.expert || (message.user && message.valid))
 }

@@ -68,96 +68,108 @@ export async function createTeamSession({ ctx, team }){
 
 		broadcast({ event: 'chat', chat })
 
-		if(chat.experts.length === 0){
-			if(!await validateProblem({ ctx, problem: text })){
-				chat.messages.push({
-					text: `⚠️ The problem description is not clear enough. Please rephrase it.`,
-					timeCreated: new Date()
-				})
-
-				chat.locked = false
-
-				broadcast({ event: 'chat', chat })
-				flushChat(chat)
-
-				log.info(`problem "${text}" was deemed unclear`)
-				return
-			}
-
-			chat.problemDescription = text
-			chat.messages.push({
-				text: `(experts)`,
-				timeCreated: new Date()
-			})
-
-			broadcast({ event: 'chat', chat })
-
-			await Promise.all([
-				handleExpertGeneration({ chat, problem: text }),
-				handleProblemSummarization({ chat, problem: text })
-			])
-
-			chat.messages.push({
-				text: `👉 Continue by asking questions or propose ideas`,
-				timeCreated: new Date()
-			})
-			chat.locked = false
-
-			broadcast({ event: 'chat', chat })
-			flushChat(chat)
-		}else{
-			if(!await validateMessage({ ctx, chat })){
-				userMessage.valid = false
-
-				chat.messages.push({
-					text: `⚠️ Your message makes no sense. Please rephrase it.`,
-					timeCreated: new Date()
-				})
-				chat.locked = false
-
-				broadcast({ event: 'chat', chat })
-				flushChat(chat)
-
-				log.info(`message "${text}" makes no sense`)
-				return
-			}else{
-				userMessage.valid = true
-			}
-
-			let expertRanking = await rankExperts({ ctx, chat })
-
-			for(let expert of expertRanking.slice(0, 3)){
-				let lastMessage
-
-				for await(let text of generateExpertResponse({ ctx, chat, expert })){
-					lastMessage = chat.messages[chat.messages.length - 1]
-
-					if(lastMessage.expert?.id !== expert.id){
-						lastMessage = {
-							expert: {
-								id: expert.id,
-								index: expert.index,
-								name: expert.name
-							},
-							timeCreated: new Date()
-						}
-
-						chat.messages.push(lastMessage)
-					}
-
-					lastMessage.text = text
-
+		try{
+			if(chat.experts.length === 0){
+				if(!await validateProblem({ ctx, problem: text })){
+					chat.messages.push({
+						text: `⚠️ The problem description is not clear enough. Please rephrase it.`,
+						timeCreated: new Date()
+					})
+	
+					chat.locked = false
+	
 					broadcast({ event: 'chat', chat })
+					flushChat(chat)
+	
+					log.info(`problem "${text}" was deemed unclear`)
+					return
 				}
-
-				if(!lastMessage)
-					break
+	
+				chat.problemDescription = text
+				chat.messages.push({
+					text: `(experts)`,
+					timeCreated: new Date()
+				})
+	
+				broadcast({ event: 'chat', chat })
+	
+				await Promise.all([
+					handleExpertGeneration({ chat, problem: text }),
+					handleProblemSummarization({ chat, problem: text })
+				])
+	
+				chat.messages.push({
+					text: `👉 Continue by asking questions or propose ideas`,
+					timeCreated: new Date()
+				})
+				chat.locked = false
+	
+				broadcast({ event: 'chat', chat })
+				flushChat(chat)
+			}else{
+				if(!await validateMessage({ ctx, chat })){
+					userMessage.valid = false
+	
+					chat.messages.push({
+						text: `⚠️ Your message makes no sense. Please rephrase it.`,
+						timeCreated: new Date()
+					})
+					chat.locked = false
+	
+					broadcast({ event: 'chat', chat })
+					flushChat(chat)
+	
+					log.info(`message "${text}" makes no sense`)
+					return
+				}else{
+					userMessage.valid = true
+				}
+	
+				let expertRanking = await rankExperts({ ctx, chat })
+	
+				for(let expert of expertRanking.slice(0, 3)){
+					let lastMessage
+	
+					for await(let text of generateExpertResponse({ ctx, chat, expert })){
+						lastMessage = chat.messages[chat.messages.length - 1]
+	
+						if(lastMessage.expert?.id !== expert.id){
+							lastMessage = {
+								expert: {
+									id: expert.id,
+									index: expert.index,
+									name: expert.name
+								},
+								timeCreated: new Date()
+							}
+	
+							chat.messages.push(lastMessage)
+						}
+	
+						lastMessage.text = text
+	
+						broadcast({ event: 'chat', chat })
+					}
+	
+					if(!lastMessage)
+						break
+				}
+	
+				chat.locked = false
+	
+				broadcast({ event: 'chat', chat })
+				flushChat(chat)
 			}
+		}catch(error){
+			log.error(`error while handling user message:`, error)
 
+			chat.messages.push({
+				text: `⛔ There was a problem while generating the answers. Please retry.`,
+				timeCreated: new Date()
+			})
 			chat.locked = false
 
 			broadcast({ event: 'chat', chat })
-			flushChat(chat)
 		}
 	}
 
