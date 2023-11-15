@@ -126,7 +126,7 @@ export async function createTeamSession({ ctx, team }){
 
 			let expertRanking = await rankExperts({ ctx, chat })
 
-			for(let expert of expertRanking){
+			for(let expert of expertRanking.slice(0, 3)){
 				let lastMessage
 
 				for await(let text of generateExpertResponse({ ctx, chat, expert })){
