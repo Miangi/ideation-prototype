@@ -127,11 +127,13 @@ export async function createTeamSession({ ctx, team }){
 			let expertRanking = await rankExperts({ ctx, chat })
 
 			for(let expert of expertRanking){
+				let lastMessage
+
 				for await(let text of generateExpertResponse({ ctx, chat, expert })){
-					let message = chat.messages[chat.messages.length - 1]
+					lastMessage = chat.messages[chat.messages.length - 1]
 
 					if(message.expert?.id !== expert.id){
-						message = {
+						lastMessage = {
 							expert: {
 								id: expert.id,
 								index: expert.index,
@@ -139,14 +141,17 @@ export async function createTeamSession({ ctx, team }){
 							},
 							timeCreated: new Date()
 						}
-						
-						chat.messages.push(message)
+
+						chat.messages.push(lastMessage)
 					}
 
-					message.text = text
+					lastMessage.text = text
 
 					broadcast({ event: 'chat', chat })
 				}
+
+				if(!lastMessage)
+					break
 			}
 
 			chat.locked = false
