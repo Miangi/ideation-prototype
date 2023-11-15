@@ -5182,12 +5182,14 @@ const css$3 = {
 const Expert_message = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let colors;
   let { expert } = $$props;
+  let { text } = $$props;
   if ($$props.expert === void 0 && $$bindings.expert && expert !== void 0)
     $$bindings.expert(expert);
+  if ($$props.text === void 0 && $$bindings.text && text !== void 0)
+    $$bindings.text(text);
   $$result.css.add(css$3);
   colors = expertColors[expert.index];
-  return `<div class="expert-message svelte-14d7bu"><div class="icon svelte-14d7bu">${validate_component(Ai_persona_in_chat, "AIIcon").$$render($$result, { color: colors.primary }, {}, {})}</div> <div class="triangle svelte-14d7bu">${validate_component(Triangle, "Triangle").$$render($$result, { color: colors.background }, {}, {})}</div> <div class="bubble"${add_attribute("style", `color: ${colors.text}; background-color: ${colors.background};`, 0)}><div class="name svelte-14d7bu"${add_attribute("style", `color: ${colors.primary}`, 0)}>Master Expert</div>
-		Let me interject for a moment, what you guys are referring to as Linux, is in fact, GNU/Linux, or as I&#39;ve recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX. Many computer users run a modified version of the GNU system every day, without realizing it. Through a peculiar turn of events, the version of GNU which is widely used today is often called &quot;Linux&quot;, and many of its users are not aware that it is basically the GNU system, developed by the GNU Project. There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine&#39;s resources to the other programs that you run. The kernel is an essential part of an operating system, but useless by itself; it can only function in the context of a complete operating system. Linux is normally used in combination with the GNU operating system: the whole system is basically GNU with Linux added, or GNU/Linux. All the so-called &quot;Linux&quot; distributions are really distributions of GNU/Linux. Thank you for taking your time to cooperate with with me, your friendly GNU+Linux neighbor, Richard Stallman.</div> </div>`;
+  return `<div class="expert-message svelte-14d7bu"><div class="icon svelte-14d7bu">${validate_component(Ai_persona_in_chat, "AIIcon").$$render($$result, { color: colors.primary }, {}, {})}</div> <div class="triangle svelte-14d7bu">${validate_component(Triangle, "Triangle").$$render($$result, { color: colors.background }, {}, {})}</div> <div class="bubble"${add_attribute("style", `color: ${colors.text}; background-color: ${colors.background};`, 0)}><div class="name svelte-14d7bu"${add_attribute("style", `color: ${colors.primary}`, 0)}>${escape(expert.name)}</div> ${escape(text)}</div> </div>`;
 });
 const css$2 = {
   code: ".chat-window.svelte-d4n7qn{display:flex;width:100%;height:75vh;background-color:#131313;border-bottom-left-radius:30px;border-bottom-right-radius:30px;flex-direction:column}.messages.svelte-d4n7qn{display:flex;width:100%;height:100%;min-width:500px;box-sizing:border-box;padding:10px;overflow-y:auto;flex-direction:column;padding-bottom:50px}.messages.svelte-d4n7qn::-webkit-scrollbar{width:10px}.messages.svelte-d4n7qn::-webkit-scrollbar-track{background:none}.messages.svelte-d4n7qn::-webkit-scrollbar-thumb{background:#888;border-radius:10px}.messages.svelte-d4n7qn::-webkit-scrollbar-thumb:hover{background:#9ca4a9}.messages.svelte-d4n7qn::-webkit-scrollbar-corner{background:none}.messages.svelte-d4n7qn .bubble{display:flex;flex-direction:column;margin-top:5px;padding:15px;box-sizing:border-box;border-radius:10px;align-self:flex-end;width:auto}",
@@ -5203,7 +5205,15 @@ const Chat_window = create_ssr_component(($$result, $$props, $$bindings, slots) 
   $$unsubscribe_currentChat();
   $$unsubscribe_users();
   return `<div class="chat-window svelte-d4n7qn"><div class="chat-message-container"></div> <div class="messages svelte-d4n7qn"${add_attribute("this", messagesContainerDom, 0)}>${$currentChat ? `${each($currentChat.messages, (message, i) => {
-    return `${message.user ? `${validate_component(User_message, "UserMessage").$$render($$result, { user: message.user, text: message.text }, {}, {})}` : `${message.expert ? `${validate_component(Expert_message, "ExpertMessage").$$render($$result, {}, {}, {})}` : `${message.text === "(experts)" ? `${validate_component(Expert_committee, "ExpertCommittee").$$render(
+    return `${message.user ? `${validate_component(User_message, "UserMessage").$$render($$result, { user: message.user, text: message.text }, {}, {})}` : `${message.expert ? `${validate_component(Expert_message, "ExpertMessage").$$render(
+      $$result,
+      {
+        expert: message.expert,
+        text: message.text
+      },
+      {},
+      {}
+    )}` : `${message.text === "(experts)" ? `${validate_component(Expert_committee, "ExpertCommittee").$$render(
       $$result,
       {
         experts: $currentChat.experts,
@@ -5283,4 +5293,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-f286ebbf.js.map
+//# sourceMappingURL=_page.svelte-f6a3ff7c.js.map
