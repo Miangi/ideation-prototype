@@ -1,7 +1,6 @@
 <script>
 	import MinimizeTaskSolution from '../../assets/svg/minimize_task_solution24px.svelte'
 	import WarningIcon from '../../assets/svg/warning_amber_18px.svelte'
-	import CheckIcon from '../../assets/svg/check_circle_outline_16px.svelte'
 	import CloseIcon from '../../assets/svg/close_green_24px.svelte'
 	import { visibleModals } from '../../models/state.js'
 	import { submitSolution } from '../../models/app'
@@ -93,7 +92,7 @@
 			<div class="modal-task-soltuion-close" on:click={() => showFinalPopup = false}><CloseIcon/></div>
 			<div class="modal-task-soltuion-popup-label">Finished?</div>
 			<div class="modal-task-soltuion-popup-subtitle">By clicking submit, your answer will be saved. After that you can no longer edit your answer and continue with the next task.</div>
-			<div class="submit-solution-button" on:click={submit}><CheckIcon/>Submit Answer</div>
+			<div class="submit-solution-button" on:click={submit}>Submit Answer</div>
 		</div>
 	</div>
 {/if}

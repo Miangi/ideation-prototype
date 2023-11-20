@@ -45,7 +45,7 @@
 			flex-direction: column;
 			position: relative;
 			background-color: #505050;
-			margin: 15% auto;
+			margin: 5% auto;
 			padding: 20px;
 			border-radius: 10px;
 			width: 600px;
