@@ -1,7 +1,7 @@
 <script>
 	export let user
 	export let text
-	export let tentative
+	export let tentative = false
 </script>
 
 <div class={`user-message ${tentative && 'tentative'}`}>
