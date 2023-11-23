@@ -30,7 +30,7 @@
 		<div class="label">
 			<CheckCircle/>
 			Task {$lastFinishedTask} has been completed! </div>
-		<div class="sub-text">You or someone from your team has submitted a solution for this task.</div>
+		<div class="sub-text">You and your team have reached consensus about the solution.</div>
 		<button on:click={close}>
 			<div class="counter">{time}</div>
 			{#if $lastFinishedTask === 1}
