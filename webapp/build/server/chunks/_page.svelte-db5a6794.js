@@ -4900,10 +4900,14 @@ function markChatSeen(chat) {
 }
 function shouldHideChat(chat) {
   if (get_store_value(hiddenChats).includes(chat.id)) {
-    console.log(getChatUnseenMessages(chat));
     if (getChatUnseenMessages(chat) <= 0)
       return true;
   }
+  hiddenChats.update(
+    (hidden) => hidden.filter(
+      (id) => id !== chat.id
+    )
+  );
   return false;
 }
 function loadLocalStorage() {
@@ -5465,4 +5469,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-d532c431.js.map
+//# sourceMappingURL=_page.svelte-db5a6794.js.map
