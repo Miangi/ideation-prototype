@@ -219,10 +219,15 @@ export function submitSolution({ answers }){
 
 function shouldHideChat(chat){
 	if(get(hiddenChats).includes(chat.id)){
-		console.log(getChatUnseenMessages(chat))
 		if(getChatUnseenMessages(chat) <= 0)
 			return true
 	}
+
+	hiddenChats.update(
+		hidden => hidden.filter(
+			id => id !== chat.id
+		)
+	)
 
 	return false
 }
