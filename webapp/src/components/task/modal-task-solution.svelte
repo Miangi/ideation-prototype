@@ -12,20 +12,20 @@
 			nr: 1,
 			questions: [
 				{
-					title: 'Challenges',
-					text: 'What are some common problems or challenges faced by the aging population that your product aims to solve?'
+					title: 'Identify the Problem or Need',
+					text: 'What specific healthcare problem or need does the elderly population currently face? Your goal in this subtask is to identify the gaps in the current healthcare system targeting this demography. What are major areas of concern that have not been adequately addressed? Define them clearly and concisely.'
 				},
 				{
-					title: 'Product',
-					text: 'What is your proposed product or service? Describe its functionality and how it helps the elderly in detail.'
+					title: 'Your Solution Design',
+					text: 'Based on the identified problem or need, what is your solution? Whether it is a novel product or service innovation or a significant improvement of an existing one, what will it look like? Describe your proposed solution, how it works, and why it will be useful.'
 				},
 				{
-					title: 'Goals',
-					text: 'How does your product or service improve upon or differ from existing solutions in the market?'
+					title: 'Market Analysis and Target Audience',
+					text: 'Who are your potential customers? You need to identify your target market. What is the size of this market, and who are the key competitors? Describe your target audience is demographics, needs, and problems, including any unique aspects.'
 				},
 				{
-					title: 'Feasibility',
-					text: 'What is the feasibility of implementing your product? Consider factors such as cost, risk, and complexity.'
+					title: 'Unique Value Proposition',
+					text: 'What is your product/services unique advantage over the competition? What makes your solution uniquely suited to the problem or need you have identified for this specific demographic? Explain how your solution creates value sustainably and how you will keep this edge over the future competitors that can emerge within the market.'
 				},
 			]
 		},
@@ -33,19 +33,19 @@
 			nr: 2,
 			questions: [
 				{
-					title: 'Uniqueness',
-					text: 'What is the unique value proposition of your new business model that capitalizes on the shift towards autonomous vehicles? What would your business offer that is different from what\'s already in the market? Consider the customer\'s perspective. What problem does your offering solve or what customer needs does it fulfill?'
+					title: 'Value Proposition',
+					text: 'What is the unique value proposition of your new business model that capitalizes on the shift towards autonomous vehicles? What would your business offer that is different from what is already in the market? Consider the customer is perspective—what problem does your offering solve or what customer needs does it fulfill?'
 				},
 				{
-					title: 'Audience',
+					title: 'Customer Segments and Relationships',
 					text: 'Who are your target customers for this new business model? How do you plan to attract, retain, and deepen the relationship with these customers? How does your business model cater specifically to these customer segments?'
 				},
 				{
-					title: 'Resources',
+					title: 'Key Resources, Activities, and Partnerships',
 					text: 'What key resources and activities are required to deliver your value proposition? What partners will you need to collaborate with to execute your business model effectively? Also, consider the cost structure and ensure it aligns with your revenue stream.'
 				},
 				{
-					title: 'Revenue',
+					title: 'Revenue Streams and possible costs',
 					text: 'How will your business model generate revenue? What is your pricing strategy? Will it have a one-time transaction, subscription model, or a mix? Consider the value customers will receive and how much they will be willing to pay for it. Outline the most important costs that need to be taken into account in the business model.'
 				},
 			]
