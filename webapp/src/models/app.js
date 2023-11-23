@@ -10,6 +10,8 @@ export const users = writable([])
 export const chats = writable([])
 export const currentChat = writable()
 export const currentTask = writable()
+export const answers = writable([])
+export const solutionAcceptance = writable([])
 
 let socket
 
@@ -41,6 +43,7 @@ export function connect({ url }){
 		visibleModals.update(
 			visible => ({
 				...visible,
+				taskSolution: false,
 				taskFinished: true
 			})
 		)
@@ -79,6 +82,14 @@ export function connect({ url }){
 
 		if(get(currentChat)?.id === chat.id)
 			currentChat.set(chat)
+	})
+
+	socket.on('answers', ({ answers: a }) => {
+		answers.set(a)
+	})
+
+	socket.on('acceptance', ({ acceptance }) => {
+		solutionAcceptance.set(acceptance)
 	})
 }
 
@@ -124,6 +135,20 @@ export function submitChatInput(text){
 		command: 'reply',
 		chat: get(currentChat).id,
 		text
+	})
+}
+
+export function setAnswerText({ index, text }){
+	socket.send({
+		command: 'answer',
+		index,
+		text
+	})
+}
+
+export function acceptSolution(){
+	socket.send({
+		command: 'accept'
 	})
 }
 

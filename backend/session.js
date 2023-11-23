@@ -6,6 +6,8 @@ export async function createTeamSession({ ctx, team }){
 	let log = logging.fork({ name: team.name })
 	let clients = []
 	let chats = []
+	let answers = []
+	let solutionAcceptance = []
 	let tasks = await ctx.db.tasks.readMany({
 		where: {
 			team,
@@ -15,6 +17,9 @@ export async function createTeamSession({ ctx, team }){
 
 	async function setupTask({ task }){
 		log.info(`setting up task #${task.number}`)
+
+		answers = []
+		solutionAcceptance = []
 
 		chats = await ctx.db.chats.readMany({
 			where: {
@@ -49,6 +54,16 @@ export async function createTeamSession({ ctx, team }){
 		broadcast({
 			event: 'chats',
 			chats
+		})
+
+		broadcast({ 
+			event: 'answers', 
+			answers 
+		})
+
+		broadcast({ 
+			event: 'acceptance', 
+			acceptance: solutionAcceptance 
 		})
 	}
 
@@ -206,6 +221,29 @@ export async function createTeamSession({ ctx, team }){
 		}
 	}
 
+	async function checkAndSubmitSolution(){
+		if(clients.some(client => solutionAcceptance.every(a => a.id !== client.user.id)))
+			return
+
+		await ctx.db.tasks.updateOne({
+			data: {
+				solution: answers.map(answer => answer.text)
+			},
+			where: {
+				id: tasks[0].id
+			}
+		})
+
+		log.info(`all users agreed to  solution for task #${tasks[0].number}`)
+		
+		broadcast({ event: 'task-complete' })
+		tasks.shift()
+
+		if(tasks.length > 0){	
+			await setupTask({ task: tasks[0] })
+		}
+	}
+
 	async function setupClient(client){
 		clients.push(client)
 
@@ -234,24 +272,29 @@ export async function createTeamSession({ ctx, team }){
 			log.info(`user "${client.user.firstName}" created a new chat`)
 		})
 
-		client.on('solution', async ({ answers }) => {
-			await ctx.db.tasks.updateOne({
-				data: {
-					solution: answers
-				},
-				where: {
-					id: tasks[0].id
-				}
-			})
-
-			log.info(`user "${client.user.firstName}" submitted a solution for task #${tasks[0].number}`)
-			
-			broadcast({ event: 'task-complete' })
-			tasks.shift()
-
-			if(tasks.length > 0){	
-				await setupTask({ task: tasks[0] })
+		client.on('answer', async ({ index, text }) => {
+			answers[index] = {
+				text,
+				lastEdit: Date.now(),
+				lastEditor: client.user
 			}
+
+			broadcast({ event: 'answers', answers })
+
+			if(solutionAcceptance.length > 0){
+				solutionAcceptance.length = 0
+				broadcast({ event: 'acceptance', acceptance: solutionAcceptance })
+			}
+		})
+
+		client.on('accept', async () => {
+			if(solutionAcceptance.some(a => a === client.user))
+				return
+
+			solutionAcceptance.push(client.user)
+			broadcast({ event: 'acceptance', acceptance: solutionAcceptance })
+
+			await checkAndSubmitSolution()
 		})
 
 		client.send({
@@ -272,6 +315,11 @@ export async function createTeamSession({ ctx, team }){
 		client.send({
 			event: 'chats',
 			chats
+		})
+
+		client.send({
+			event: 'answers',
+			answers
 		})
 
 		client.on('disconnect', ({ code }) => {
