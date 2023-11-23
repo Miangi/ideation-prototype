@@ -65,7 +65,7 @@
 		<div class="subtitle">
 			By clicking submit, your answers will be saved. After that you can no longer edit your answers and you will continue with the next task.
 		</div>
-		<div class="solution-summary">
+		<div class="questions">
 			{#each task.questions as question, index}
 				{#if index > 0}
 					<div class="line"/>
@@ -142,12 +142,17 @@
 			text-align: center;
 		}
 
-		>.solution-summary{
+		>.questions{
 			display: flex;
 			width: 100%;
+			max-height: calc(100vh - 500px);
+			overflow-y: auto;
 			flex-direction: column;
-			margin-top: 25px;
-			margin-bottom: 15px;
+			margin-top: 15px;
+			margin-bottom: 5px;
+			margin-left: -8px;
+			margin-right: -8px;
+			padding: 10px 8px;
 
 			>.line{
 				display: flex;
@@ -156,6 +161,23 @@
 				background-color: #2E7E66;
 				margin-top: 10px;
 				margin-bottom: 10px;
+			}
+
+			&::-webkit-scrollbar-corner {
+				background: none;
+			}
+			&::-webkit-scrollbar {
+				width: 10px;
+			}
+			&::-webkit-scrollbar-track {
+				background: none;
+			}
+			&::-webkit-scrollbar-thumb {
+				background: #888;
+				border-radius: 10px;
+			}
+			&::-webkit-scrollbar-thumb:hover {
+				background: #9ca4a9;
 			}
 		}
 

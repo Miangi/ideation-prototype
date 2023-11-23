@@ -88,6 +88,7 @@
 	.accord{
 		display: flex;
 		justify-content: space-between;
+		flex-shrink: 0;
 		align-items: center;
 		cursor: pointer;
 
@@ -143,38 +144,18 @@
 	}
 
 	textarea{
-		display: flex;
+		flex-shrink: 0;
 		width: 100%;
 		background-color: #033129;
-		max-height: 270px;
 		border-radius: 10px;
 		padding-top: 5px;
 		padding-left: 5px;
 		padding-right: 5px;
 		box-sizing: border-box;
-		overflow-y: scroll;
-		overflow-x: hidden;
 		outline: none;
 		border: none;
 		resize: vertical;
 		color: #34E5B0;
-
-		&::-webkit-scrollbar-corner {
-			background: none;
-		}
-		&::-webkit-scrollbar {
-			width: 10px;
-		}
-		&::-webkit-scrollbar-track {
-			background: none;
-		}
-		&::-webkit-scrollbar-thumb {
-			background: #888;
-			border-radius: 10px;
-		}
-		&::-webkit-scrollbar-thumb:hover {
-			background: #9ca4a9;
-		}
 
 		&:disabled{
 			cursor: not-allowed;
