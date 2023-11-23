@@ -20,8 +20,10 @@
 
 		if(valid)
 			goto('/ideation')
-		else
+		else{
 			document.cookie = `token=; path=/;`
+			window.localStorage.clear()
+		}
 	}
 
 	checkToken()
