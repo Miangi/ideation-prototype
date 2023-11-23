@@ -12,8 +12,11 @@ export const currentChat = writable()
 export const currentTask = writable()
 export const answers = writable([])
 export const solutionAcceptance = writable([])
+export const hiddenChats = writable([])
+export const seenChatMessages = writable([])
 
 let socket
+let allChats
 
 export function connect({ url }){
 	socket = createSocket({ url })
@@ -64,6 +67,10 @@ export function connect({ url }){
 	})
 
 	socket.on('chats', ({ chats: c }) => {
+		allChats = c
+
+		c = c.filter(c => !shouldHideChat(c))
+
 		chats.set(c)
 
 		currentChat.update(
@@ -78,7 +85,16 @@ export function connect({ url }){
 	})
 
 	socket.on('chat', ({ chat }) => {
-		chats.update(chats => chats.map(c => c.id === chat.id ? chat: c))
+		allChats = allChats.map(c => c.id === chat.id ? chat: c)
+
+		if(shouldHideChat(chat))
+			return
+
+		chats.update(
+			chats => allChats.filter(
+				c => !shouldHideChat(c)
+			)
+		)
 
 		if(get(currentChat)?.id === chat.id)
 			currentChat.set(chat)
@@ -113,6 +129,46 @@ export function selectChat(chat){
 			c => c.id === chat.id
 		)
 	)
+}
+
+export function hideChat(chat){
+	hiddenChats.update(
+		hidden => [...hidden, chat.id]
+	)
+
+	chats.update(
+		chats => chats.filter(
+			c => c.id !== chat.id
+		)
+	)
+
+	if(get(currentChat).id === chat.id){
+		currentChat.set(get(chats).slice(-1)[0])
+	}
+
+	flushLocalStorage()
+}
+
+export function getChatUnseenMessages(chat){
+	let seen = get(seenChatMessages).find(
+		seen => seen.id === chat.id
+	)
+
+	if(!seen)
+		seen = { count: 1 }
+
+	return chat.messages.length - seen.count
+}
+
+export function markChatSeen(chat){
+	seenChatMessages.update(
+		seen => [
+			...seen.filter(({ id }) => id !== chat.id),
+			{ id: chat.id, count: chat.messages.length }
+		]
+	)
+
+	flushLocalStorage()
 }
 
 export function setChatInput(text){
@@ -159,3 +215,38 @@ export function submitSolution({ answers }){
 		answers
 	})
 }
+
+
+function shouldHideChat(chat){
+	if(get(hiddenChats).includes(chat.id)){
+		console.log(getChatUnseenMessages(chat))
+		if(getChatUnseenMessages(chat) <= 0)
+			return true
+	}
+
+	return false
+}
+
+function loadLocalStorage(){
+	hiddenChats.set(readLocalStorage('hiddenChats') || [])
+	seenChatMessages.set(readLocalStorage('seenChatMessages') || [])
+}
+
+function flushLocalStorage(){
+	writeLocalStorage('hiddenChats', get(hiddenChats))
+	writeLocalStorage('seenChatMessages', get(seenChatMessages))
+}
+
+function readLocalStorage(key){
+	try{
+		return JSON.parse(window.localStorage.getItem(key))
+	}catch{
+		return null
+	}
+}
+
+function writeLocalStorage(key, value){
+	window.localStorage.setItem(key, JSON.stringify(value))
+}
+
+loadLocalStorage()

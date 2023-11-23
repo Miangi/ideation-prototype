@@ -2,20 +2,30 @@
 	import CloseTabIcon from '../../assets/svg/close_inactive_tab_18px.svelte'
 	import CloseActiveTabIcon from '../../assets/svg/close_tab_18px.svelte'
 	import AddTabIcon from '../../assets/svg/add_tab_18px.svelte'
-	import { chats, createNewChat, selectChat, currentChat } from '../../models/app.js'
+	import { chats, createNewChat, selectChat, currentChat, hideChat, getChatUnseenMessages, seenChatMessages } from '../../models/app.js'
 
-	function removeChat(chat){
-
-	}
+	let hovering = {}
 </script>
 
 <div class="tabs">
-	{#each $chats as chat}  
+	{#each $chats as chat, index}  
 		<div class={chat.id === $currentChat?.id ? 'tab active' : 'tab'} on:click={() => selectChat(chat)}>
 			<div class="title">{chat.title}</div>
+			{#if getChatUnseenMessages(chat, $seenChatMessages) > 0}
+				<div class="bubble">{getChatUnseenMessages(chat, $seenChatMessages)}</div>
+			{/if}
 			{#if $chats.length > 1}
-				<div class="close" on:click={() => removeChat(chat)}>
-					<CloseTabIcon/>
+				<div 
+					class="close" 
+					on:click|preventDefault={() => hideChat(chat)}
+					on:mouseenter={() => hovering[index] = true}
+					on:mouseleave={() => hovering[index] = false}
+				>
+					{#if hovering[index]}
+						<CloseActiveTabIcon/>
+					{:else}
+						<CloseTabIcon/>
+					{/if}
 				</div>
 			{/if}
 		</div>
@@ -43,6 +53,19 @@
 		padding-left: 10px;
 		color: #9CA4A9;
 		cursor: pointer;
+
+		.bubble{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 15px;
+			height: 15px;
+			border-radius: 15px;
+			margin-left: 5px;
+			color: white;
+			font-size: 10px;
+			background-color: rgb(150, 2, 2);
+		}
 
 		&.active{
 			border-bottom: solid 2px #3ea2ff;

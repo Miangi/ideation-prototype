@@ -7,7 +7,7 @@
     import GeneratingAnswer from './generating-answer.svelte'
 	
     import { onMount } from 'svelte'
-	import { currentChat, users } from '../../models/app.js'
+	import { currentChat, markChatSeen, users } from '../../models/app.js'
 
 	let messagesContainerDom
 	let detached = false
@@ -46,6 +46,8 @@
 			messagesContainerDom.removeEventListener('scroll', handleScroll)
 		}
 	})
+
+	$: $currentChat && !detached && markChatSeen($currentChat)
 </script>   
 
 
