@@ -149,26 +149,6 @@
 			margin-top: 25px;
 			margin-bottom: 15px;
 
-
-			>.collapsible{
-				display: flex;
-
-				font-size: 16px;
-				font-family: 'Ubuntu Bold';
-				width: 100%;
-				cursor: pointer;
-
-				>.icon{
-					margin-left: auto;
-					margin-right: 3px;
-				}
-			}
-
-			>.content{
-				display: none;
-  				overflow: hidden;
-			}
-
 			>.line{
 				display: flex;
 				height: 2px;
