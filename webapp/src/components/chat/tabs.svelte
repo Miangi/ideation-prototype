@@ -4,9 +4,6 @@
 	import AddTabIcon from '../../assets/svg/add_tab_18px.svelte'
 	import { chats, createNewChat, selectChat, currentChat } from '../../models/app.js'
 
-	let hoveringClose = false
-
-
 	function removeChat(chat){
 
 	}
@@ -17,17 +14,8 @@
 		<div class={chat.id === $currentChat?.id ? 'tab active' : 'tab'} on:click={() => selectChat(chat)}>
 			<div class="title">{chat.title}</div>
 			{#if $chats.length > 1}
-				<div 
-					class="close" 
-					on:click={() => removeChat(chat)} 
-					on:mouseenter={() => hoveringClose = true} 
-					on:mouseleave={() => hoveringClose = false}
-				>
-					{#if hoveringClose}
-						<CloseActiveTabIcon/>
-					{:else}
-						<CloseTabIcon/>
-					{/if}
+				<div class="close" on:click={() => removeChat(chat)}>
+					<CloseTabIcon/>
 				</div>
 			{/if}
 		</div>
