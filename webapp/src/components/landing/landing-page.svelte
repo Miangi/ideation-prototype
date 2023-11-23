@@ -5,9 +5,26 @@
 
 	import { goto } from '$app/navigation'
 	import { getCookies } from '../../models/cookies.js'
+	import { get } from '@mwni/fetch'
+	
 
-	if(getCookies().token)
-		goto('/ideation')
+	async function checkToken(){
+		let token = getCookies().token
+
+		let { valid } = await get({
+			url: `${BACKEND_REST_URL}/check-token`,
+			query: {
+				token
+			}
+		})
+
+		if(valid)
+			goto('/ideation')
+		else
+			document.cookie = `token=; path=/;`
+	}
+
+	checkToken()
 </script>
 
 <div class="landing-container">

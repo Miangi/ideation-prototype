@@ -11,6 +11,18 @@ export function initApi({ ctx: serverCtx, router }){
 		}
 	})
 
+	router.get('/check-token', async ctx => {
+		let user = await serverCtx.db.users.readOne({
+			where: {
+				token: ctx.query.token
+			}
+		})
+
+		ctx.body = {
+			valid: !!user
+		}
+	})
+
 	router.post('/register', async ctx => {
 		let { code, surname: firstName, name: lastName, email } = ctx.request.body
 		let team = await serverCtx.db.teams.readOne({
