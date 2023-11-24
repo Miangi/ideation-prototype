@@ -42,7 +42,7 @@
 				},
 				{
 					title: 'Key Resources, Activities, and Partnerships',
-					text: 'What key resources and activities are required to deliver your value proposition? What partners will you need to collaborate with to execute your business model effectively? Also, consider the cost structure and ensure it aligns with your revenue stream.'
+					text: 'What key resources and activities are required to deliver your value proposition? What partners will you need to collaborate with to execute your business model effectively?'
 				},
 				{
 					title: 'Revenue Streams and possible costs',
