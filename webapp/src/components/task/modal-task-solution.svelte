@@ -53,7 +53,7 @@
 	]
 
 	$: task = tasks.find(task => task.nr === $currentTask.number)
-	$: submittable = $answers.length == 4 && $answers.every(answer => answer && answer.text.split(/ +/g).length >= minWordsPerAnswer)
+	$: submittable = $answers.length == 4 && $answers.every(answer => answer && answer.text.split(/\s+/g).length >= minWordsPerAnswer)
 </script>
 
 <div class="modal">

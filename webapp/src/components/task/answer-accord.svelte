@@ -51,7 +51,7 @@
 		)
 	})
 
-	$: words = inputText.length > 0 ? inputText.split(/ +/g).length : 0
+	$: words = inputText.length > 0 ? inputText.split(/\s+/g).length : 0
 	$: editorIsMe = currentEditor ? currentEditor?.id === $userMeta.id : undefined
 </script>
 
