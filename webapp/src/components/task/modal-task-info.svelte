@@ -49,7 +49,7 @@
 			padding: 20px;
 			border-radius: 10px;
 			width: 600px;
-			color: #D3D3D3;
+			color: #CCCCCC;
 			word-break: normal;
 			font-size: 16px;
 
@@ -61,7 +61,7 @@
 
 			> .close-button {
 				display: flex;
-				color: #aaa;
+				color: #CCCCCC;
 				float: right;
 				font-size: 24px;
 				font-weight: bold;
