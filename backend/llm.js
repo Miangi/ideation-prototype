@@ -11,32 +11,83 @@ export async function queryLLM({ model='gpt-4', system, messages, preface, stop,
 	let xid = Math.random()
 
 	log.time.debug(`llm.query${xid}`, `querying ${model}`)
-
-	let completion = await openai.chat.completions.create({
-		model,
-		messages: llmMessages,
-		temperature: 0,
-		stop,
-		stream,
-	})
-
+	
 	if(stream){
-		async function* iterate(){
-			for await (const chunk of completion){
-				let text = chunk.choices[0]?.delta?.content || ''
+		let attempts = 0
+		let queue = []
+		let done = false
 
-				if(text.length === 0)
-					continue
+		async function stream(){
+			let currentThread = new LLMThread(...thread)
+			let completion = await openai.chat.completions.create({
+				model,
+				messages: llmMessages,
+				temperature: 0,
+				stop,
+				stream: true,
+			})
 
-				thread.appendStreamingDelta(text)
+			let bricked = false
+			let brick = () => {
+				bricked = true
 
-				yield thread
+				if(++attempts >= 3){
+					log.warn(`chat streaming timed out after 5s - giving up`)
+					done = true
+				}else{
+					log.warn(`chat streaming timed out after 5s - retrying (attempt #${attempts})`)
+					stream()
+				}
 			}
 
-			log.time.debug(`llm.query${xid}`, `querying ${model} took %`)
+			let timeout = setTimeout(brick, 5000)
+
+			for await (const chunk of completion){
+				if(bricked)
+					return
+
+				clearTimeout(timeout)
+				timeout = setTimeout(brick, 5000)
+
+				let text = chunk.choices[0]?.delta?.content || ''
+	
+				if(text.length === 0)
+					continue
+	
+				currentThread.appendStreamingDelta(text)
+	
+				queue.push(currentThread)
+			}
+
+			clearTimeout(timeout)
+			done = true
 		}
+
+		async function* iterate(){
+			while(true){
+				if(queue.length > 0){
+					yield queue.shift()
+				}else if(done){
+					log.time.debug(`llm.query${xid}`, `querying ${model} took %`)
+					return
+				}else{
+					await new Promise(resolve => setTimeout(resolve, 10))
+				}
+			}
+		}
+
+		stream()
+
 		return iterate()
 	}else{
+		let completion = await openai.chat.completions.create({
+			model,
+			messages: llmMessages,
+			temperature: 0,
+			stop,
+			stream: false,
+		})
+
 		thread.appendResult((preface || '') + completion.choices[0].message.content)
 		log.time.debug(`llm.query${xid}`, `querying ${model} took %`)
 		return thread
