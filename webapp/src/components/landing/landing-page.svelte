@@ -1,5 +1,4 @@
 <script>
-	import URlogo from '../../assets/svg/URlogo.svelte'
     import WaveFx from './wave-fx.svelte'
 	import InputForm from './inputs.svelte'
 
@@ -30,9 +29,6 @@
 </script>
 
 <div class="landing-container">
-	<div class="logo-UR">
-		<URlogo/>
-	</div>
 	<div class="welcome-message">
 		<div class="label">Welcome to the study</div>
 		<div class="subtext">You will be brainstorming with AI</div>

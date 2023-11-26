@@ -1,13 +1,9 @@
 <script>
-	import URlogo from '../assets/svg/URlogo.svelte'
     import WaveFx from './landing/wave-fx.svelte'
 	import OpenAILogo from '../assets/svg/openai-plus.svelte'
 </script>
 
 <div class="ending-container">
-	<div class="logo-UR">
-		<URlogo/>
-	</div>
 	<div class="text">
 		<div class="label">🎉 Thank You!</div>
 		<div class="subtext">You successfully completed the study!</div>
