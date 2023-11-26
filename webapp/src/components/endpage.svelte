@@ -95,15 +95,6 @@
 	}
 }
 
-.logo-UR{
-	display: flex;
-	width: auto;
-	margin-left: auto;
-	margin-right: 25px;
-	margin-top: 25px;
-}
-
-
 .wave-fx{
 	position: absolute;
 	left: 0;
