@@ -8,18 +8,28 @@ export async function createTeamSession({ ctx, team }){
 	let chats = []
 	let answers = []
 	let solutionAcceptance = []
+	let answerFlushTimer
 	let tasks = await ctx.db.tasks.readMany({
 		where: {
 			team,
-			solution: null
+			complete: false
 		}
 	})
 
 	async function setupTask({ task }){
 		log.info(`setting up task #${task.number}`)
 
-		answers = []
 		solutionAcceptance = []
+		answers = task.solution
+			? task.solution.map(
+				text => text
+					? {
+						text,
+						lastEdit: 0
+					}
+					: null
+			)
+			: []
 
 		chats = await ctx.db.chats.readMany({
 			where: {
@@ -225,9 +235,12 @@ export async function createTeamSession({ ctx, team }){
 		if(clients.some(client => solutionAcceptance.every(a => a.id !== client.user.id)))
 			return
 
+		clearTimeout(answerFlushTimer)
+
 		await ctx.db.tasks.updateOne({
 			data: {
-				solution: answers.map(answer => answer.text)
+				solution: answers.map(answer => answer.text),
+				complete: true
 			},
 			where: {
 				id: tasks[0].id
@@ -278,6 +291,9 @@ export async function createTeamSession({ ctx, team }){
 				lastEdit: Date.now(),
 				lastEditor: client.user
 			}
+
+			clearTimeout(answerFlushTimer)
+			answerFlushTimer = setTimeout(flushAnswers, 3000)
 
 			broadcast({ event: 'answers', answers })
 
@@ -340,6 +356,20 @@ export async function createTeamSession({ ctx, team }){
 				users: clients.map(client => client.user)
 			})
 		})
+	}
+
+	async function flushAnswers(){
+		await ctx.db.tasks.updateOne({
+			data: {
+				solution: answers.map(answer => answer.text)
+			},
+			where: {
+				id: tasks[0].id,
+				complete: false
+			}
+		})
+
+		log.info(`flushed answers`)
 	}
 
 	async function createChat({ task }){

@@ -42,8 +42,7 @@
 					)
 				}
 				
-
-				if(answer.lastEditor.id !== $userMeta.id){
+				if(answer.lastEditor?.id !== $userMeta.id){
 					inputText = answer.text
 					tick().then(() => autosize.update(inputDom))
 				}
