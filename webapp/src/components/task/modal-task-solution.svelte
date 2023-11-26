@@ -41,7 +41,7 @@
 					text: 'Who are your target customers for this new business model? How do you plan to attract, retain, and deepen the relationship with these customers? How does your business model cater specifically to these customer segments?'
 				},
 				{
-					title: 'Key Resources, Activities, and Partnerships',
+					title: 'Key Resources, Activities, Partnerships',
 					text: 'What key resources and activities are required to deliver your value proposition? What partners will you need to collaborate with to execute your business model effectively?'
 				},
 				{
