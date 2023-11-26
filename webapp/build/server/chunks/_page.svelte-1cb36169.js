@@ -1,5 +1,5 @@
 import { c as create_ssr_component, v as validate_component, b as add_attribute } from './ssr-cfa1d793.js';
-import { U as URlogo, W as Wave_fx } from './wave-fx-892272ff.js';
+import { W as Wave_fx } from './wave-fx-7c2169b8.js';
 import { g as getCookies, a as goto } from './cookies-e2afa694.js';
 
 async function get({ url, query, headers }){
@@ -50,7 +50,7 @@ const Inputs = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `<div class="code-input-container svelte-1qvrpym">${`<div class="input-code svelte-1qvrpym"><div class="input-wrapper svelte-1qvrpym"><input type="text" id="registration-code" placeholder="Your Registration Code" ${""} maxlength="5" class="svelte-1qvrpym"${add_attribute("value", registrationCode, 0)}> ${``}</div> <div class="instruction svelte-1qvrpym" data-svelte-h="svelte-ennphq">Once we start, please enter your registration code</div> ${``}</div>`} ${``} ${``} ${``} </div>`;
 });
 const css = {
-  code: ".landing-container.svelte-vob2zq.svelte-vob2zq{display:flex;flex-direction:column;width:100%;height:100%;z-index:10;position:relative}.logo-UR.svelte-vob2zq.svelte-vob2zq{display:flex;width:auto;margin-left:auto;margin-right:25px;margin-top:25px}.welcome-message.svelte-vob2zq.svelte-vob2zq{display:flex;flex-direction:column;align-items:center;margin-top:10%;gap:5px;color:#34E5B0}.welcome-message.svelte-vob2zq .label.svelte-vob2zq{font-size:36px;font-weight:bold}.wave-fx.svelte-vob2zq.svelte-vob2zq{position:absolute;left:0;right:0;bottom:calc(20vh - 250px);height:400px;overflow:hidden;z-index:1}",
+  code: ".landing-container.svelte-vob2zq.svelte-vob2zq{display:flex;flex-direction:column;width:100%;height:100%;z-index:10;position:relative}.welcome-message.svelte-vob2zq.svelte-vob2zq{display:flex;flex-direction:column;align-items:center;margin-top:10%;gap:5px;color:#34E5B0}.welcome-message.svelte-vob2zq .label.svelte-vob2zq{font-size:36px;font-weight:bold}.wave-fx.svelte-vob2zq.svelte-vob2zq{position:absolute;left:0;right:0;bottom:calc(20vh - 250px);height:400px;overflow:hidden;z-index:1}",
   map: null
 };
 const Landing_page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -69,11 +69,11 @@ const Landing_page = create_ssr_component(($$result, $$props, $$bindings, slots)
   }
   checkToken();
   $$result.css.add(css);
-  return `<div class="landing-container svelte-vob2zq"><div class="logo-UR svelte-vob2zq">${validate_component(URlogo, "URlogo").$$render($$result, {}, {}, {})}</div> <div class="welcome-message svelte-vob2zq" data-svelte-h="svelte-w18pnb"><div class="label svelte-vob2zq">Welcome to the study</div> <div class="subtext">You will be brainstorming with AI</div></div> ${validate_component(Inputs, "InputForm").$$render($$result, {}, {}, {})}</div> <div class="wave-fx svelte-vob2zq">${validate_component(Wave_fx, "WaveFx").$$render($$result, {}, {}, {})} </div>`;
+  return `<div class="landing-container svelte-vob2zq"><div class="welcome-message svelte-vob2zq" data-svelte-h="svelte-w18pnb"><div class="label svelte-vob2zq">Welcome to the study</div> <div class="subtext">You will be brainstorming with AI</div></div> ${validate_component(Inputs, "InputForm").$$render($$result, {}, {}, {})}</div> <div class="wave-fx svelte-vob2zq">${validate_component(Wave_fx, "WaveFx").$$render($$result, {}, {}, {})} </div>`;
 });
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `${validate_component(Landing_page, "LandingPage").$$render($$result, {}, {}, {})}`;
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-b78b0243.js.map
+//# sourceMappingURL=_page.svelte-1cb36169.js.map
