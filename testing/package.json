@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@mwni/fetch": "^1.0.0",
+    "@mwni/log": "^2.2.0",
+    "ws": "^8.14.2"
+  }
+}
